@@ -9,12 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as ProjectionRouteImport } from './routes/projection'
+import { Route as IncomeRouteImport } from './routes/income'
+import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as IndexRouteImport } from './routes/index'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const ProjectionRoute = ProjectionRouteImport.update({
+  id: '/projection',
+  path: '/projection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncomeRoute = IncomeRouteImport.update({
+  id: '/income',
+  path: '/income',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsRoute = AssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,37 +37,59 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/assets': typeof AssetsRoute
+  '/income': typeof IncomeRoute
+  '/projection': typeof ProjectionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/assets': typeof AssetsRoute
+  '/income': typeof IncomeRoute
+  '/projection': typeof ProjectionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/assets': typeof AssetsRoute
+  '/income': typeof IncomeRoute
+  '/projection': typeof ProjectionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/assets' | '/income' | '/projection'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/assets' | '/income' | '/projection'
+  id: '__root__' | '/' | '/assets' | '/income' | '/projection'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  AssetsRoute: typeof AssetsRoute
+  IncomeRoute: typeof IncomeRoute
+  ProjectionRoute: typeof ProjectionRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/projection': {
+      id: '/projection'
+      path: '/projection'
+      fullPath: '/projection'
+      preLoaderRoute: typeof ProjectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/income': {
+      id: '/income'
+      path: '/income'
+      fullPath: '/income'
+      preLoaderRoute: typeof IncomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets': {
+      id: '/assets'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AssetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,7 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  AssetsRoute: AssetsRoute,
+  IncomeRoute: IncomeRoute,
+  ProjectionRoute: ProjectionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

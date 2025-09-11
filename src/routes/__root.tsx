@@ -8,8 +8,14 @@ export const Route = createRootRoute({
           <Link to="/" style={{ textDecoration: 'none', color: '#007bff' }}>
             Home
           </Link>
-          <Link to="/about" style={{ textDecoration: 'none', color: '#007bff' }}>
-            About
+          <Link to="/assets" style={{ textDecoration: 'none', color: '#007bff' }}>
+            Assets
+          </Link>
+          <Link to="/income" style={{ textDecoration: 'none', color: '#007bff' }}>
+            Income
+          </Link>
+          <Link to="/projection" style={{ textDecoration: 'none', color: '#007bff' }}>
+            Projection
           </Link>
         </nav>
       </div>
