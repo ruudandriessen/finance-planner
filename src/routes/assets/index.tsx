@@ -32,10 +32,8 @@ function RouteComponent() {
 		<div className="container mx-auto p-6 max-w-6xl">
 			<div className="flex justify-between items-center mb-6">
 				<div>
-					<h1 className="text-3xl font-bold text-gray-900">Assets</h1>
-					<p className="text-gray-600 mt-1">
-						Total Value: {formatCurrency(totalValue)}
-					</p>
+					<h1 className="text-3xl font-bold">Assets</h1>
+					<p>Total Value: {formatCurrency(totalValue)}</p>
 				</div>
 
 				<Button onClick={() => navigate({ to: "/assets/add" })}>
@@ -47,14 +45,9 @@ function RouteComponent() {
 			{assets && assets.length > 0 ? (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{assets.map((asset) => (
-						<Card
-							key={asset.id}
-							className="border border-gray-200 rounded-lg shadow-sm"
-						>
-							<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
-								<CardTitle className="text-sm font-medium text-gray-700">
-									{asset.name}
-								</CardTitle>
+						<Card key={asset.id}>
+							<CardHeader className="flex flex-row items-center justify-between">
+								<CardTitle>{asset.name}</CardTitle>
 								<Button
 									variant="ghost"
 									size="sm"
@@ -64,13 +57,12 @@ function RouteComponent() {
 											params: { assetId: asset.id },
 										})
 									}
-									className="h-8 w-8 p-0"
 								>
 									<Edit3 className="h-4 w-4" />
 								</Button>
 							</CardHeader>
-							<CardContent className="p-4 pt-0">
-								<div className="text-2xl font-bold text-gray-900">
+							<CardContent>
+								<div className="text-2xl font-bold">
 									{formatCurrency(asset.amount)}
 								</div>
 							</CardContent>
