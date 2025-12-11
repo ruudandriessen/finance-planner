@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.8",
     "@tanstack/router-devtools": "^1.131.40",
     "@tanstack/router-vite-plugin": "^1.131.40",
     "@types/bun": "latest",
