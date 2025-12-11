@@ -1,9 +1,5 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import {
-	useLoaderData,
-	useLocation,
-	useNavigate,
-} from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { plansCollection } from "@/collections/plans";
