@@ -1,49 +1,33 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useLiveQuery } from '@tanstack/react-db'
-import { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { incomeCollection } from '../../collections/income'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
-import { Input } from '../../components/ui/input'
-import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { assetsCollection } from '@/collections/assets'
+import { IncomeForm } from '../../components/income/IncomeForm'
 
 export const Route = createFileRoute('/income/$incomeId/edit')({
   component: RouteComponent,
 })
 
-interface EditIncomeFormData {
-  name: string
-  amount: number;
-  targetAssetId?: string;
-  period?: 'monthly'
-}
-
 function RouteComponent() {
   const { incomeId } = Route.useParams()
   const navigate = useNavigate()
-  const { data: assets } = useLiveQuery(assetsCollection)
   const { data: income } = useLiveQuery(incomeCollection)
-  
+
   const incomeItem = income?.find(i => i.id === incomeId)
-  if (!incomeItem) return <div>Income not found</div>
 
-  const [formData, setFormData] = useState<EditIncomeFormData>(incomeItem)
+  const handleSubmit = async (data: { name: string; amount: string; targetAssetId?: string; period?: 'monthly' }) => {
+    if (!incomeItem) return
 
-  const handleInputChange = (field: keyof EditIncomeFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
     await incomeCollection.update(incomeItem.id, (oldIncome) => {
-      oldIncome.name = formData.name
-      oldIncome.amount = formData.amount
-      if (formData.period)  {
-        oldIncome.period = formData.period
+      oldIncome.name = data.name
+      oldIncome.amount = parseFloat(data.amount)
+      if (data.targetAssetId) {
+        oldIncome.targetAssetId = data.targetAssetId
+      }
+      if (data.period) {
+        oldIncome.period = data.period
       }
     })
     navigate({ to: '/income' })
@@ -51,7 +35,7 @@ function RouteComponent() {
 
   const handleDelete = async () => {
     if (!incomeItem) return
-    
+
     if (confirm(`Are you sure you want to delete "${incomeItem.name}"?`)) {
       await incomeCollection.delete(incomeItem.id)
       navigate({ to: '/income' })
@@ -96,75 +80,18 @@ function RouteComponent() {
           <CardTitle className="text-xl text-gray-900">Income Details</CardTitle>
         </CardHeader>
         <CardContent className="p-6 pt-0">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label htmlFor="name">Income Name</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                placeholder="Enter income source name"
-                className="mt-2"
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="asset">Asset</Label>
-              <Select
-                onValueChange={(value) => handleInputChange('targetAssetId', value)}
-              >
-              <SelectTrigger className="mt-2">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent id="asset">
-                {assets?.map((asset) => (
-                  <SelectItem key={asset.id} value={asset.id}>{asset.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            </div>
-            
-            <div>
-              <Label htmlFor="amount">
-                Amount ($) - Monthly
-              </Label>
-              <Input
-                id="amount"
-                type="number"
-                step="0.01"
-                min="0"
-                value={formData.amount}
-                onChange={(e) => handleInputChange('amount', e.target.value)}
-                placeholder="Enter amount"
-                className="mt-2"
-                required
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                Enter your monthly amount you receive
-              </p>
-            </div>
-            
-            <div className="flex gap-4 pt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => navigate({ to: '/income' })}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button 
-                type="button" 
-                variant="destructive" 
-                onClick={handleDelete}
-                className="flex-1"
-              >
-                Delete
-              </Button>
-              <Button type="submit" className="flex-1">Update Income</Button>
-            </div>
-          </form>
+          <IncomeForm
+            mode="edit"
+            initialData={{
+              name: incomeItem.name,
+              amount: incomeItem.amount.toString(),
+              targetAssetId: incomeItem.targetAssetId,
+              period: incomeItem.period
+            }}
+            onSubmit={handleSubmit}
+            onCancel={() => navigate({ to: '/income' })}
+            onDelete={handleDelete}
+          />
         </CardContent>
       </Card>
     </div>
