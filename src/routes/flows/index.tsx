@@ -84,7 +84,10 @@ function RouteComponent() {
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="text-2xl font-bold">
-									{formatCurrency(getFlowAmount(flow))}
+									{flow.strategy.type === "fixed" ||
+									flow.strategy.type === "mortgage"
+										? formatCurrency(getFlowAmount(flow))
+										: `${flow.strategy.config.growthRate * 100}%`}
 								</div>
 
 								<div className="text-sm text-muted-foreground space-y-1">
