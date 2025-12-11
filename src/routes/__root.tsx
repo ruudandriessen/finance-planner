@@ -1,4 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
+import z from "zod";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -16,4 +17,7 @@ export const Route = createRootRoute({
 			</SidebarProvider>
 		</ThemeProvider>
 	),
+	validateSearch: z.object({
+		planId: z.string().optional(),
+	}),
 });

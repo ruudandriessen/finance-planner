@@ -9,6 +9,7 @@ import {
 	BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { SidebarTrigger } from "./ui/sidebar";
+import { PlanSelector } from "./plan-selector";
 
 interface BreadcrumbSegment {
 	title: string;
@@ -70,38 +71,41 @@ export function DynamicBreadcrumb() {
 	);
 
 	return (
-		<div className="flex items-center gap-2 border-b px-4 py-3">
-			<SidebarTrigger className="-ml-1" />
-			<Breadcrumb>
-				<BreadcrumbList>
-					<BreadcrumbItem>
-						<BreadcrumbLink asChild>
-							<Link to="/">Home</Link>
-						</BreadcrumbLink>
-					</BreadcrumbItem>
+		<div className="flex items-center justify-between gap-2 border-b px-4 py-3">
+			<div className="flex items-center gap-2">
+				<SidebarTrigger className="-ml-1" />
+				<Breadcrumb>
+					<BreadcrumbList>
+						<BreadcrumbItem>
+							<BreadcrumbLink asChild>
+								<Link to="/">Home</Link>
+							</BreadcrumbLink>
+						</BreadcrumbItem>
 
-					{uniqueBreadcrumbs.map((crumb, index) => {
-						const isLast = index === uniqueBreadcrumbs.length - 1;
+						{uniqueBreadcrumbs.map((crumb, index) => {
+							const isLast = index === uniqueBreadcrumbs.length - 1;
 
-						return (
-							<div key={crumb.path} className="flex items-center gap-2">
-								<BreadcrumbSeparator>
-									<ChevronRight className="h-4 w-4" />
-								</BreadcrumbSeparator>
-								<BreadcrumbItem>
-									{isLast ? (
-										<BreadcrumbPage>{crumb.title}</BreadcrumbPage>
-									) : (
-										<BreadcrumbLink asChild>
-											<Link to={crumb.path}>{crumb.title}</Link>
-										</BreadcrumbLink>
-									)}
-								</BreadcrumbItem>
-							</div>
-						);
-					})}
-				</BreadcrumbList>
-			</Breadcrumb>
+							return (
+								<div key={crumb.path} className="flex items-center gap-2">
+									<BreadcrumbSeparator>
+										<ChevronRight className="h-4 w-4" />
+									</BreadcrumbSeparator>
+									<BreadcrumbItem>
+										{isLast ? (
+											<BreadcrumbPage>{crumb.title}</BreadcrumbPage>
+										) : (
+											<BreadcrumbLink asChild>
+												<Link to={crumb.path}>{crumb.title}</Link>
+											</BreadcrumbLink>
+										)}
+									</BreadcrumbItem>
+								</div>
+							);
+						})}
+					</BreadcrumbList>
+				</Breadcrumb>
+			</div>
+			<PlanSelector />
 		</div>
 	);
 }
