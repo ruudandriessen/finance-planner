@@ -46,7 +46,7 @@ function RouteComponent() {
 
 			{assets && assets.length > 0 ? (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{assets.map((asset: any) => (
+					{assets.map((asset) => (
 						<Card
 							key={asset.id}
 							className="border border-gray-200 rounded-lg shadow-sm"

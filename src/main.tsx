@@ -12,7 +12,9 @@ declare module "@tanstack/react-router" {
 	}
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootNode = document.getElementById("root");
+if (!rootNode) throw new Error("Root node not found");
+ReactDOM.createRoot(rootNode).render(
 	<React.StrictMode>
 		<RouterProvider router={router} />
 	</React.StrictMode>,
