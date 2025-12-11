@@ -20,18 +20,6 @@ export const Route = createRootRoute({
 					>
 						Income
 					</Link>
-					<Link
-						to="/loans"
-						style={{ textDecoration: "none", color: "#007bff" }}
-					>
-						Loans
-					</Link>
-					<Link
-						to="/projection"
-						style={{ textDecoration: "none", color: "#007bff" }}
-					>
-						Projection
-					</Link>
 				</nav>
 			</div>
 			<div style={{ padding: "1rem" }}>

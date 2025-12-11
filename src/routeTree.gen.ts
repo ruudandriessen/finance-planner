@@ -10,24 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LoansIndexRouteImport } from './routes/loans/index'
 import { Route as IncomeIndexRouteImport } from './routes/income/index'
 import { Route as AssetsIndexRouteImport } from './routes/assets/index'
-import { Route as LoansAddRouteImport } from './routes/loans/add'
 import { Route as IncomeAddRouteImport } from './routes/income/add'
 import { Route as AssetsAddRouteImport } from './routes/assets/add'
-import { Route as LoansLoanIdEditRouteImport } from './routes/loans/$loanId.edit'
 import { Route as IncomeIncomeIdEditRouteImport } from './routes/income/$incomeId.edit'
 import { Route as AssetsAssetIdEditRouteImport } from './routes/assets/$assetId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoansIndexRoute = LoansIndexRouteImport.update({
-  id: '/loans/',
-  path: '/loans/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IncomeIndexRoute = IncomeIndexRouteImport.update({
@@ -40,11 +32,6 @@ const AssetsIndexRoute = AssetsIndexRouteImport.update({
   path: '/assets/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoansAddRoute = LoansAddRouteImport.update({
-  id: '/loans/add',
-  path: '/loans/add',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IncomeAddRoute = IncomeAddRouteImport.update({
   id: '/income/add',
   path: '/income/add',
@@ -53,11 +40,6 @@ const IncomeAddRoute = IncomeAddRouteImport.update({
 const AssetsAddRoute = AssetsAddRouteImport.update({
   id: '/assets/add',
   path: '/assets/add',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoansLoanIdEditRoute = LoansLoanIdEditRouteImport.update({
-  id: '/loans/$loanId/edit',
-  path: '/loans/$loanId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IncomeIncomeIdEditRoute = IncomeIncomeIdEditRouteImport.update({
@@ -75,38 +57,29 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
-  '/loans/add': typeof LoansAddRoute
   '/assets': typeof AssetsIndexRoute
   '/income': typeof IncomeIndexRoute
-  '/loans': typeof LoansIndexRoute
   '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
   '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
-  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
-  '/loans/add': typeof LoansAddRoute
   '/assets': typeof AssetsIndexRoute
   '/income': typeof IncomeIndexRoute
-  '/loans': typeof LoansIndexRoute
   '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
   '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
-  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
-  '/loans/add': typeof LoansAddRoute
   '/assets/': typeof AssetsIndexRoute
   '/income/': typeof IncomeIndexRoute
-  '/loans/': typeof LoansIndexRoute
   '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
   '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
-  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,50 +87,38 @@ export interface FileRouteTypes {
     | '/'
     | '/assets/add'
     | '/income/add'
-    | '/loans/add'
     | '/assets'
     | '/income'
-    | '/loans'
     | '/assets/$assetId/edit'
     | '/income/$incomeId/edit'
-    | '/loans/$loanId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/assets/add'
     | '/income/add'
-    | '/loans/add'
     | '/assets'
     | '/income'
-    | '/loans'
     | '/assets/$assetId/edit'
     | '/income/$incomeId/edit'
-    | '/loans/$loanId/edit'
   id:
     | '__root__'
     | '/'
     | '/assets/add'
     | '/income/add'
-    | '/loans/add'
     | '/assets/'
     | '/income/'
-    | '/loans/'
     | '/assets/$assetId/edit'
     | '/income/$incomeId/edit'
-    | '/loans/$loanId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssetsAddRoute: typeof AssetsAddRoute
   IncomeAddRoute: typeof IncomeAddRoute
-  LoansAddRoute: typeof LoansAddRoute
   AssetsIndexRoute: typeof AssetsIndexRoute
   IncomeIndexRoute: typeof IncomeIndexRoute
-  LoansIndexRoute: typeof LoansIndexRoute
   AssetsAssetIdEditRoute: typeof AssetsAssetIdEditRoute
   IncomeIncomeIdEditRoute: typeof IncomeIncomeIdEditRoute
-  LoansLoanIdEditRoute: typeof LoansLoanIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,13 +128,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/loans/': {
-      id: '/loans/'
-      path: '/loans'
-      fullPath: '/loans'
-      preLoaderRoute: typeof LoansIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/income/': {
@@ -190,13 +144,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/loans/add': {
-      id: '/loans/add'
-      path: '/loans/add'
-      fullPath: '/loans/add'
-      preLoaderRoute: typeof LoansAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/income/add': {
       id: '/income/add'
       path: '/income/add'
@@ -209,13 +156,6 @@ declare module '@tanstack/react-router' {
       path: '/assets/add'
       fullPath: '/assets/add'
       preLoaderRoute: typeof AssetsAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/loans/$loanId/edit': {
-      id: '/loans/$loanId/edit'
-      path: '/loans/$loanId/edit'
-      fullPath: '/loans/$loanId/edit'
-      preLoaderRoute: typeof LoansLoanIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/income/$incomeId/edit': {
@@ -239,13 +179,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssetsAddRoute: AssetsAddRoute,
   IncomeAddRoute: IncomeAddRoute,
-  LoansAddRoute: LoansAddRoute,
   AssetsIndexRoute: AssetsIndexRoute,
   IncomeIndexRoute: IncomeIndexRoute,
-  LoansIndexRoute: LoansIndexRoute,
   AssetsAssetIdEditRoute: AssetsAssetIdEditRoute,
   IncomeIncomeIdEditRoute: IncomeIncomeIdEditRoute,
-  LoansLoanIdEditRoute: LoansLoanIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
