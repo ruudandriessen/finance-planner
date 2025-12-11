@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProjectionRouteImport } from './routes/projection'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoansIndexRouteImport } from './routes/loans/index'
 import { Route as IncomeIndexRouteImport } from './routes/income/index'
@@ -21,11 +20,6 @@ import { Route as LoansLoanIdEditRouteImport } from './routes/loans/$loanId.edit
 import { Route as IncomeIncomeIdEditRouteImport } from './routes/income/$incomeId.edit'
 import { Route as AssetsAssetIdEditRouteImport } from './routes/assets/$assetId.edit'
 
-const ProjectionRoute = ProjectionRouteImport.update({
-  id: '/projection',
-  path: '/projection',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,7 +73,6 @@ const AssetsAssetIdEditRoute = AssetsAssetIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/projection': typeof ProjectionRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
   '/loans/add': typeof LoansAddRoute
@@ -92,7 +85,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/projection': typeof ProjectionRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
   '/loans/add': typeof LoansAddRoute
@@ -106,7 +98,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/projection': typeof ProjectionRoute
   '/assets/add': typeof AssetsAddRoute
   '/income/add': typeof IncomeAddRoute
   '/loans/add': typeof LoansAddRoute
@@ -121,7 +112,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/projection'
     | '/assets/add'
     | '/income/add'
     | '/loans/add'
@@ -134,7 +124,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/projection'
     | '/assets/add'
     | '/income/add'
     | '/loans/add'
@@ -147,7 +136,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/projection'
     | '/assets/add'
     | '/income/add'
     | '/loans/add'
@@ -161,7 +149,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProjectionRoute: typeof ProjectionRoute
   AssetsAddRoute: typeof AssetsAddRoute
   IncomeAddRoute: typeof IncomeAddRoute
   LoansAddRoute: typeof LoansAddRoute
@@ -175,13 +162,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/projection': {
-      id: '/projection'
-      path: '/projection'
-      fullPath: '/projection'
-      preLoaderRoute: typeof ProjectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -257,7 +237,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProjectionRoute: ProjectionRoute,
   AssetsAddRoute: AssetsAddRoute,
   IncomeAddRoute: IncomeAddRoute,
   LoansAddRoute: LoansAddRoute,
