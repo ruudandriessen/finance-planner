@@ -1,24 +1,19 @@
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
-import { ModeToggle } from "@/components/mode-toggle";
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { AppSidebar } from "@/components/app-sidebar";
+import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const Route = createRootRoute({
 	component: () => (
-		<>
-			<ThemeProvider defaultTheme="system">
-				<div>
-					<nav className="flex gap-1 border-b-1 border-gray-200 px-4 py-2 items-center">
-						<Link to="/">Home</Link>
-						<Link to="/assets">Assets</Link>
-						<Link to="/income">Income</Link>
-						<div className="flex flex-1" />
-						<ModeToggle />
-					</nav>
-				</div>
-				<div>
+		<ThemeProvider defaultTheme="system">
+			<SidebarProvider defaultOpen={false}>
+				<AppSidebar />
+				<main className="w-full">
+					<DynamicBreadcrumb />
 					<Outlet />
-				</div>
-			</ThemeProvider>
-		</>
+				</main>
+			</SidebarProvider>
+		</ThemeProvider>
 	),
 });
