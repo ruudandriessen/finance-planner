@@ -20,4 +20,15 @@ export const Route = createRootRoute({
 	validateSearch: z.object({
 		planId: z.string().optional(),
 	}),
+	search: {
+		middlewares: [
+			({ search, next }) => {
+				const result = next(search);
+				return {
+					planId: search.planId,
+					...result,
+				};
+			},
+		],
+	},
 });
