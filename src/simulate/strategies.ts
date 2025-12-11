@@ -121,6 +121,6 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
  * Maps the string keys from your DB/JSON to the actual functions.
  */
 export const StrategyRegistry: Record<string, StrategyFn> = {
-	FIXED_TRANSFER: fixedTransferStrategy,
-	DYNAMIC_MORTGAGE: dynamicMortgageStrategy,
+	fixed: fixedTransferStrategy,
+	mortgage: dynamicMortgageStrategy,
 };
