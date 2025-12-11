@@ -49,7 +49,9 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
 	// We need the absolute value of the debt to calculate interest cost
 	const principalRemaining = Math.abs(currentLiabilityBalance);
 
-	const annualRate = config.interestCalculation.baseAnnualRate || 0.05; // Default 5%
+	// Convert percentage to decimal if needed (e.g., 4.15 -> 0.0415)
+	const annualRateInput = config.interestCalculation.baseAnnualRate || 5; // Default 5%
+	const annualRate = annualRateInput > 1 ? annualRateInput / 100 : annualRateInput;
 	const monthlyRate = annualRate / 12;
 
 	let interestPayment = principalRemaining * monthlyRate;
@@ -81,7 +83,12 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
 		// 2. Add unpaid interest to principal? (Complex)
 		// For this MVP, let's just log a warning and clamp.
 		console.warn(
-			`[${rule.id}] Warning: Payment is less than interest generated.`,
+			`[${rule.name}] ⚠️  NEGATIVE AMORTIZATION!\n` +
+			`  Mortgage Balance: $${principalRemaining.toLocaleString()}\n` +
+			`  Monthly Interest: $${interestPayment.toFixed(2)}\n` +
+			`  Your Payment: $${totalPayment.toFixed(2)}\n` +
+			`  Shortfall: $${(interestPayment - totalPayment).toFixed(2)}\n` +
+			`  → Your payment is too low! Increase it to at least $${Math.ceil(interestPayment + 100)}/month`
 		);
 		interestPayment = totalPayment;
 		principalPayment = 0;

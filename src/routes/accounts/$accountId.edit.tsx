@@ -28,9 +28,13 @@ function RouteComponent() {
 		const amount = parseFloat(data.amount);
 		if (Number.isNaN(amount)) return;
 
+		// Liabilities should be stored as negative numbers
+		const normalizedAmount =
+			data.type === "liability" ? -Math.abs(amount) : amount;
+
 		await accountsCollection.update(asset.id, (oldAsset) => {
 			oldAsset.name = data.name;
-			oldAsset.amount = amount;
+			oldAsset.amount = normalizedAmount;
 			oldAsset.type = data.type;
 		});
 		navigate({ to: "/accounts" });
@@ -88,7 +92,7 @@ function RouteComponent() {
 					<AssetForm
 						initialData={{
 							name: asset.name,
-							amount: asset.amount.toString(),
+							amount: Math.abs(asset.amount).toString(),
 							type: asset.type,
 						}}
 						onSubmit={handleSubmit}

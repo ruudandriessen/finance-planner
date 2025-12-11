@@ -2,7 +2,6 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { accountsCollection } from "@/collections/accounts";
-import { ExampleChart } from "@/components/example-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	ChartContainer,
@@ -17,22 +16,39 @@ export const Route = createFileRoute("/")({
 
 function Home() {
 	const { data: accounts } = useLiveQuery(accountsCollection);
-	const simulationResults = useSimulation(30 * 12); // 30 years in months
+	const numberOfMonthsInSimulation = 30 * 12;
+	const simulationResults = useSimulation(numberOfMonthsInSimulation);
 
 	// Filter to only show assets and liabilities
 	const relevantAccounts = accounts?.filter(
 		(account) => account.type === "asset" || account.type === "liability",
 	);
 
-	// Prepare chart data
+	// Create a set of liability account IDs for quick lookup
+	const liabilityAccountIds = new Set(
+		accounts
+			?.filter((account) => account.type === "liability")
+			.map((a) => a.id),
+	);
+
+	// Prepare chart data - display liabilities as positive values
 	const chartData =
-		simulationResults?.map((result) => ({
-			date: result.date.toLocaleDateString("en-US", {
-				month: "short",
-				year: "numeric",
-			}),
-			...result.balances,
-		})) || [];
+		simulationResults?.map((result) => {
+			const displayBalances: Record<string, number> = {};
+			for (const [accountId, balance] of Object.entries(result.balances)) {
+				// Show liabilities as positive (flip the sign)
+				displayBalances[accountId] = liabilityAccountIds.has(accountId)
+					? Math.abs(balance)
+					: balance;
+			}
+			return {
+				date: result.date.toLocaleDateString("en-US", {
+					month: "short",
+					year: "numeric",
+				}),
+				...displayBalances,
+			};
+		}) ?? [];
 
 	// Create chart config with colors for each account
 	const chartConfig =
@@ -52,7 +68,7 @@ function Home() {
 				return config;
 			},
 			{} as Record<string, { label: string; color: string }>,
-		) || {};
+		) ?? {};
 
 	const formatCurrency = (value: number) => {
 		return new Intl.NumberFormat("en-US", {

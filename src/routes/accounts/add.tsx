@@ -21,10 +21,14 @@ function RouteComponent() {
 		const amount = parseFloat(data.amount);
 		if (Number.isNaN(amount)) return;
 
+		// Liabilities should be stored as negative numbers
+		const normalizedAmount =
+			data.type === "liability" ? -Math.abs(amount) : amount;
+
 		await accountsCollection.insert({
 			id: crypto.randomUUID(),
 			name: data.name,
-			amount,
+			amount: normalizedAmount,
 			type: data.type,
 		});
 		navigate({ to: "/accounts" });

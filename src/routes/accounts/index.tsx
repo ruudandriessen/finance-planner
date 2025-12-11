@@ -65,8 +65,11 @@ function RouteComponent() {
 							</CardHeader>
 							<CardContent>
 								<div className="text-2xl font-bold">
-									{formatCurrency(account.amount)}
+									{formatCurrency(Math.abs(account.amount))}
 								</div>
+								<p className="text-sm text-muted-foreground mt-1 capitalize">
+									{account.type}
+								</p>
 							</CardContent>
 						</Card>
 					))}
