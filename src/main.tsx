@@ -2,6 +2,7 @@ import { Router, RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen";
+import "./index.css";
 
 const router = new Router({ routeTree });
 
