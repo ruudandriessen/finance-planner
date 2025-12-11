@@ -11,11 +11,11 @@ export const Route = createRootRoute({
 						<Link to="/">Home</Link>
 						<Link to="/assets">Assets</Link>
 						<Link to="/income">Income</Link>
-						<div style={{ flex: 1 }} />
+						<div className="flex flex-1" />
 						<ModeToggle />
 					</nav>
 				</div>
-				<div style={{ padding: "1rem" }}>
+				<div>
 					<Outlet />
 				</div>
 			</ThemeProvider>
