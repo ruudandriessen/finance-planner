@@ -4,7 +4,7 @@ import {
 } from "@tanstack/react-db";
 import z from "zod";
 
-const fixedStrategy = z.object({
+export const fixedStrategy = z.object({
 	type: z.literal("fixed"),
 	config: z.object({
 		amount: z.number(),
@@ -12,7 +12,7 @@ const fixedStrategy = z.object({
 	}),
 });
 
-const morgageStrategy = z.object({
+export const morgageStrategy = z.object({
 	type: z.literal("mortgage"),
 	config: z.object({
 		liabilityAccountId: z.string(),

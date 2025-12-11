@@ -14,9 +14,9 @@ import {
 
 interface IncomeFormData {
 	name: string;
-	amount: string;
-	targetAssetId?: string;
-	sourceAssetId?: string;
+	amount: number;
+	targetAssetId: string;
+	sourceAssetId: string;
 	amountType?: "fixed" | "percentage" | "remainder";
 	schedule?: string;
 }
@@ -40,15 +40,18 @@ export function IncomeForm({
 }: IncomeFormProps) {
 	const { data: assets } = useLiveQuery(accountsCollection);
 	const [formData, setFormData] = useState<IncomeFormData>({
-		name: initialData.name || "",
-		amount: initialData.amount?.toString() || "",
-		targetAssetId: initialData.targetAssetId,
-		sourceAssetId: initialData.sourceAssetId,
-		amountType: initialData.amountType || "fixed",
-		schedule: initialData.schedule || "monthly",
+		name: initialData.name ?? "",
+		amount: initialData.amount ?? 0,
+		targetAssetId: initialData.targetAssetId ?? "",
+		sourceAssetId: initialData.sourceAssetId ?? "",
+		amountType: initialData.amountType ?? "fixed",
+		schedule: initialData.schedule ?? "monthly",
 	});
 
-	const handleInputChange = (field: keyof IncomeFormData, value: string) => {
+	const handleInputChange = (
+		field: keyof IncomeFormData,
+		value: IncomeFormData[keyof IncomeFormData],
+	) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -119,7 +122,9 @@ export function IncomeForm({
 					step="0.01"
 					min="0"
 					value={formData.amount}
-					onChange={(e) => handleInputChange("amount", e.target.value)}
+					onChange={(e) => {
+						handleInputChange("amount", parseFloat(e.target.value));
+					}}
 					placeholder="Enter amount"
 					className="mt-2"
 					required
@@ -149,7 +154,7 @@ export function IncomeForm({
 					</Button>
 				)}
 				<Button type="submit" className="flex-1">
-					{submitLabel || defaultSubmitLabel}
+					{submitLabel ?? defaultSubmitLabel}
 				</Button>
 			</div>
 		</form>

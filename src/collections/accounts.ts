@@ -4,7 +4,7 @@ import {
 } from "@tanstack/react-db";
 import z from "zod";
 
-const accountsSchema = z.object({
+export const accountSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	type: z.enum(["asset", "liability", "income", "expense"]),
@@ -16,6 +16,6 @@ export const accountsCollection = createCollection(
 		id: "accounts",
 		storageKey: "accounts",
 		getKey: (item) => item.id,
-		schema: accountsSchema,
+		schema: accountSchema,
 	}),
 );

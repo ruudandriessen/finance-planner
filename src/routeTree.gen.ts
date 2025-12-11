@@ -10,11 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as IncomeIndexRouteImport } from './routes/income/index'
+import { Route as FlowsIndexRouteImport } from './routes/flows/index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts/index'
-import { Route as IncomeAddRouteImport } from './routes/income/add'
+import { Route as FlowsAddRouteImport } from './routes/flows/add'
 import { Route as AccountsAddRouteImport } from './routes/accounts/add'
-import { Route as IncomeIncomeIdEditRouteImport } from './routes/income/$incomeId.edit'
+import { Route as FlowsFlowIdEditRouteImport } from './routes/flows/$flowId.edit'
 import { Route as AccountsAccountIdEditRouteImport } from './routes/accounts/$accountId.edit'
 
 const IndexRoute = IndexRouteImport.update({
@@ -22,9 +22,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IncomeIndexRoute = IncomeIndexRouteImport.update({
-  id: '/income/',
-  path: '/income/',
+const FlowsIndexRoute = FlowsIndexRouteImport.update({
+  id: '/flows/',
+  path: '/flows/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsIndexRoute = AccountsIndexRouteImport.update({
@@ -32,9 +32,9 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   path: '/accounts/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IncomeAddRoute = IncomeAddRouteImport.update({
-  id: '/income/add',
-  path: '/income/add',
+const FlowsAddRoute = FlowsAddRouteImport.update({
+  id: '/flows/add',
+  path: '/flows/add',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsAddRoute = AccountsAddRouteImport.update({
@@ -42,9 +42,9 @@ const AccountsAddRoute = AccountsAddRouteImport.update({
   path: '/accounts/add',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IncomeIncomeIdEditRoute = IncomeIncomeIdEditRouteImport.update({
-  id: '/income/$incomeId/edit',
-  path: '/income/$incomeId/edit',
+const FlowsFlowIdEditRoute = FlowsFlowIdEditRouteImport.update({
+  id: '/flows/$flowId/edit',
+  path: '/flows/$flowId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsAccountIdEditRoute = AccountsAccountIdEditRouteImport.update({
@@ -56,69 +56,69 @@ const AccountsAccountIdEditRoute = AccountsAccountIdEditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts/add': typeof AccountsAddRoute
-  '/income/add': typeof IncomeAddRoute
+  '/flows/add': typeof FlowsAddRoute
   '/accounts': typeof AccountsIndexRoute
-  '/income': typeof IncomeIndexRoute
+  '/flows': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
-  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts/add': typeof AccountsAddRoute
-  '/income/add': typeof IncomeAddRoute
+  '/flows/add': typeof FlowsAddRoute
   '/accounts': typeof AccountsIndexRoute
-  '/income': typeof IncomeIndexRoute
+  '/flows': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
-  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts/add': typeof AccountsAddRoute
-  '/income/add': typeof IncomeAddRoute
+  '/flows/add': typeof FlowsAddRoute
   '/accounts/': typeof AccountsIndexRoute
-  '/income/': typeof IncomeIndexRoute
+  '/flows/': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
-  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/accounts/add'
-    | '/income/add'
+    | '/flows/add'
     | '/accounts'
-    | '/income'
+    | '/flows'
     | '/accounts/$accountId/edit'
-    | '/income/$incomeId/edit'
+    | '/flows/$flowId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts/add'
-    | '/income/add'
+    | '/flows/add'
     | '/accounts'
-    | '/income'
+    | '/flows'
     | '/accounts/$accountId/edit'
-    | '/income/$incomeId/edit'
+    | '/flows/$flowId/edit'
   id:
     | '__root__'
     | '/'
     | '/accounts/add'
-    | '/income/add'
+    | '/flows/add'
     | '/accounts/'
-    | '/income/'
+    | '/flows/'
     | '/accounts/$accountId/edit'
-    | '/income/$incomeId/edit'
+    | '/flows/$flowId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsAddRoute: typeof AccountsAddRoute
-  IncomeAddRoute: typeof IncomeAddRoute
+  FlowsAddRoute: typeof FlowsAddRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
-  IncomeIndexRoute: typeof IncomeIndexRoute
+  FlowsIndexRoute: typeof FlowsIndexRoute
   AccountsAccountIdEditRoute: typeof AccountsAccountIdEditRoute
-  IncomeIncomeIdEditRoute: typeof IncomeIncomeIdEditRoute
+  FlowsFlowIdEditRoute: typeof FlowsFlowIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,11 +130,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/income/': {
-      id: '/income/'
-      path: '/income'
-      fullPath: '/income'
-      preLoaderRoute: typeof IncomeIndexRouteImport
+    '/flows/': {
+      id: '/flows/'
+      path: '/flows'
+      fullPath: '/flows'
+      preLoaderRoute: typeof FlowsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/': {
@@ -144,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/income/add': {
-      id: '/income/add'
-      path: '/income/add'
-      fullPath: '/income/add'
-      preLoaderRoute: typeof IncomeAddRouteImport
+    '/flows/add': {
+      id: '/flows/add'
+      path: '/flows/add'
+      fullPath: '/flows/add'
+      preLoaderRoute: typeof FlowsAddRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/add': {
@@ -158,11 +158,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsAddRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/income/$incomeId/edit': {
-      id: '/income/$incomeId/edit'
-      path: '/income/$incomeId/edit'
-      fullPath: '/income/$incomeId/edit'
-      preLoaderRoute: typeof IncomeIncomeIdEditRouteImport
+    '/flows/$flowId/edit': {
+      id: '/flows/$flowId/edit'
+      path: '/flows/$flowId/edit'
+      fullPath: '/flows/$flowId/edit'
+      preLoaderRoute: typeof FlowsFlowIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/$accountId/edit': {
@@ -178,11 +178,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsAddRoute: AccountsAddRoute,
-  IncomeAddRoute: IncomeAddRoute,
+  FlowsAddRoute: FlowsAddRoute,
   AccountsIndexRoute: AccountsIndexRoute,
-  IncomeIndexRoute: IncomeIndexRoute,
+  FlowsIndexRoute: FlowsIndexRoute,
   AccountsAccountIdEditRoute: AccountsAccountIdEditRoute,
-  IncomeIncomeIdEditRoute: IncomeIncomeIdEditRoute,
+  FlowsFlowIdEditRoute: FlowsFlowIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
