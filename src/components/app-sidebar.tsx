@@ -1,4 +1,5 @@
-import { DollarSignIcon, HomeIcon, HouseIcon } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { DollarSignIcon, HouseIcon } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
 	Sidebar,
@@ -6,7 +7,6 @@ import {
 	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupLabel,
-	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
@@ -35,10 +35,10 @@ export function AppSidebar() {
 						{items.map((item) => (
 							<SidebarMenuItem key={item.title}>
 								<SidebarMenuButton asChild>
-									<a href={item.url}>
+									<Link to={item.url}>
 										<item.icon />
 										<span>{item.title}</span>
-									</a>
+									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						))}
