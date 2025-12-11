@@ -17,7 +17,12 @@ export const Route = createFileRoute("/")({
 
 function Home() {
 	const { data: accounts } = useLiveQuery(accountsCollection);
-	const simulationResults = useSimulation(12);
+	const simulationResults = useSimulation(30 * 12); // 30 years in months
+
+	// Filter to only show assets and liabilities
+	const relevantAccounts = accounts?.filter(
+		(account) => account.type === "asset" || account.type === "liability",
+	);
 
 	// Prepare chart data
 	const chartData =
@@ -31,7 +36,7 @@ function Home() {
 
 	// Create chart config with colors for each account
 	const chartConfig =
-		accounts?.reduce(
+		relevantAccounts?.reduce(
 			(config, account, index) => {
 				const colors = [
 					"var(--chart-1)",
@@ -40,7 +45,6 @@ function Home() {
 					"var(--chart-4)",
 					"var(--chart-5)",
 				];
-				console.log(colors);
 				config[account.id] = {
 					label: account.name,
 					color: colors[index % colors.length] ?? "var(--chart-1)",
@@ -70,7 +74,7 @@ function Home() {
 				<div className="mt-6 space-y-6">
 					<Card>
 						<CardHeader>
-							<CardTitle>Account Balances Over Time (12 Months)</CardTitle>
+							<CardTitle>Account Balances Over Time (30 Years)</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<ChartContainer config={chartConfig}>
@@ -89,7 +93,7 @@ function Home() {
 										tickFormatter={formatCurrency}
 									/>
 									<ChartTooltip content={<ChartTooltipContent />} />
-									{accounts.map((account) => (
+									{relevantAccounts?.map((account) => (
 										<Line
 											key={account.id}
 											type="monotone"

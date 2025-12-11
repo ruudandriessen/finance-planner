@@ -54,9 +54,9 @@ export const runSimulation = ({
 			// Apply Transactions to State Immediately (Waterfall effect)
 			for (const tx of ruleTxs) {
 				// Decrease Source
-				let source = currentBalances[tx.fromId];
-				if (source !== undefined) {
-					source -= tx.amount;
+				const sourceBalance = currentBalances[tx.fromId];
+				if (sourceBalance !== undefined) {
+					currentBalances[tx.fromId] = sourceBalance - tx.amount;
 				} else {
 					// Initialize if implied (e.g. Income buckets usually start at 0)
 					currentBalances[tx.fromId] = -tx.amount;
@@ -80,9 +80,9 @@ export const runSimulation = ({
 				// Paying off debt = Moving Positive Cash to Negative Liability.
 				// -300k + 1k = -299k. Correct.
 
-				let currentBalance = currentBalances[tx.toId];
-				if (currentBalance !== undefined) {
-					currentBalance += tx.amount;
+				const targetBalance = currentBalances[tx.toId];
+				if (targetBalance !== undefined) {
+					currentBalances[tx.toId] = targetBalance + tx.amount;
 				} else {
 					currentBalances[tx.toId] = tx.amount;
 				}
