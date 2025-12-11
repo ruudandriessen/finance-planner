@@ -1,5 +1,5 @@
 import { Link, useMatches } from "@tanstack/react-router";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -76,9 +76,7 @@ export function DynamicBreadcrumb() {
 				<BreadcrumbList>
 					<BreadcrumbItem>
 						<BreadcrumbLink asChild>
-							<Link to="/">
-								<Home className="h-4 w-4" />
-							</Link>
+							<Link to="/">Home</Link>
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 
