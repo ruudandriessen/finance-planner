@@ -7,7 +7,6 @@ import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
 
 export const Route = createFileRoute('/assets/$assetId/edit')({
   component: RouteComponent,
@@ -15,10 +14,7 @@ export const Route = createFileRoute('/assets/$assetId/edit')({
 
 interface EditAssetFormData {
   name: string
-  type: 'house' | 'stocks' | 'savings'
   amount: string
-  expectedReturn?: string
-  interestRate?: string
 }
 
 function RouteComponent() {
@@ -28,10 +24,7 @@ function RouteComponent() {
   
   const [formData, setFormData] = useState<EditAssetFormData>({
     name: '',
-    type: 'house',
     amount: '',
-    expectedReturn: '',
-    interestRate: ''
   })
 
   const asset = assets?.find(a => a.id === assetId)
@@ -40,10 +33,7 @@ function RouteComponent() {
     if (asset) {
       setFormData({
         name: asset.name,
-        type: asset.type,
         amount: asset.amount.toString(),
-        expectedReturn: asset.type === 'stocks' ? asset.expectedReturn?.toString() || '' : '',
-        interestRate: asset.type === 'savings' ? asset.interestRate?.toString() || '' : ''
       })
     }
   }, [asset])
@@ -62,14 +52,7 @@ function RouteComponent() {
 
     await assetsCollection.update(asset.id, (oldAsset) => {
       oldAsset.name = formData.name
-      oldAsset.type = formData.type
       oldAsset.amount = parseFloat(formData.amount);
-      if (oldAsset.type === 'stocks' && formData.type === 'stocks' && formData.expectedReturn)  {
-        oldAsset.expectedReturn = parseFloat(formData.expectedReturn) ?? 0;
-      }
-      if (oldAsset.type === 'savings' && formData.type === 'savings' && formData.interestRate)  {
-        oldAsset.interestRate = parseFloat(formData.interestRate) ?? 0;
-      }
     })
     navigate({ to: '/assets' })
   }
@@ -135,23 +118,6 @@ function RouteComponent() {
             </div>
             
             <div>
-              <Label htmlFor="type">Asset Type</Label>
-              <Select 
-                value={formData.type} 
-                onValueChange={(value: 'house' | 'stocks' | 'savings') => handleInputChange('type', value)}
-              >
-                <SelectTrigger className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="house">House</SelectItem>
-                  <SelectItem value="stocks">Stocks</SelectItem>
-                  <SelectItem value="savings">Savings Account</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
               <Label htmlFor="amount">Amount ($)</Label>
               <Input
                 id="amount"
@@ -165,40 +131,6 @@ function RouteComponent() {
                 required
               />
             </div>
-            
-            {formData.type === 'stocks' && (
-              <div>
-                <Label htmlFor="expectedReturn">Expected Return (%)</Label>
-                <Input
-                  id="expectedReturn"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="100"
-                  value={formData.expectedReturn}
-                  onChange={(e) => handleInputChange('expectedReturn', e.target.value)}
-                  placeholder="Enter expected return percentage"
-                  className="mt-2"
-                />
-              </div>
-            )}
-            
-            {formData.type === 'savings' && (
-              <div>
-                <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                <Input
-                  id="interestRate"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="20"
-                  value={formData.interestRate}
-                  onChange={(e) => handleInputChange('interestRate', e.target.value)}
-                  placeholder="Enter annual interest rate"
-                  className="mt-2"
-                />
-              </div>
-            )}
             
             <div className="flex gap-4 pt-4">
               <Button 

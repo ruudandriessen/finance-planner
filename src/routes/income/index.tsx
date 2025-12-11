@@ -23,11 +23,7 @@ function RouteComponent() {
   const calculateTotalMonthlyIncome = () => {
     if (!income) return 0
     return income.reduce((sum: number, incomeItem) => {
-      if (incomeItem.type === 'salary') {
         return sum + incomeItem.amount
-      } else {
-        return sum + (incomeItem.amount / 12)
-      }
     }, 0)
   }
 
@@ -52,17 +48,13 @@ function RouteComponent() {
 
       {income && income.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {income.map((incomeItem: any) => (
+          {income.map((incomeItem) => (
             <Card key={incomeItem.id} className="border border-gray-200 rounded-lg shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
                 <div className="flex items-center space-x-2">
-                  {incomeItem.type === 'salary' ? (
-                    <DollarSign className="h-4 w-4 text-green-600" />
-                  ) : (
-                    <Gift className="h-4 w-4 text-blue-600" />
-                  )}
+                  <DollarSign className="h-4 w-4 text-green-600" />
                   <CardTitle className="text-sm font-medium text-gray-700">
-                    {incomeItem.type === 'salary' ? 'Salary' : 'Subsidies'}
+                    {incomeItem.name}
                   </CardTitle>
                 </div>
                 <Button
@@ -78,11 +70,8 @@ function RouteComponent() {
                 <div className="text-2xl font-bold text-gray-900">
                   {formatCurrency(incomeItem.amount)}
                 </div>
-                <p className="text-xs text-gray-600 mt-1">
-                  {incomeItem.name}
-                </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {incomeItem.type === 'salary' ? 'Monthly' : 'Annual'}
+                  {incomeItem.period}
                 </p>
               </CardContent>
             </Card>

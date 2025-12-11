@@ -1,13 +1,14 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useLiveQuery } from '@tanstack/react-db'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { incomeCollection } from '../../collections/income'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { assetsCollection } from '@/collections/assets'
 
 export const Route = createFileRoute('/income/$incomeId/edit')({
   component: RouteComponent,
@@ -15,36 +16,21 @@ export const Route = createFileRoute('/income/$incomeId/edit')({
 
 interface EditIncomeFormData {
   name: string
-  type: 'salary' | 'subsidies'
-  amount: string
+  amount: number;
+  targetAssetId?: string;
   period?: 'monthly'
 }
 
 function RouteComponent() {
   const { incomeId } = Route.useParams()
   const navigate = useNavigate()
+  const { data: assets } = useLiveQuery(assetsCollection)
   const { data: income } = useLiveQuery(incomeCollection)
   
-  const [formData, setFormData] = useState<EditIncomeFormData>({
-    name: '',
-    type: 'salary',
-    amount: '',
-    period: 'monthly'
-  })
-
   const incomeItem = income?.find(i => i.id === incomeId)
   if (!incomeItem) return <div>Income not found</div>
 
-  useEffect(() => {
-    if (incomeItem) {
-      setFormData({
-        name: incomeItem.name,
-        type: incomeItem.type,
-        amount: incomeItem.amount.toString(),
-        period: incomeItem.type === 'salary' ? incomeItem.period : undefined
-      })
-    }
-  }, [incomeItem])
+  const [formData, setFormData] = useState<EditIncomeFormData>(incomeItem)
 
   const handleInputChange = (field: keyof EditIncomeFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -55,9 +41,8 @@ function RouteComponent() {
     
     await incomeCollection.update(incomeItem.id, (oldIncome) => {
       oldIncome.name = formData.name
-      oldIncome.type = formData.type
-      oldIncome.amount = parseFloat(formData.amount)
-      if (oldIncome.type === 'salary' && formData.type === 'salary' && formData.period)  {
+      oldIncome.amount = formData.amount
+      if (formData.period)  {
         oldIncome.period = formData.period
       }
     })
@@ -123,26 +108,26 @@ function RouteComponent() {
                 required
               />
             </div>
-            
+
             <div>
-              <Label htmlFor="type">Income Type</Label>
-              <Select 
-                value={formData.type} 
-                onValueChange={(value: 'salary' | 'subsidies') => handleInputChange('type', value)}
+              <Label htmlFor="asset">Asset</Label>
+              <Select
+                onValueChange={(value) => handleInputChange('targetAssetId', value)}
               >
-                <SelectTrigger className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="salary">Salary</SelectItem>
-                  <SelectItem value="subsidies">Subsidies</SelectItem>
-                </SelectContent>
-              </Select>
+              <SelectTrigger className="mt-2">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent id="asset">
+                {assets?.map((asset) => (
+                  <SelectItem key={asset.id} value={asset.id}>{asset.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             </div>
             
             <div>
               <Label htmlFor="amount">
-                Amount ($) - {formData.type === 'salary' ? 'Monthly' : 'Annual'}
+                Amount ($) - Monthly
               </Label>
               <Input
                 id="amount"
@@ -156,10 +141,7 @@ function RouteComponent() {
                 required
               />
               <p className="text-sm text-gray-500 mt-1">
-                {formData.type === 'salary' 
-                  ? 'Enter your monthly salary amount' 
-                  : 'Enter your annual subsidies amount'
-                }
+                Enter your monthly amount you receive
               </p>
             </div>
             

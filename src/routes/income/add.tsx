@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
+import { useLiveQuery } from '@tanstack/react-db'
+import { assetsCollection } from '@/collections/assets'
 
 export const Route = createFileRoute('/income/add')({
   component: RouteComponent,
@@ -17,10 +19,12 @@ interface AddIncomeFormData {
   type: 'salary'
   amount: string
   period?: 'monthly'
+  targetAssetId?: string
 }
 
 function RouteComponent() {
   const navigate = useNavigate()
+  const { data: assets } = useLiveQuery(assetsCollection)
   const [formData, setFormData] = useState<AddIncomeFormData>({
     name: '',
     type: 'salary',
@@ -35,12 +39,17 @@ function RouteComponent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+
+    if (formData.targetAssetId == null) {
+      return;
+    }
+
     await incomeCollection.insert({
       id: crypto.randomUUID(),
       amount: parseFloat(formData.amount),
       name: formData.name,
-      type: 'salary',
-      period: 'monthly'
+      period: 'monthly',
+      targetAssetId: formData.targetAssetId,
     })
     navigate({ to: '/income' })
   }
@@ -92,6 +101,21 @@ function RouteComponent() {
                 <SelectContent>
                   <SelectItem value="salary">Salary</SelectItem>
                   <SelectItem value="subsidies">Subsidies</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Select
+                onValueChange={(value) => handleInputChange('targetAssetId', value)}
+              >
+                <SelectTrigger className="mt-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {assets?.map((asset) => (
+                    <SelectItem key={asset.id} value={asset.id}>{asset.name}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

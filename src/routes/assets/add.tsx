@@ -6,7 +6,6 @@ import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select'
 
 export const Route = createFileRoute('/assets/add')({
   component: RouteComponent,
@@ -14,20 +13,14 @@ export const Route = createFileRoute('/assets/add')({
 
 interface AddAssetFormData {
   name: string
-  type: 'house' | 'stocks' | 'savings'
   amount: string
-  expectedReturn?: string
-  interestRate?: string
 }
 
 function RouteComponent() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState<AddAssetFormData>({
     name: '',
-    type: 'house',
     amount: '',
-    expectedReturn: '',
-    interestRate: ''
   })
 
   const handleInputChange = (field: keyof AddAssetFormData, value: string) => {
@@ -36,26 +29,16 @@ function RouteComponent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!formData.name || !formData.amount) return
 
     const amount = parseFloat(formData.amount)
     if (isNaN(amount)) return
 
-    const newAsset = {
+
+    await assetsCollection.insert({
       id: crypto.randomUUID(),
       name: formData.name,
-      type: formData.type,
       amount,
-      ...(formData.type === 'stocks' && formData.expectedReturn 
-        ? { expectedReturn: parseFloat(formData.expectedReturn) || 0 } 
-        : {}),
-      ...(formData.type === 'savings' && formData.interestRate 
-        ? { interestRate: parseFloat(formData.interestRate) || 0 } 
-        : {})
-    }
-
-    await assetsCollection.insert(newAsset)
+    });
     navigate({ to: '/assets' })
   }
 
@@ -95,23 +78,6 @@ function RouteComponent() {
             </div>
             
             <div>
-              <Label htmlFor="type">Asset Type</Label>
-              <Select 
-                value={formData.type} 
-                onValueChange={(value: 'house' | 'stocks' | 'savings') => handleInputChange('type', value)}
-              >
-                <SelectTrigger className="mt-2">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="house">House</SelectItem>
-                  <SelectItem value="stocks">Stocks</SelectItem>
-                  <SelectItem value="savings">Savings Account</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
               <Label htmlFor="amount">Amount ($)</Label>
               <Input
                 id="amount"
@@ -125,40 +91,6 @@ function RouteComponent() {
                 required
               />
             </div>
-            
-            {formData.type === 'stocks' && (
-              <div>
-                <Label htmlFor="expectedReturn">Expected Return (%)</Label>
-                <Input
-                  id="expectedReturn"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="100"
-                  value={formData.expectedReturn}
-                  onChange={(e) => handleInputChange('expectedReturn', e.target.value)}
-                  placeholder="Enter expected return percentage"
-                  className="mt-2"
-                />
-              </div>
-            )}
-            
-            {formData.type === 'savings' && (
-              <div>
-                <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                <Input
-                  id="interestRate"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="20"
-                  value={formData.interestRate}
-                  onChange={(e) => handleInputChange('interestRate', e.target.value)}
-                  placeholder="Enter annual interest rate"
-                  className="mt-2"
-                />
-              </div>
-            )}
             
             <div className="flex gap-4 pt-4">
               <Button 

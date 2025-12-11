@@ -1,17 +1,20 @@
 import { createCollection, localStorageCollectionOptions } from "@tanstack/react-db";
 import z from "zod";
 
-const assetsSchema = z.object({
+const expensesSchema = z.object({
   id: z.string(),
   name: z.string(),
+  period: z.literal('monthly'),
   amount: z.number(),
+  sourceAssetId: z.string(),
 });
 
-export const assetsCollection = createCollection(
+
+export const expenseCollection = createCollection(
   localStorageCollectionOptions({
-    id: "assets",
-    storageKey: "assets",
+    id: "expenses",
+    storageKey: "expenses",
     getKey: (item) => item.id,
-    schema: assetsSchema,
+    schema: expensesSchema,
   })
 )
