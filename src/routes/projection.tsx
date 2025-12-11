@@ -1,15 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useLiveQuery } from "@tanstack/react-db";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-	LineChart,
+	CartesianGrid,
+	Legend,
 	Line,
+	LineChart,
+	ResponsiveContainer,
+	Tooltip,
 	XAxis,
 	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer,
 } from "recharts";
 import { assetsCollection } from "../collections/assets";
 import { incomeCollection } from "../collections/income";

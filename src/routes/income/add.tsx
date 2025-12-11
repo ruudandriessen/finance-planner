@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { incomeCollection } from "../../collections/income";
+import { IncomeForm } from "../../components/income/IncomeForm";
 import { Button } from "../../components/ui/button";
 import {
 	Card,
@@ -8,7 +9,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../../components/ui/card";
-import { IncomeForm } from "../../components/income/IncomeForm";
 
 export const Route = createFileRoute("/income/add")({
 	component: RouteComponent,

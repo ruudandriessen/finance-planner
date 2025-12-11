@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
 import { assetsCollection } from "../../collections/assets";
 import { Button } from "../../components/ui/button";
 import {

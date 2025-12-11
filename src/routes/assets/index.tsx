@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "@tanstack/react-db";
-import { Plus, Home, TrendingUp, PiggyBank, Edit3 } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Edit3, Plus } from "lucide-react";
 import { assetsCollection } from "../../collections/assets";
 import { Button } from "../../components/ui/button";
 import {

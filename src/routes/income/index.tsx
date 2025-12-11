@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "@tanstack/react-db";
-import { Plus, DollarSign, Gift, Edit3 } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { DollarSign, Edit3, Plus } from "lucide-react";
 import { incomeCollection } from "../../collections/income";
 import { Button } from "../../components/ui/button";
 import {

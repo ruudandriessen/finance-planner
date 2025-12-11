@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { assetsCollection } from "@/collections/assets";
 import { useLiveQuery } from "@tanstack/react-db";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -10,7 +11,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "../ui/select";
-import { assetsCollection } from "@/collections/assets";
 
 interface IncomeFormData {
 	name: string;
