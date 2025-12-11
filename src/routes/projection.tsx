@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { assetsCollection } from '../collections/assets'
 import { incomeCollection } from '../collections/income'
+import { loansCollection } from '../collections/loans'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
@@ -16,12 +17,15 @@ interface ProjectionData {
   year: number
   assets: number
   totalIncome: number
+  totalDebt: number
   netWorth: number
+  monthlyLoanPayments: number
 }
 
 function RouteComponent() {
   const { data: assets } = useLiveQuery(assetsCollection)
   const { data: income } = useLiveQuery(incomeCollection)
+  const { data: loans } = useLiveQuery(loansCollection)
   const [yearsToProject, setYearsToProject] = useState(30)
   const [savingsRate, setSavingsRate] = useState(20) // percentage
   const [inflationRate, setInflationRate] = useState(2.5) // percentage
@@ -50,9 +54,25 @@ function RouteComponent() {
       }
     }, 0)
 
-    const annualSavings = (annualIncome * savingsRate) / 100
+    // Calculate initial debt and monthly payments
+    const initialTotalDebt = loans ? loans.reduce((sum, loan) => {
+      if (loan.type === 'credit_card') {
+        return sum + loan.balance
+      } else {
+        return sum + loan.remainingBalance
+      }
+    }, 0) : 0
 
-    // Separate house and stock assets
+    const monthlyLoanPayments = loans ? loans.reduce((sum, loan) => {
+      if (loan.type === 'credit_card') {
+        return sum + loan.minimumPayment
+      } else {
+        return sum + loan.monthlyPayment
+      }
+    }, 0) : 0
+
+
+    // Separate different asset types
     let houseValue = assets
       .filter(asset => asset.type === 'house')
       .reduce((sum, asset) => sum + asset.amount, 0)
@@ -60,30 +80,67 @@ function RouteComponent() {
     let stockValue = assets
       .filter(asset => asset.type === 'stocks')
       .reduce((sum, asset) => sum + asset.amount, 0)
+    
+    let savingsValue = assets
+      .filter(asset => asset.type === 'savings')
+      .reduce((sum, asset) => sum + asset.amount, 0)
 
-    // Calculate average stock return rate
+    // Calculate average return rates
     const stockAssets = assets.filter(asset => asset.type === 'stocks')
     const avgStockReturn = stockAssets.length > 0 
       ? stockAssets.reduce((sum, asset) => sum + (asset.expectedReturn || 7), 0) / stockAssets.length
       : 7 // default 7% if no stocks
 
+    const savingsAssets = assets.filter(asset => asset.type === 'savings')
+    const avgSavingsRate = savingsAssets.length > 0 
+      ? savingsAssets.reduce((sum, asset) => sum + (asset.interestRate || 2), 0) / savingsAssets.length
+      : 2 // default 2% if no savings accounts
+
     const projectionData: ProjectionData[] = []
     let currentYear = new Date().getFullYear()
     let adjustedIncome = annualIncome
-    let adjustedSavings = annualSavings
+    let currentTotalDebt = initialTotalDebt
 
     // Add current year as starting point
     projectionData.push({
       year: currentYear,
       assets: currentAssets,
       totalIncome: adjustedIncome,
-      netWorth: currentAssets
+      totalDebt: currentTotalDebt,
+      netWorth: currentAssets - currentTotalDebt,
+      monthlyLoanPayments: monthlyLoanPayments
     })
+
+    // Create loan tracking for amortization
+    let remainingLoans = loans ? loans.map(loan => ({
+      ...loan,
+      currentBalance: loan.type === 'credit_card' ? loan.balance : loan.remainingBalance,
+      monthlyPayment: loan.type === 'credit_card' ? loan.minimumPayment : loan.monthlyPayment
+    })) : []
 
     for (let i = 1; i <= yearsToProject; i++) {
       // Adjust for inflation
       adjustedIncome = adjustedIncome * (1 + inflationRate / 100)
-      adjustedSavings = (adjustedIncome * savingsRate) / 100
+
+      // Update loan balances (simple amortization)
+      remainingLoans = remainingLoans.map(loan => {
+        const annualInterest = (loan.currentBalance * loan.interestRate) / 100
+        const annualPrincipalPayment = (loan.monthlyPayment * 12) - annualInterest
+        
+        const newBalance = Math.max(0, loan.currentBalance - annualPrincipalPayment)
+        
+        return {
+          ...loan,
+          currentBalance: newBalance
+        }
+      }).filter(loan => loan.currentBalance > 0) // Remove paid-off loans
+
+      currentTotalDebt = remainingLoans.reduce((sum, loan) => sum + loan.currentBalance, 0)
+      const currentMonthlyPayments = remainingLoans.reduce((sum, loan) => sum + loan.monthlyPayment, 0)
+      const currentAnnualPayments = currentMonthlyPayments * 12
+
+      // Calculate available savings after loan payments
+      const availableSavings = Math.max(0, (adjustedIncome * savingsRate) / 100 - currentAnnualPayments)
 
       // Appreciate existing house value
       houseValue = houseValue * (1 + houseAppreciation / 100)
@@ -91,18 +148,31 @@ function RouteComponent() {
       // Grow existing stocks
       stockValue = stockValue * (1 + avgStockReturn / 100)
 
-      // Add new savings (assume split between stocks and savings based on existing portfolio)
-      const stockPortion = currentAssets > 0 ? stockValue / (houseValue + stockValue) : 0.7
-      const newStockInvestment = adjustedSavings * stockPortion
-      stockValue += newStockInvestment * (1 + avgStockReturn / 100)
+      // Grow existing savings accounts
+      savingsValue = savingsValue * (1 + avgSavingsRate / 100)
 
-      const totalAssets = houseValue + stockValue
+      // Add new savings (assume split between stocks, savings, and other assets based on existing portfolio)
+      if (availableSavings > 0) {
+        const totalCurrentAssets = houseValue + stockValue + savingsValue
+        const stockPortion = totalCurrentAssets > 0 ? stockValue / totalCurrentAssets : 0.4
+        const savingsPortion = totalCurrentAssets > 0 ? savingsValue / totalCurrentAssets : 0.3
+        
+        const newStockInvestment = availableSavings * stockPortion
+        const newSavingsInvestment = availableSavings * savingsPortion
+        
+        stockValue += newStockInvestment * (1 + avgStockReturn / 100)
+        savingsValue += newSavingsInvestment * (1 + avgSavingsRate / 100)
+      }
+
+      const totalAssets = houseValue + stockValue + savingsValue
       
       projectionData.push({
         year: currentYear + i,
         assets: totalAssets,
         totalIncome: adjustedIncome,
-        netWorth: totalAssets
+        totalDebt: currentTotalDebt,
+        netWorth: totalAssets - currentTotalDebt,
+        monthlyLoanPayments: currentMonthlyPayments
       })
 
       currentAssets = totalAssets
@@ -200,7 +270,7 @@ function RouteComponent() {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
+      <div className="grid gap-6 md:grid-cols-4 mb-8">
         <Card className="border border-gray-200 rounded-lg shadow-sm">
           <CardHeader className="p-4">
             <CardTitle className="text-lg text-gray-900">Current Net Worth</CardTitle>
@@ -219,6 +289,17 @@ function RouteComponent() {
           <CardContent className="p-4 pt-0">
             <p className="text-3xl font-bold text-blue-600">
               {formatCurrency(finalNetWorth)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-gray-200 rounded-lg shadow-sm">
+          <CardHeader className="p-4">
+            <CardTitle className="text-lg text-gray-900">Current Total Debt</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <p className="text-3xl font-bold text-red-600">
+              {formatCurrency(projectionData[0]?.totalDebt || 0)}
             </p>
           </CardContent>
         </Card>
@@ -251,6 +332,20 @@ function RouteComponent() {
                   labelFormatter={(year) => `Year: ${year}`}
                 />
                 <Legend />
+                <Line 
+                  type="monotone" 
+                  dataKey="assets" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  name="Total Assets"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="totalDebt" 
+                  stroke="#ef4444" 
+                  strokeWidth={2}
+                  name="Total Debt"
+                />
                 <Line 
                   type="monotone" 
                   dataKey="netWorth" 

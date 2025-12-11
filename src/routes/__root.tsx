@@ -14,6 +14,9 @@ export const Route = createRootRoute({
           <Link to="/income" style={{ textDecoration: 'none', color: '#007bff' }}>
             Income
           </Link>
+          <Link to="/loans" style={{ textDecoration: 'none', color: '#007bff' }}>
+            Loans
+          </Link>
           <Link to="/projection" style={{ textDecoration: 'none', color: '#007bff' }}>
             Projection
           </Link>

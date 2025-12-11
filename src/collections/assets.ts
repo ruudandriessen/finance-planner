@@ -16,9 +16,18 @@ const stockAssetsSchema = z.object({
   expectedReturn: z.number(),
 });
 
+const savingsAccountSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.literal("savings"),
+  amount: z.number(),
+  interestRate: z.number(),
+});
+
 const assetsSchema = z.discriminatedUnion("type", [
   houseAssetSchema,
-  stockAssetsSchema
+  stockAssetsSchema,
+  savingsAccountSchema
 ]);
 
 export const assetsCollection = createCollection(

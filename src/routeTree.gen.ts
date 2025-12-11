@@ -10,23 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProjectionRouteImport } from './routes/projection'
-import { Route as IncomeRouteImport } from './routes/income'
-import { Route as AssetsRouteImport } from './routes/assets'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoansIndexRouteImport } from './routes/loans/index'
+import { Route as IncomeIndexRouteImport } from './routes/income/index'
+import { Route as AssetsIndexRouteImport } from './routes/assets/index'
+import { Route as LoansAddRouteImport } from './routes/loans/add'
+import { Route as IncomeAddRouteImport } from './routes/income/add'
+import { Route as AssetsAddRouteImport } from './routes/assets/add'
+import { Route as LoansLoanIdEditRouteImport } from './routes/loans/$loanId.edit'
+import { Route as IncomeIncomeIdEditRouteImport } from './routes/income/$incomeId.edit'
+import { Route as AssetsAssetIdEditRouteImport } from './routes/assets/$assetId.edit'
 
 const ProjectionRoute = ProjectionRouteImport.update({
   id: '/projection',
   path: '/projection',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IncomeRoute = IncomeRouteImport.update({
-  id: '/income',
-  path: '/income',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssetsRoute = AssetsRouteImport.update({
-  id: '/assets',
-  path: '/assets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,39 +31,146 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoansIndexRoute = LoansIndexRouteImport.update({
+  id: '/loans/',
+  path: '/loans/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncomeIndexRoute = IncomeIndexRouteImport.update({
+  id: '/income/',
+  path: '/income/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsIndexRoute = AssetsIndexRouteImport.update({
+  id: '/assets/',
+  path: '/assets/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoansAddRoute = LoansAddRouteImport.update({
+  id: '/loans/add',
+  path: '/loans/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncomeAddRoute = IncomeAddRouteImport.update({
+  id: '/income/add',
+  path: '/income/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsAddRoute = AssetsAddRouteImport.update({
+  id: '/assets/add',
+  path: '/assets/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoansLoanIdEditRoute = LoansLoanIdEditRouteImport.update({
+  id: '/loans/$loanId/edit',
+  path: '/loans/$loanId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncomeIncomeIdEditRoute = IncomeIncomeIdEditRouteImport.update({
+  id: '/income/$incomeId/edit',
+  path: '/income/$incomeId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssetsAssetIdEditRoute = AssetsAssetIdEditRouteImport.update({
+  id: '/assets/$assetId/edit',
+  path: '/assets/$assetId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/assets': typeof AssetsRoute
-  '/income': typeof IncomeRoute
   '/projection': typeof ProjectionRoute
+  '/assets/add': typeof AssetsAddRoute
+  '/income/add': typeof IncomeAddRoute
+  '/loans/add': typeof LoansAddRoute
+  '/assets': typeof AssetsIndexRoute
+  '/income': typeof IncomeIndexRoute
+  '/loans': typeof LoansIndexRoute
+  '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
+  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/assets': typeof AssetsRoute
-  '/income': typeof IncomeRoute
   '/projection': typeof ProjectionRoute
+  '/assets/add': typeof AssetsAddRoute
+  '/income/add': typeof IncomeAddRoute
+  '/loans/add': typeof LoansAddRoute
+  '/assets': typeof AssetsIndexRoute
+  '/income': typeof IncomeIndexRoute
+  '/loans': typeof LoansIndexRoute
+  '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
+  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/assets': typeof AssetsRoute
-  '/income': typeof IncomeRoute
   '/projection': typeof ProjectionRoute
+  '/assets/add': typeof AssetsAddRoute
+  '/income/add': typeof IncomeAddRoute
+  '/loans/add': typeof LoansAddRoute
+  '/assets/': typeof AssetsIndexRoute
+  '/income/': typeof IncomeIndexRoute
+  '/loans/': typeof LoansIndexRoute
+  '/assets/$assetId/edit': typeof AssetsAssetIdEditRoute
+  '/income/$incomeId/edit': typeof IncomeIncomeIdEditRoute
+  '/loans/$loanId/edit': typeof LoansLoanIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assets' | '/income' | '/projection'
+  fullPaths:
+    | '/'
+    | '/projection'
+    | '/assets/add'
+    | '/income/add'
+    | '/loans/add'
+    | '/assets'
+    | '/income'
+    | '/loans'
+    | '/assets/$assetId/edit'
+    | '/income/$incomeId/edit'
+    | '/loans/$loanId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assets' | '/income' | '/projection'
-  id: '__root__' | '/' | '/assets' | '/income' | '/projection'
+  to:
+    | '/'
+    | '/projection'
+    | '/assets/add'
+    | '/income/add'
+    | '/loans/add'
+    | '/assets'
+    | '/income'
+    | '/loans'
+    | '/assets/$assetId/edit'
+    | '/income/$incomeId/edit'
+    | '/loans/$loanId/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/projection'
+    | '/assets/add'
+    | '/income/add'
+    | '/loans/add'
+    | '/assets/'
+    | '/income/'
+    | '/loans/'
+    | '/assets/$assetId/edit'
+    | '/income/$incomeId/edit'
+    | '/loans/$loanId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AssetsRoute: typeof AssetsRoute
-  IncomeRoute: typeof IncomeRoute
   ProjectionRoute: typeof ProjectionRoute
+  AssetsAddRoute: typeof AssetsAddRoute
+  IncomeAddRoute: typeof IncomeAddRoute
+  LoansAddRoute: typeof LoansAddRoute
+  AssetsIndexRoute: typeof AssetsIndexRoute
+  IncomeIndexRoute: typeof IncomeIndexRoute
+  LoansIndexRoute: typeof LoansIndexRoute
+  AssetsAssetIdEditRoute: typeof AssetsAssetIdEditRoute
+  IncomeIncomeIdEditRoute: typeof IncomeIncomeIdEditRoute
+  LoansLoanIdEditRoute: typeof LoansLoanIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,20 +182,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/income': {
-      id: '/income'
-      path: '/income'
-      fullPath: '/income'
-      preLoaderRoute: typeof IncomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/assets': {
-      id: '/assets'
-      path: '/assets'
-      fullPath: '/assets'
-      preLoaderRoute: typeof AssetsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -99,14 +189,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loans/': {
+      id: '/loans/'
+      path: '/loans'
+      fullPath: '/loans'
+      preLoaderRoute: typeof LoansIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/income/': {
+      id: '/income/'
+      path: '/income'
+      fullPath: '/income'
+      preLoaderRoute: typeof IncomeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets/': {
+      id: '/assets/'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AssetsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loans/add': {
+      id: '/loans/add'
+      path: '/loans/add'
+      fullPath: '/loans/add'
+      preLoaderRoute: typeof LoansAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/income/add': {
+      id: '/income/add'
+      path: '/income/add'
+      fullPath: '/income/add'
+      preLoaderRoute: typeof IncomeAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets/add': {
+      id: '/assets/add'
+      path: '/assets/add'
+      fullPath: '/assets/add'
+      preLoaderRoute: typeof AssetsAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loans/$loanId/edit': {
+      id: '/loans/$loanId/edit'
+      path: '/loans/$loanId/edit'
+      fullPath: '/loans/$loanId/edit'
+      preLoaderRoute: typeof LoansLoanIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/income/$incomeId/edit': {
+      id: '/income/$incomeId/edit'
+      path: '/income/$incomeId/edit'
+      fullPath: '/income/$incomeId/edit'
+      preLoaderRoute: typeof IncomeIncomeIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assets/$assetId/edit': {
+      id: '/assets/$assetId/edit'
+      path: '/assets/$assetId/edit'
+      fullPath: '/assets/$assetId/edit'
+      preLoaderRoute: typeof AssetsAssetIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AssetsRoute: AssetsRoute,
-  IncomeRoute: IncomeRoute,
   ProjectionRoute: ProjectionRoute,
+  AssetsAddRoute: AssetsAddRoute,
+  IncomeAddRoute: IncomeAddRoute,
+  LoansAddRoute: LoansAddRoute,
+  AssetsIndexRoute: AssetsIndexRoute,
+  IncomeIndexRoute: IncomeIndexRoute,
+  LoansIndexRoute: LoansIndexRoute,
+  AssetsAssetIdEditRoute: AssetsAssetIdEditRoute,
+  IncomeIncomeIdEditRoute: IncomeIncomeIdEditRoute,
+  LoansLoanIdEditRoute: LoansLoanIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
