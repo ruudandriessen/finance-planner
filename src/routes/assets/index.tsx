@@ -72,7 +72,7 @@ function RouteComponent() {
 					))}
 				</div>
 			) : (
-				<Card className="border border-gray-200 rounded-lg">
+				<Card>
 					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
 						<div className="text-muted-foreground text-center">
 							<p className="text-lg font-medium mb-2 text-foreground">
