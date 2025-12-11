@@ -7,7 +7,7 @@ export const Route = createRootRoute({
 		<>
 			<ThemeProvider defaultTheme="system">
 				<div>
-					<nav className="flex gap-1 border-b-2 border-gray-200 px-4 py-2">
+					<nav className="flex gap-1 border-b-1 border-gray-200 px-4 py-2 items-center">
 						<Link to="/">Home</Link>
 						<Link to="/assets">Assets</Link>
 						<Link to="/income">Income</Link>
