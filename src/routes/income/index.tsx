@@ -39,8 +39,8 @@ function RouteComponent() {
 		<div className="container mx-auto p-6 max-w-6xl">
 			<div className="flex justify-between items-center mb-6">
 				<div>
-					<h1 className="text-3xl font-bold">Income</h1>
-					<p>
+					<h1 className="text-3xl font-bold text-foreground">Income</h1>
+					<p className="text-muted-foreground">
 						Monthly: {formatCurrency(totalMonthlyIncome)} • Annual:{" "}
 						{formatCurrency(totalAnnualIncome)}
 					</p>
@@ -78,17 +78,17 @@ function RouteComponent() {
 								<div className="text-2xl font-bold">
 									{formatCurrency(incomeItem.amount)}
 								</div>
-								<p className="text-xs">{incomeItem.period}</p>
+								<p className="text-xs text-muted-foreground">{incomeItem.period}</p>
 							</CardContent>
 						</Card>
 					))}
 				</div>
 			) : (
-				<Card className="border border-gray-200 rounded-lg">
+				<Card>
 					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
-						<div className="text-gray-600 text-center">
+						<div className="text-muted-foreground text-center">
 							<p className="text-lg font-medium mb-2">No income sources yet</p>
-							<p className="text-sm text-gray-600">
+							<p className="text-sm text-muted-foreground">
 								Add your first income source to get started
 							</p>
 						</div>

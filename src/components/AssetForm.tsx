@@ -39,7 +39,7 @@ export function AssetForm({
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
+		<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 			<div>
 				<Label htmlFor="name">Asset Name</Label>
 				<Input

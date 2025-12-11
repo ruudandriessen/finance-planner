@@ -40,15 +40,19 @@ function RouteComponent() {
 					<ArrowLeft className="h-4 w-4 mr-2" />
 					Back to Assets
 				</Button>
-				<h1 className="text-3xl font-bold text-gray-900">Add New Asset</h1>
-				<p className="text-gray-600 mt-1">Add a new asset to your portfolio</p>
+				<h1 className="text-3xl font-bold text-foreground">Add New Asset</h1>
+				<p className="text-muted-foreground mt-1">
+					Add a new asset to your portfolio
+				</p>
 			</div>
 
-			<Card className="border border-gray-200 rounded-lg shadow-sm">
-				<CardHeader className="p-6">
-					<CardTitle className="text-xl text-gray-900">Asset Details</CardTitle>
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-xl text-foreground">
+						Asset Details
+					</CardTitle>
 				</CardHeader>
-				<CardContent className="p-6 pt-0">
+				<CardContent>
 					<AssetForm
 						onSubmit={handleSubmit}
 						onCancel={() => navigate({ to: "/assets" })}

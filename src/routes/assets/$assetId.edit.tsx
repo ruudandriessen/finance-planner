@@ -48,7 +48,7 @@ function RouteComponent() {
 		return (
 			<div className="container mx-auto p-6 max-w-2xl">
 				<div className="text-center py-12">
-					<p className="text-lg text-gray-600">Asset not found</p>
+					<p className="text-lg text-muted-foreground">Asset not found</p>
 					<Button onClick={() => navigate({ to: "/assets" })} className="mt-4">
 						Back to Assets
 					</Button>
@@ -68,15 +68,17 @@ function RouteComponent() {
 					<ArrowLeft className="h-4 w-4 mr-2" />
 					Back to Assets
 				</Button>
-				<h1 className="text-3xl font-bold text-gray-900">Edit Asset</h1>
-				<p className="text-gray-600 mt-1">Update your asset details</p>
+				<h1 className="text-3xl font-bold text-foreground">Edit Asset</h1>
+				<p className="text-muted-foreground mt-1">Update your asset details</p>
 			</div>
 
-			<Card className="border border-gray-200 rounded-lg shadow-sm">
-				<CardHeader className="p-6">
-					<CardTitle className="text-xl text-gray-900">Asset Details</CardTitle>
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-xl text-foreground">
+						Asset Details
+					</CardTitle>
 				</CardHeader>
-				<CardContent className="p-6 pt-0">
+				<CardContent>
 					<AssetForm
 						initialData={{
 							name: asset.name,

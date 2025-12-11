@@ -6,9 +6,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
 	return (
-		<div>
-			<h1>Finance Planner</h1>
-			<p>Welcome to your personal finance planning application!</p>
+		<div className="container mx-auto p-6 max-w-6xl">
+			<h1 className="text-3xl font-bold text-foreground">Finance Planner</h1>
+			<p className="text-muted-foreground mt-2">Welcome to your personal finance planning application!</p>
 		</div>
 	);
 }

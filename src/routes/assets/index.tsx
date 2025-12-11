@@ -32,8 +32,8 @@ function RouteComponent() {
 		<div className="container mx-auto p-6 max-w-6xl">
 			<div className="flex justify-between items-center mb-6">
 				<div>
-					<h1 className="text-3xl font-bold">Assets</h1>
-					<p>Total Value: {formatCurrency(totalValue)}</p>
+					<h1 className="text-3xl font-bold text-foreground">Assets</h1>
+					<p className="text-muted-foreground">Total Value: {formatCurrency(totalValue)}</p>
 				</div>
 
 				<Button onClick={() => navigate({ to: "/assets/add" })}>
@@ -72,11 +72,11 @@ function RouteComponent() {
 			) : (
 				<Card className="border border-gray-200 rounded-lg">
 					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
-						<div className="text-gray-600 text-center">
-							<p className="text-lg font-medium mb-2 text-gray-900">
+						<div className="text-muted-foreground text-center">
+							<p className="text-lg font-medium mb-2 text-foreground">
 								No assets yet
 							</p>
-							<p className="text-sm text-gray-600">
+							<p className="text-sm text-muted-foreground">
 								Add your first asset to get started
 							</p>
 						</div>

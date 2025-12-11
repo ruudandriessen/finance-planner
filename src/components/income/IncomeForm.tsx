@@ -56,7 +56,7 @@ export function IncomeForm({
 	const defaultSubmitLabel = mode === "add" ? "Add Income" : "Update Income";
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
+		<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 			<div>
 				<Label htmlFor="name">Income Name</Label>
 				<Input
@@ -101,7 +101,7 @@ export function IncomeForm({
 					className="mt-2"
 					required
 				/>
-				<p className="text-sm text-gray-500 mt-1">
+				<p className="text-sm text-muted-foreground mt-1">
 					Enter your monthly amount you receive
 				</p>
 			</div>

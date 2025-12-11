@@ -48,19 +48,19 @@ function RouteComponent() {
 					<ArrowLeft className="h-4 w-4 mr-2" />
 					Back to Income
 				</Button>
-				<h1 className="text-3xl font-bold text-gray-900">Add New Income</h1>
-				<p className="text-gray-600 mt-1">
+				<h1 className="text-3xl font-bold text-foreground">Add New Income</h1>
+				<p className="text-muted-foreground mt-1">
 					Add a new income source to your financial plan
 				</p>
 			</div>
 
-			<Card className="border border-gray-200 rounded-lg shadow-sm">
-				<CardHeader className="p-6">
-					<CardTitle className="text-xl text-gray-900">
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-xl text-foreground">
 						Income Details
 					</CardTitle>
 				</CardHeader>
-				<CardContent className="p-6 pt-0">
+				<CardContent>
 					<IncomeForm
 						mode="add"
 						onSubmit={handleSubmit}
