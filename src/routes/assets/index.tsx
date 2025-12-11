@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Edit3, Plus } from "lucide-react";
-import { assetsCollection } from "../../collections/assets";
+import { accountsCollection } from "../../collections/accounts";
 import { Button } from "../../components/ui/button";
 import {
 	Card,
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/assets/")({
 });
 
 function RouteComponent() {
-	const { data: assets } = useLiveQuery(assetsCollection);
+	const { data: assets } = useLiveQuery(accountsCollection);
 	const navigate = useNavigate();
 
 	const formatCurrency = (amount: number) => {
@@ -33,7 +33,9 @@ function RouteComponent() {
 			<div className="flex justify-between items-center mb-6">
 				<div>
 					<h1 className="text-3xl font-bold text-foreground">Assets</h1>
-					<p className="text-muted-foreground">Total Value: {formatCurrency(totalValue)}</p>
+					<p className="text-muted-foreground">
+						Total Value: {formatCurrency(totalValue)}
+					</p>
 				</div>
 
 				<Button onClick={() => navigate({ to: "/assets/add" })}>

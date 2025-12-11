@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { assetsCollection } from "@/collections/assets";
+import { accountsCollection } from "@/collections/accounts";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -16,7 +16,9 @@ interface IncomeFormData {
 	name: string;
 	amount: string;
 	targetAssetId?: string;
-	period?: "monthly";
+	sourceAssetId?: string;
+	amountType?: "fixed" | "percentage" | "remainder";
+	schedule?: string;
 }
 
 interface IncomeFormProps {
@@ -36,12 +38,14 @@ export function IncomeForm({
 	submitLabel,
 	mode,
 }: IncomeFormProps) {
-	const { data: assets } = useLiveQuery(assetsCollection);
+	const { data: assets } = useLiveQuery(accountsCollection);
 	const [formData, setFormData] = useState<IncomeFormData>({
 		name: initialData.name || "",
 		amount: initialData.amount?.toString() || "",
 		targetAssetId: initialData.targetAssetId,
-		period: initialData.period || "monthly",
+		sourceAssetId: initialData.sourceAssetId,
+		amountType: initialData.amountType || "fixed",
+		schedule: initialData.schedule || "monthly",
 	});
 
 	const handleInputChange = (field: keyof IncomeFormData, value: string) => {
@@ -70,15 +74,34 @@ export function IncomeForm({
 			</div>
 
 			<div>
-				<Label htmlFor="asset">Asset</Label>
+				<Label htmlFor="sourceAsset">From (Source)</Label>
+				<Select
+					value={formData.sourceAssetId}
+					onValueChange={(value) => handleInputChange("sourceAssetId", value)}
+				>
+					<SelectTrigger className="mt-2">
+						<SelectValue placeholder="Select source (e.g., External)" />
+					</SelectTrigger>
+					<SelectContent id="sourceAsset">
+						{assets?.map((asset) => (
+							<SelectItem key={asset.id} value={asset.id}>
+								{asset.name}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</div>
+
+			<div>
+				<Label htmlFor="targetAsset">To (Target Account)</Label>
 				<Select
 					value={formData.targetAssetId}
 					onValueChange={(value) => handleInputChange("targetAssetId", value)}
 				>
 					<SelectTrigger className="mt-2">
-						<SelectValue placeholder="Select an asset" />
+						<SelectValue placeholder="Select target account" />
 					</SelectTrigger>
-					<SelectContent id="asset">
+					<SelectContent id="targetAsset">
 						{assets?.map((asset) => (
 							<SelectItem key={asset.id} value={asset.id}>
 								{asset.name}

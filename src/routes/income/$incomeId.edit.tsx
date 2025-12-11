@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { incomeCollection } from "../../collections/income";
+import { flowsCollection } from "../../collections/flows";
 import { IncomeForm } from "../../components/income/IncomeForm";
 import { Button } from "../../components/ui/button";
 import {
@@ -18,41 +18,42 @@ export const Route = createFileRoute("/income/$incomeId/edit")({
 function RouteComponent() {
 	const { incomeId } = Route.useParams();
 	const navigate = useNavigate();
-	const { data: income } = useLiveQuery(incomeCollection);
+	const { data: flows } = useLiveQuery(flowsCollection);
 
-	const incomeItem = income?.find((i) => i.id === incomeId);
+	const flow = flows?.find((f) => f.id === incomeId);
 
 	const handleSubmit = async (data: {
 		name: string;
 		amount: string;
 		targetAssetId?: string;
-		period?: "monthly";
+		sourceAssetId?: string;
+		amountType?: "fixed" | "percentage" | "remainder";
+		schedule?: string;
 	}) => {
-		if (!incomeItem) return;
+		if (!flow) return;
+		if (!data.targetAssetId || !data.sourceAssetId) return;
 
-		await incomeCollection.update(incomeItem.id, (oldIncome) => {
-			oldIncome.name = data.name;
-			oldIncome.amount = parseFloat(data.amount);
-			if (data.targetAssetId) {
-				oldIncome.targetAssetId = data.targetAssetId;
-			}
-			if (data.period) {
-				oldIncome.period = data.period;
-			}
+		await flowsCollection.update(flow.id, (oldFlow) => {
+			oldFlow.name = data.name;
+			oldFlow.amount = parseFloat(data.amount);
+			oldFlow.targetAccountId = data.targetAssetId!;
+			oldFlow.sourceAccountId = data.sourceAssetId!;
+			oldFlow.amountType = data.amountType || "fixed";
+			oldFlow.schedule = data.schedule || "monthly";
 		});
 		navigate({ to: "/income" });
 	};
 
 	const handleDelete = async () => {
-		if (!incomeItem) return;
+		if (!flow) return;
 
-		if (confirm(`Are you sure you want to delete "${incomeItem.name}"?`)) {
-			await incomeCollection.delete(incomeItem.id);
+		if (confirm(`Are you sure you want to delete "${flow.name}"?`)) {
+			await flowsCollection.delete(flow.id);
 			navigate({ to: "/income" });
 		}
 	};
 
-	if (!incomeItem) {
+	if (!flow) {
 		return (
 			<div className="container mx-auto p-6 max-w-2xl">
 				<div className="text-center py-12">
@@ -94,10 +95,12 @@ function RouteComponent() {
 					<IncomeForm
 						mode="edit"
 						initialData={{
-							name: incomeItem.name,
-							amount: incomeItem.amount.toString(),
-							targetAssetId: incomeItem.targetAssetId,
-							period: incomeItem.period,
+							name: flow.name,
+							amount: flow.amount.toString(),
+							targetAssetId: flow.targetAccountId,
+							sourceAssetId: flow.sourceAccountId,
+							amountType: flow.amountType,
+							schedule: flow.schedule,
 						}}
 						onSubmit={handleSubmit}
 						onCancel={() => navigate({ to: "/income" })}

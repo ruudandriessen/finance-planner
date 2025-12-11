@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { incomeCollection } from "../../collections/income";
+import { flowsCollection } from "../../collections/flows";
 import { IncomeForm } from "../../components/income/IncomeForm";
 import { Button } from "../../components/ui/button";
 import {
@@ -21,18 +21,25 @@ function RouteComponent() {
 		name: string;
 		amount: string;
 		targetAssetId?: string;
-		period?: "monthly";
+		sourceAssetId?: string;
+		amountType?: "fixed" | "percentage" | "remainder";
+		schedule?: string;
 	}) => {
-		if (data.targetAssetId == null) {
+		if (data.targetAssetId == null || data.sourceAssetId == null) {
 			return;
 		}
 
-		await incomeCollection.insert({
+		await flowsCollection.insert({
 			id: crypto.randomUUID(),
 			amount: parseFloat(data.amount),
 			name: data.name,
-			period: "monthly",
-			targetAssetId: data.targetAssetId,
+			sourceAccountId: data.sourceAssetId,
+			targetAccountId: data.targetAssetId,
+			amountType: data.amountType || "fixed",
+			schedule: data.schedule || "monthly",
+			conditions: {
+				stopIfTargetBalance: 0,
+			},
 		});
 		navigate({ to: "/income" });
 	};

@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DollarSign, Edit3, Plus } from "lucide-react";
-import { incomeCollection } from "../../collections/income";
+import { flowsCollection } from "../../collections/flows";
 import { Button } from "../../components/ui/button";
 import {
 	Card,
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/income/")({
 });
 
 function RouteComponent() {
-	const { data: income } = useLiveQuery(incomeCollection);
+	const { data: flows } = useLiveQuery(flowsCollection);
 	const navigate = useNavigate();
 
 	const formatCurrency = (amount: number) => {
@@ -26,9 +26,9 @@ function RouteComponent() {
 	};
 
 	const calculateTotalMonthlyIncome = () => {
-		if (!income) return 0;
-		return income.reduce((sum: number, incomeItem) => {
-			return sum + incomeItem.amount;
+		if (!flows) return 0;
+		return flows.reduce((sum: number, flow) => {
+			return sum + flow.amount;
 		}, 0);
 	};
 
@@ -52,14 +52,14 @@ function RouteComponent() {
 				</Button>
 			</div>
 
-			{income && income.length > 0 ? (
+			{flows && flows.length > 0 ? (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{income.map((incomeItem) => (
-						<Card key={incomeItem.id}>
+					{flows.map((flow) => (
+						<Card key={flow.id}>
 							<CardHeader className="flex flex-row items-center justify-between">
 								<CardTitle className="flex items-center gap-2">
 									<DollarSign className="h-4 w-4 text-green-600" />
-									{incomeItem.name}
+									{flow.name}
 								</CardTitle>
 								<Button
 									variant="ghost"
@@ -67,7 +67,7 @@ function RouteComponent() {
 									onClick={() =>
 										navigate({
 											to: "/income/$incomeId/edit",
-											params: { incomeId: incomeItem.id },
+											params: { incomeId: flow.id },
 										})
 									}
 								>
@@ -76,9 +76,9 @@ function RouteComponent() {
 							</CardHeader>
 							<CardContent>
 								<div className="text-2xl font-bold">
-									{formatCurrency(incomeItem.amount)}
+									{formatCurrency(flow.amount)}
 								</div>
-								<p className="text-xs text-muted-foreground">{incomeItem.period}</p>
+								<p className="text-xs text-muted-foreground">{flow.schedule}</p>
 							</CardContent>
 						</Card>
 					))}

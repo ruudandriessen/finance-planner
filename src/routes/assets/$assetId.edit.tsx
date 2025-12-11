@@ -1,7 +1,7 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { assetsCollection } from "../../collections/assets";
+import { accountsCollection } from "../../collections/accounts";
 import { AssetForm, type AssetFormData } from "../../components/AssetForm";
 import { Button } from "../../components/ui/button";
 import {
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/assets/$assetId/edit")({
 function RouteComponent() {
 	const { assetId } = Route.useParams();
 	const navigate = useNavigate();
-	const { data: assets } = useLiveQuery(assetsCollection);
+	const { data: assets } = useLiveQuery(accountsCollection);
 
 	const asset = assets?.find((a) => a.id === assetId);
 
@@ -28,7 +28,7 @@ function RouteComponent() {
 		const amount = parseFloat(data.amount);
 		if (Number.isNaN(amount)) return;
 
-		await assetsCollection.update(asset.id, (oldAsset) => {
+		await accountsCollection.update(asset.id, (oldAsset) => {
 			oldAsset.name = data.name;
 			oldAsset.amount = amount;
 		});
@@ -39,7 +39,7 @@ function RouteComponent() {
 		if (!asset) return;
 
 		if (confirm(`Are you sure you want to delete "${asset.name}"?`)) {
-			await assetsCollection.delete(asset.id);
+			await accountsCollection.delete(asset.id);
 			navigate({ to: "/assets" });
 		}
 	};

@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { assetsCollection } from "../../collections/assets";
+import { accountsCollection } from "../../collections/accounts";
 import { AssetForm, type AssetFormData } from "../../components/AssetForm";
 import { Button } from "../../components/ui/button";
 import {
@@ -21,10 +21,11 @@ function RouteComponent() {
 		const amount = parseFloat(data.amount);
 		if (Number.isNaN(amount)) return;
 
-		await assetsCollection.insert({
+		await accountsCollection.insert({
 			id: crypto.randomUUID(),
 			name: data.name,
 			amount,
+			type: "asset",
 		});
 		navigate({ to: "/assets" });
 	};
