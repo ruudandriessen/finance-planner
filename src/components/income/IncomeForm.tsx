@@ -1,6 +1,6 @@
-import { assetsCollection } from "@/collections/assets";
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
+import { assetsCollection } from "@/collections/assets";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
