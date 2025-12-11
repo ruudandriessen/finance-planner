@@ -18,7 +18,7 @@ interface FlowFormData {
 	targetAccountId: string;
 	schedule: string;
 	priorityOrder: number;
-	strategyType: "fixed" | "mortgage";
+	strategyType: "fixed" | "mortgage" | "compound";
 	amount?: number;
 	inflationAdjusted: boolean;
 	// Mortgage-specific fields
@@ -27,6 +27,8 @@ interface FlowFormData {
 	assetAccountId?: string;
 	totalPaymentAmount?: number;
 	baseAnnualRate?: number;
+	// Compound-specific fields
+	growthRate?: number;
 }
 
 interface FlowFormProps {
@@ -61,11 +63,12 @@ export function FlowForm({
 		assetAccountId: initialData.assetAccountId,
 		totalPaymentAmount: initialData.totalPaymentAmount,
 		baseAnnualRate: initialData.baseAnnualRate,
+		growthRate: initialData.growthRate,
 	});
 
 	const handleInputChange = (
 		field: keyof FlowFormData,
-		value: string | number | boolean,
+		value: FlowFormData[keyof FlowFormData],
 	) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 	};
@@ -173,7 +176,7 @@ export function FlowForm({
 				<Label htmlFor="strategyType">Strategy Type</Label>
 				<Select
 					value={formData.strategyType}
-					onValueChange={(value: "fixed" | "mortgage") =>
+					onValueChange={(value: "fixed" | "mortgage" | "compound") =>
 						handleInputChange("strategyType", value)
 					}
 				>
@@ -183,6 +186,7 @@ export function FlowForm({
 					<SelectContent id="strategyType">
 						<SelectItem value="fixed">Fixed Amount</SelectItem>
 						<SelectItem value="mortgage">Mortgage</SelectItem>
+						<SelectItem value="compound">Compound Interest</SelectItem>
 					</SelectContent>
 				</Select>
 				<p className="text-xs text-muted-foreground mt-1">
@@ -208,6 +212,29 @@ export function FlowForm({
 					/>
 					<p className="text-sm text-muted-foreground mt-1">
 						Fixed amount per {formData.schedule} period
+					</p>
+				</div>
+			)}
+
+			{formData.strategyType === "compound" && (
+				<div>
+					<Label htmlFor="growthRate">Growth rate (%)</Label>
+					<Input
+						id="growthRate"
+						type="number"
+						step="0.01"
+						min="0"
+						max="1"
+						value={formData.growthRate ?? ""}
+						onChange={(e) =>
+							handleInputChange("growthRate", parseFloat(e.target.value) ?? 0)
+						}
+						placeholder="Enter amount"
+						className="mt-2"
+						required
+					/>
+					<p className="text-sm text-muted-foreground mt-1">
+						Percentage growth rate per {formData.schedule} period
 					</p>
 				</div>
 			)}

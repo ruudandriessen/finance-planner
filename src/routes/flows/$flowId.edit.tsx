@@ -28,7 +28,7 @@ function RouteComponent() {
 		targetAccountId: string;
 		schedule: string;
 		priorityOrder: number;
-		strategyType: "fixed" | "mortgage";
+		strategyType: "fixed" | "mortgage" | "compound";
 		amount?: number;
 		inflationAdjusted: boolean;
 		// Mortgage-specific fields
@@ -37,6 +37,8 @@ function RouteComponent() {
 		assetAccountId?: string;
 		totalPaymentAmount?: number;
 		baseAnnualRate?: number;
+		// Compound-specific fields
+		growthRate?: number;
 	}) => {
 		if (!flow) return;
 
@@ -54,19 +56,26 @@ function RouteComponent() {
 								amount: data.amount ?? 0,
 							},
 						}
-					: {
-							type: "mortgage",
-							config: {
-								liabilityAccountId: data.liabilityAccountId ?? "",
-								interestExpenseAccountId: data.interestExpenseAccountId ?? "",
-								assetAccountId: data.assetAccountId ?? "",
-								totalPaymentAmount: data.totalPaymentAmount ?? 0,
-								interestCalculation: {
-									type: "FIXED_RATE",
-									baseAnnualRate: data.baseAnnualRate ?? 0,
+					: data.strategyType === "mortgage"
+						? {
+								type: "mortgage",
+								config: {
+									liabilityAccountId: data.liabilityAccountId ?? "",
+									interestExpenseAccountId: data.interestExpenseAccountId ?? "",
+									assetAccountId: data.assetAccountId ?? "",
+									totalPaymentAmount: data.totalPaymentAmount ?? 0,
+									interestCalculation: {
+										type: "FIXED_RATE",
+										baseAnnualRate: data.baseAnnualRate ?? 0,
+									},
 								},
-							},
-						};
+							}
+						: {
+								type: "compound",
+								config: {
+									growthRate: data.growthRate ?? 0,
+								},
+							};
 			oldFlow.modifiers = data.inflationAdjusted ? ["inflation_adjusted"] : [];
 		});
 		navigate({ to: "/flows" });
@@ -150,6 +159,11 @@ function RouteComponent() {
 							baseAnnualRate:
 								flow.strategy.type === "mortgage"
 									? flow.strategy.config.interestCalculation.baseAnnualRate
+									: undefined,
+
+							growthRate:
+								flow.strategy.type === "compound"
+									? flow.strategy.config.growthRate
 									: undefined,
 						}}
 						onSubmit={handleSubmit}

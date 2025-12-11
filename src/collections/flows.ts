@@ -26,6 +26,13 @@ export const morgageStrategy = z.object({
 	}),
 });
 
+export const compoundInterestStrategy = z.object({
+	type: z.literal("compound"),
+	config: z.object({
+		growthRate: z.number(),
+	}),
+});
+
 export const flowSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -33,13 +40,20 @@ export const flowSchema = z.object({
 	// Execution Priority
 	// Lower numbers run first (Income -> Transfers -> Bills -> Savings)
 	priorityOrder: z.number(),
-	schedule: z.string(),
+	schedule: z.enum(["monthly", "annually"]).default("monthly"),
 
 	// Flow direction
 	sourceAccountId: z.string(),
 	targetAccountId: z.string(),
 
-	strategy: z.discriminatedUnion("type", [fixedStrategy, morgageStrategy]),
+	start: z.date().optional(),
+	end: z.date().optional(),
+
+	strategy: z.discriminatedUnion("type", [
+		fixedStrategy,
+		morgageStrategy,
+		compoundInterestStrategy,
+	]),
 	modifiers: z.array(z.enum(["inflation_adjusted"])),
 });
 

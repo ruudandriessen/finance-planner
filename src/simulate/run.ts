@@ -1,3 +1,4 @@
+import { shouldRunRule } from "./shouldRunRule";
 import { StrategyRegistry } from "./strategies";
 import type {
 	SimulationContext,
@@ -41,6 +42,10 @@ export const runSimulation = ({
 
 		// 3. Rule Execution Loop (Waterfall)
 		for (const rule of sortedRules) {
+			if (!shouldRunRule(rule, currentDate)) {
+				continue;
+			}
+
 			const strategyFn = StrategyRegistry[rule.strategy.type];
 
 			if (!strategyFn) {

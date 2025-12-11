@@ -12,8 +12,10 @@ const fixedTransferStrategy: StrategyFn = (rule, ctx) => {
 	const { config } = rule.strategy;
 	const amount = config.amount;
 
-	// Validation
-	if (!amount || amount <= 0) return [];
+	if (amount <= 0) {
+		console.warn(`[${rule.name}] ⚠️ BELOW ZERO AMOUNT TRANSFER`);
+		return [];
+	}
 
 	return [
 		{
@@ -51,7 +53,8 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
 
 	// Convert percentage to decimal if needed (e.g., 4.15 -> 0.0415)
 	const annualRateInput = config.interestCalculation.baseAnnualRate || 5; // Default 5%
-	const annualRate = annualRateInput > 1 ? annualRateInput / 100 : annualRateInput;
+	const annualRate =
+		annualRateInput > 1 ? annualRateInput / 100 : annualRateInput;
 	const monthlyRate = annualRate / 12;
 
 	let interestPayment = principalRemaining * monthlyRate;
@@ -84,11 +87,11 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
 		// For this MVP, let's just log a warning and clamp.
 		console.warn(
 			`[${rule.name}] ⚠️  NEGATIVE AMORTIZATION!\n` +
-			`  Mortgage Balance: $${principalRemaining.toLocaleString()}\n` +
-			`  Monthly Interest: $${interestPayment.toFixed(2)}\n` +
-			`  Your Payment: $${totalPayment.toFixed(2)}\n` +
-			`  Shortfall: $${(interestPayment - totalPayment).toFixed(2)}\n` +
-			`  → Your payment is too low! Increase it to at least $${Math.ceil(interestPayment + 100)}/month`
+				`  Mortgage Balance: $${principalRemaining.toLocaleString()}\n` +
+				`  Monthly Interest: $${interestPayment.toFixed(2)}\n` +
+				`  Your Payment: $${totalPayment.toFixed(2)}\n` +
+				`  Shortfall: $${(interestPayment - totalPayment).toFixed(2)}\n` +
+				`  → Your payment is too low! Increase it to at least $${Math.ceil(interestPayment + 100)}/month`,
 		);
 		interestPayment = totalPayment;
 		principalPayment = 0;
@@ -124,10 +127,53 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
 };
 
 /**
+ * STRATEGY 3: COMPOUND_INTEREST
+ * Applies a % growth rate to the current balance of the target account.
+ * Used for: Savings Interest, Stock Market Growth, Dividend Reinvestment.
+ */
+const compoundInterestStrategy: StrategyFn = (rule, ctx) => {
+	if (rule.strategy.type !== "compound") return [];
+	const { config } = rule.strategy;
+
+	// 1. Get the current balance of the Asset (e.g., Stock Portfolio)
+	// Logic: We define the "Target" as the account growing.
+	const currentBalance = ctx.balances[rule.targetAccountId] || 0;
+
+	// No money, no interest.
+	if (currentBalance <= 0) return [];
+
+	// 2. Determine Rate
+	const annualRate = config.growthRate; // e.g., 0.08 for 8%
+
+	// 3. Calculate Gain
+	const gainAmount = currentBalance * annualRate;
+
+	// Round to 2 decimals
+	const safeAmount = Number(gainAmount.toFixed(2));
+
+	if (safeAmount <= 0) return [];
+
+	return [
+		{
+			fromId: rule.sourceAccountId, // The "Market" or "Bank" income node
+			toId: rule.targetAccountId, // The Asset
+			amount: safeAmount,
+			date: ctx.date,
+			description: `Growth (${(annualRate * 100).toFixed(1)}%): ${rule.name}`,
+			type: "INTEREST", // or 'APPRECIATION'
+		},
+	];
+};
+
+// Add to Registry
+// StrategyRegistry['COMPOUND_INTEREST'] = compoundInterestStrategy;
+
+/**
  * STRATEGY REGISTRY
  * Maps the string keys from your DB/JSON to the actual functions.
  */
 export const StrategyRegistry: Record<string, StrategyFn> = {
 	fixed: fixedTransferStrategy,
 	mortgage: dynamicMortgageStrategy,
+	compound: compoundInterestStrategy,
 };
