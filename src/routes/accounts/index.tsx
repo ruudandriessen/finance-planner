@@ -10,12 +10,12 @@ import {
 	CardTitle,
 } from "../../components/ui/card";
 
-export const Route = createFileRoute("/assets/")({
+export const Route = createFileRoute("/accounts/")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { data: assets } = useLiveQuery(accountsCollection);
+	const { data: accounts } = useLiveQuery(accountsCollection);
 	const navigate = useNavigate();
 
 	const formatCurrency = (amount: number) => {
@@ -26,37 +26,37 @@ function RouteComponent() {
 	};
 
 	const totalValue =
-		assets?.reduce((sum: number, asset) => sum + asset.amount, 0) || 0;
+		accounts?.reduce((sum: number, asset) => sum + asset.amount, 0) || 0;
 
 	return (
 		<div className="container mx-auto p-6 max-w-6xl">
 			<div className="flex justify-between items-center mb-6">
 				<div>
-					<h1 className="text-3xl font-bold text-foreground">Assets</h1>
+					<h1 className="text-3xl font-bold text-foreground">Accounts</h1>
 					<p className="text-muted-foreground">
 						Total Value: {formatCurrency(totalValue)}
 					</p>
 				</div>
 
-				<Button onClick={() => navigate({ to: "/assets/add" })}>
+				<Button onClick={() => navigate({ to: "/accounts/add" })}>
 					<Plus className="h-4 w-4" />
-					Add Asset
+					Add Account
 				</Button>
 			</div>
 
-			{assets && assets.length > 0 ? (
+			{accounts && accounts.length > 0 ? (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{assets.map((asset) => (
-						<Card key={asset.id}>
+					{accounts.map((account) => (
+						<Card key={account.id}>
 							<CardHeader className="flex flex-row items-center justify-between">
-								<CardTitle>{asset.name}</CardTitle>
+								<CardTitle>{account.name}</CardTitle>
 								<Button
 									variant="ghost"
 									size="sm"
 									onClick={() =>
 										navigate({
-											to: "/assets/$assetId/edit",
-											params: { assetId: asset.id },
+											to: "/accounts/$accountId/edit",
+											params: { accountId: account.id },
 										})
 									}
 								>
@@ -65,7 +65,7 @@ function RouteComponent() {
 							</CardHeader>
 							<CardContent>
 								<div className="text-2xl font-bold">
-									{formatCurrency(asset.amount)}
+									{formatCurrency(account.amount)}
 								</div>
 							</CardContent>
 						</Card>
@@ -76,10 +76,10 @@ function RouteComponent() {
 					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
 						<div className="text-muted-foreground text-center">
 							<p className="text-lg font-medium mb-2 text-foreground">
-								No assets yet
+								No accounts yet
 							</p>
 							<p className="text-sm text-muted-foreground">
-								Add your first asset to get started
+								Add your first account to get started
 							</p>
 						</div>
 					</CardContent>

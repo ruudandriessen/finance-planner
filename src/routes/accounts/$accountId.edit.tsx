@@ -11,16 +11,16 @@ import {
 	CardTitle,
 } from "../../components/ui/card";
 
-export const Route = createFileRoute("/assets/$assetId/edit")({
+export const Route = createFileRoute("/accounts/$accountId/edit")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const { assetId } = Route.useParams();
+	const { accountId } = Route.useParams();
 	const navigate = useNavigate();
 	const { data: assets } = useLiveQuery(accountsCollection);
 
-	const asset = assets?.find((a) => a.id === assetId);
+	const asset = assets?.find((a) => a.id === accountId);
 
 	const handleSubmit = async (data: AssetFormData) => {
 		if (!asset) return;
@@ -31,8 +31,9 @@ function RouteComponent() {
 		await accountsCollection.update(asset.id, (oldAsset) => {
 			oldAsset.name = data.name;
 			oldAsset.amount = amount;
+			oldAsset.type = data.type;
 		});
-		navigate({ to: "/assets" });
+		navigate({ to: "/accounts" });
 	};
 
 	const handleDelete = async () => {
@@ -40,7 +41,7 @@ function RouteComponent() {
 
 		if (confirm(`Are you sure you want to delete "${asset.name}"?`)) {
 			await accountsCollection.delete(asset.id);
-			navigate({ to: "/assets" });
+			navigate({ to: "/accounts" });
 		}
 	};
 
@@ -48,9 +49,12 @@ function RouteComponent() {
 		return (
 			<div className="container mx-auto p-6 max-w-2xl">
 				<div className="text-center py-12">
-					<p className="text-lg text-muted-foreground">Asset not found</p>
-					<Button onClick={() => navigate({ to: "/assets" })} className="mt-4">
-						Back to Assets
+					<p className="text-lg text-muted-foreground">Account not found</p>
+					<Button
+						onClick={() => navigate({ to: "/accounts" })}
+						className="mt-4"
+					>
+						Back to Accounts
 					</Button>
 				</div>
 			</div>
@@ -62,20 +66,22 @@ function RouteComponent() {
 			<div className="mb-6">
 				<Button
 					variant="outline"
-					onClick={() => navigate({ to: "/assets" })}
+					onClick={() => navigate({ to: "/accounts" })}
 					className="mb-4"
 				>
 					<ArrowLeft className="h-4 w-4 mr-2" />
-					Back to Assets
+					Back to Accounts
 				</Button>
-				<h1 className="text-3xl font-bold text-foreground">Edit Asset</h1>
-				<p className="text-muted-foreground mt-1">Update your asset details</p>
+				<h1 className="text-3xl font-bold text-foreground">Edit Account</h1>
+				<p className="text-muted-foreground mt-1">
+					Update your account details
+				</p>
 			</div>
 
 			<Card>
 				<CardHeader>
 					<CardTitle className="text-xl text-foreground">
-						Asset Details
+						Account Details
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
@@ -83,11 +89,12 @@ function RouteComponent() {
 						initialData={{
 							name: asset.name,
 							amount: asset.amount.toString(),
+							type: asset.type,
 						}}
 						onSubmit={handleSubmit}
-						onCancel={() => navigate({ to: "/assets" })}
+						onCancel={() => navigate({ to: "/accounts" })}
 						onDelete={handleDelete}
-						submitLabel="Update Asset"
+						submitLabel="Update Account"
 					/>
 				</CardContent>
 			</Card>

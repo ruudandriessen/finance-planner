@@ -2,10 +2,18 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "./ui/select";
 
 export interface AssetFormData {
 	name: string;
 	amount: string;
+	type: "asset" | "liability" | "income" | "expense";
 }
 
 interface AssetFormProps {
@@ -17,7 +25,7 @@ interface AssetFormProps {
 }
 
 export function AssetForm({
-	initialData = { name: "", amount: "" },
+	initialData = { name: "", amount: "", type: "asset" as const },
 	onSubmit,
 	onCancel,
 	onDelete,
@@ -41,12 +49,32 @@ export function AssetForm({
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 			<div>
-				<Label htmlFor="name">Asset Name</Label>
+				<Label htmlFor="type">Account Type</Label>
+				<Select
+					value={formData.type}
+					onValueChange={(value) =>
+						handleInputChange("type", value as AssetFormData["type"])
+					}
+				>
+					<SelectTrigger className="mt-2">
+						<SelectValue placeholder="Select account type" />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="asset">Asset</SelectItem>
+						<SelectItem value="liability">Liability</SelectItem>
+						<SelectItem value="income">Income</SelectItem>
+						<SelectItem value="expense">Expense</SelectItem>
+					</SelectContent>
+				</Select>
+			</div>
+
+			<div>
+				<Label htmlFor="name">Account Name</Label>
 				<Input
 					id="name"
 					value={formData.name}
 					onChange={(e) => handleInputChange("name", e.target.value)}
-					placeholder="Enter asset name"
+					placeholder="Enter account name"
 					className="mt-2"
 					required
 				/>

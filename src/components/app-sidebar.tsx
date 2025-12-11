@@ -15,7 +15,7 @@ import {
 const items = [
 	{
 		title: "Assets",
-		url: "/assets",
+		url: "/accounts",
 		icon: () => <HouseIcon />,
 	},
 	{

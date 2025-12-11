@@ -10,7 +10,7 @@ import {
 	CardTitle,
 } from "../../components/ui/card";
 
-export const Route = createFileRoute("/assets/add")({
+export const Route = createFileRoute("/accounts/add")({
 	component: RouteComponent,
 });
 
@@ -25,9 +25,9 @@ function RouteComponent() {
 			id: crypto.randomUUID(),
 			name: data.name,
 			amount,
-			type: "asset",
+			type: data.type,
 		});
-		navigate({ to: "/assets" });
+		navigate({ to: "/accounts" });
 	};
 
 	return (
@@ -35,29 +35,29 @@ function RouteComponent() {
 			<div className="mb-6">
 				<Button
 					variant="outline"
-					onClick={() => navigate({ to: "/assets" })}
+					onClick={() => navigate({ to: "/accounts" })}
 					className="mb-4"
 				>
 					<ArrowLeft className="h-4 w-4 mr-2" />
-					Back to Assets
+					Back to Accounts
 				</Button>
-				<h1 className="text-3xl font-bold text-foreground">Add New Asset</h1>
+				<h1 className="text-3xl font-bold text-foreground">Add New Account</h1>
 				<p className="text-muted-foreground mt-1">
-					Add a new asset to your portfolio
+					Add a new account to your portfolio
 				</p>
 			</div>
 
 			<Card>
 				<CardHeader>
 					<CardTitle className="text-xl text-foreground">
-						Asset Details
+						Account Details
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<AssetForm
 						onSubmit={handleSubmit}
-						onCancel={() => navigate({ to: "/assets" })}
-						submitLabel="Add Asset"
+						onCancel={() => navigate({ to: "/accounts" })}
+						submitLabel="Add Account"
 					/>
 				</CardContent>
 			</Card>
