@@ -103,7 +103,10 @@ export function FlowForm({
             min="1"
             value={formData.priorityOrder}
             onChange={(e) =>
-              handleInputChange("priorityOrder", parseInt(e.target.value) || 1)
+              handleInputChange(
+                "priorityOrder",
+                parseInt(e.target.value, 10) ?? 1,
+              )
             }
             className="mt-2"
             required
