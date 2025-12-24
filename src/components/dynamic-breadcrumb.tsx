@@ -25,6 +25,7 @@ export function DynamicBreadcrumb() {
     .map((match) => {
       const pathSegments = match.pathname.split("/").filter(Boolean);
       const lastSegment = pathSegments[pathSegments.length - 1];
+      if (!lastSegment) throw new Error("Last segment is required");
 
       // Format the title - capitalize and handle special cases
       let title = lastSegment;
@@ -41,7 +42,9 @@ export function DynamicBreadcrumb() {
       else if (match.params && Object.keys(match.params).length > 0) {
         // If it's a dynamic parameter, use a generic label
         const paramKey = Object.keys(match.params)[0];
-        if (lastSegment === match.params[paramKey]) {
+        if (
+          lastSegment === match.params[paramKey as keyof typeof match.params]
+        ) {
           // Get the parent segment for context
           const parentSegment = pathSegments[pathSegments.length - 2];
           title = parentSegment

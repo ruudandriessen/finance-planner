@@ -26,7 +26,7 @@ function RouteComponent() {
     name: string;
     sourceAccountId: string;
     targetAccountId: string;
-    schedule: string;
+    schedule: "monthly" | "annually";
     priorityOrder: number;
     strategyType: "fixed" | "mortgage" | "compound";
     amount?: number;
