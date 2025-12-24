@@ -1,5 +1,6 @@
 import { Link, useMatches } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
+import { PlanSelector } from "./plan-selector";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +10,6 @@ import {
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { SidebarTrigger } from "./ui/sidebar";
-import { PlanSelector } from "./plan-selector";
 
 interface BreadcrumbSegment {
   title: string;
