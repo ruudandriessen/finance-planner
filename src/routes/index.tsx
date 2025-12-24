@@ -4,151 +4,151 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { accountsCollection } from "@/collections/accounts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useSimulation } from "@/hooks/use-simulation";
 
 export const Route = createFileRoute("/")({
-	component: Home,
+  component: Home,
 });
 
 function Home() {
-	const { data: accounts } = useLiveQuery(accountsCollection);
-	const numberOfMonthsInSimulation = 30 * 12;
-	const simulationResults = useSimulation(numberOfMonthsInSimulation);
+  const { data: accounts } = useLiveQuery(accountsCollection);
+  const numberOfMonthsInSimulation = 30 * 12;
+  const simulationResults = useSimulation(numberOfMonthsInSimulation);
 
-	// Filter to only show assets and liabilities
-	const relevantAccounts = accounts?.filter(
-		(account) => account.type === "asset" || account.type === "liability",
-	);
+  // Filter to only show assets and liabilities
+  const relevantAccounts = accounts?.filter(
+    (account) => account.type === "asset" || account.type === "liability",
+  );
 
-	// Create a set of liability account IDs for quick lookup
-	const liabilityAccountIds = new Set(
-		accounts
-			?.filter((account) => account.type === "liability")
-			.map((a) => a.id),
-	);
+  // Create a set of liability account IDs for quick lookup
+  const liabilityAccountIds = new Set(
+    accounts
+      ?.filter((account) => account.type === "liability")
+      .map((a) => a.id),
+  );
 
-	// Prepare chart data - display liabilities as positive values
-	const chartData =
-		simulationResults?.map((result) => {
-			const displayBalances: Record<string, number> = {};
-			for (const [accountId, balance] of Object.entries(result.balances)) {
-				// Show liabilities as positive (flip the sign)
-				displayBalances[accountId] = liabilityAccountIds.has(accountId)
-					? Math.abs(balance)
-					: balance;
-			}
-			return {
-				date: result.date.toLocaleDateString("en-US", {
-					month: "short",
-					year: "numeric",
-				}),
-				...displayBalances,
-			};
-		}) ?? [];
+  // Prepare chart data - display liabilities as positive values
+  const chartData =
+    simulationResults?.map((result) => {
+      const displayBalances: Record<string, number> = {};
+      for (const [accountId, balance] of Object.entries(result.balances)) {
+        // Show liabilities as positive (flip the sign)
+        displayBalances[accountId] = liabilityAccountIds.has(accountId)
+          ? Math.abs(balance)
+          : balance;
+      }
+      return {
+        date: result.date.toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+        }),
+        ...displayBalances,
+      };
+    }) ?? [];
 
-	// Create chart config with colors for each account
-	const chartConfig =
-		relevantAccounts?.reduce(
-			(config, account, index) => {
-				const colors = [
-					"var(--chart-1)",
-					"var(--chart-2)",
-					"var(--chart-3)",
-					"var(--chart-4)",
-					"var(--chart-5)",
-				];
-				config[account.id] = {
-					label: account.name,
-					color: colors[index % colors.length] ?? "var(--chart-1)",
-				};
-				return config;
-			},
-			{} as Record<string, { label: string; color: string }>,
-		) ?? {};
+  // Create chart config with colors for each account
+  const chartConfig =
+    relevantAccounts?.reduce(
+      (config, account, index) => {
+        const colors = [
+          "var(--chart-1)",
+          "var(--chart-2)",
+          "var(--chart-3)",
+          "var(--chart-4)",
+          "var(--chart-5)",
+        ];
+        config[account.id] = {
+          label: account.name,
+          color: colors[index % colors.length] ?? "var(--chart-1)",
+        };
+        return config;
+      },
+      {} as Record<string, { label: string; color: string }>,
+    ) ?? {};
 
-	const formatCurrency = (value: number) => {
-		return new Intl.NumberFormat("en-US", {
-			style: "currency",
-			currency: "USD",
-			notation: "compact",
-			maximumFractionDigits: 1,
-		}).format(value);
-	};
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(value);
+  };
 
-	return (
-		<div className="container mx-auto p-6 max-w-6xl">
-			<h1 className="text-3xl font-bold text-foreground">Finance Planner</h1>
-			<p className="text-muted-foreground mt-2">
-				Welcome to your personal finance planning application!
-			</p>
+  return (
+    <div className="container mx-auto p-6 max-w-6xl">
+      <h1 className="text-3xl font-bold text-foreground">Finance Planner</h1>
+      <p className="text-muted-foreground mt-2">
+        Welcome to your personal finance planning application!
+      </p>
 
-			{simulationResults && accounts && accounts.length > 0 ? (
-				<div className="mt-6 space-y-6">
-					<Card>
-						<CardHeader>
-							<CardTitle>Account Balances Over Time (30 Years)</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<ChartContainer config={chartConfig}>
-								<LineChart data={chartData}>
-									<CartesianGrid strokeDasharray="3 3" />
-									<XAxis
-										dataKey="date"
-										tickLine={false}
-										axisLine={false}
-										tickMargin={8}
-									/>
-									<YAxis
-										tickLine={false}
-										axisLine={false}
-										tickMargin={8}
-										tickFormatter={formatCurrency}
-									/>
-									<ChartTooltip content={<ChartTooltipContent />} />
-									{relevantAccounts?.map((account) => (
-										<Line
-											key={account.id}
-											type="monotone"
-											dataKey={account.id}
-											stroke={chartConfig[account.id]?.color}
-											strokeWidth={2}
-											dot={false}
-										/>
-									))}
-								</LineChart>
-							</ChartContainer>
-						</CardContent>
-					</Card>
+      {simulationResults && accounts && accounts.length > 0 ? (
+        <div className="mt-6 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Account Balances Over Time (30 Years)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={formatCurrency}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  {relevantAccounts?.map((account) => (
+                    <Line
+                      key={account.id}
+                      type="monotone"
+                      dataKey={account.id}
+                      stroke={chartConfig[account.id]?.color}
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  ))}
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
 
-					<Card>
-						<CardHeader>
-							<CardTitle>Simulation Results (JSON)</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<pre className="bg-muted p-4 rounded-lg overflow-auto max-h-[400px] text-sm">
-								{JSON.stringify(simulationResults, null, 2)}
-							</pre>
-						</CardContent>
-					</Card>
-				</div>
-			) : (
-				<Card className="mt-6">
-					<CardContent className="flex flex-col items-center justify-center py-12 px-6">
-						<div className="text-muted-foreground text-center">
-							<p className="text-lg font-medium mb-2 text-foreground">
-								No accounts or flows yet
-							</p>
-							<p className="text-sm text-muted-foreground">
-								Add accounts and flows to see your financial simulation
-							</p>
-						</div>
-					</CardContent>
-				</Card>
-			)}
-		</div>
-	);
+          <Card>
+            <CardHeader>
+              <CardTitle>Simulation Results (JSON)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="bg-muted p-4 rounded-lg overflow-auto max-h-[400px] text-sm">
+                {JSON.stringify(simulationResults, null, 2)}
+              </pre>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
+        <Card className="mt-6">
+          <CardContent className="flex flex-col items-center justify-center py-12 px-6">
+            <div className="text-muted-foreground text-center">
+              <p className="text-lg font-medium mb-2 text-foreground">
+                No accounts or flows yet
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Add accounts and flows to see your financial simulation
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
 }
