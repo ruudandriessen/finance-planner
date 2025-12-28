@@ -53,12 +53,11 @@ export function IncomeForm({
     const amount = parseFloat(formData.amount);
     if (Number.isNaN(amount) || amount <= 0) return;
 
-    const priorityOrder = parseInt(formData.priorityOrder) || 1;
+    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 1;
 
     const financialItem: FinancialItem<"income"> = {
       id: initialData?.id || crypto.randomUUID(),
       name: formData.name,
-      type: "income",
       priorityOrder,
       schedule: formData.schedule,
       start: initialData?.start,

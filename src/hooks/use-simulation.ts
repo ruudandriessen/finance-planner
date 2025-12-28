@@ -2,7 +2,6 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { accountsCollection } from "@/collections/accounts";
 import { financialItemsCollection } from "@/collections/financialItems";
 import { flowsCollection } from "@/collections/flows";
-import type { FinancialItem } from "@/components/financial-items/types";
 import { deriveAccountsAndFlows } from "@/lib/derive-accounts-flows";
 import { runSimulation } from "@/simulate/run";
 import type { SimulationResult } from "@/simulate/types";
@@ -13,18 +12,10 @@ export function useSimulation(
   // Get both user-created accounts/flows and financial items
   const { data: accounts } = useLiveQuery(accountsCollection);
   const { data: flows } = useLiveQuery(flowsCollection);
-  const { data: financialItems } = useLiveQuery(financialItemsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
 
   // Derive accounts/flows from financial items
-  // Filter to only supported types (income, mortgage) for now
-  const supportedFinancialItems = (financialItems?.filter(
-    (item) => item.type === "income" || item.type === "mortgage",
-  ) || []) as Array<FinancialItem<"income"> | FinancialItem<"mortgage">>;
-
-  const derived =
-    supportedFinancialItems.length > 0
-      ? deriveAccountsAndFlows(supportedFinancialItems)
-      : { accounts: [], flows: [] };
+  const derived = deriveAccountsAndFlows(financialItems);
 
   // Convert derived accounts to full Account type (add empty name for type compatibility)
   // The simulation doesn't actually use the name field

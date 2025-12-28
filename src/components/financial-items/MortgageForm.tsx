@@ -63,7 +63,7 @@ export function MortgageForm({
     const paymentAmount = parseFloat(formData.paymentAmount);
     const interestRate = parseFloat(formData.interestRate);
     const loanAmount = parseFloat(formData.loanAmount);
-    const priorityOrder = parseInt(formData.priorityOrder) || 10;
+    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 10;
 
     if (
       Number.isNaN(paymentAmount) ||
@@ -79,7 +79,6 @@ export function MortgageForm({
     const financialItem: FinancialItem<"mortgage"> = {
       id: initialData?.id || crypto.randomUUID(),
       name: formData.name,
-      type: "mortgage",
       priorityOrder,
       schedule: formData.schedule,
       start: initialData?.start,

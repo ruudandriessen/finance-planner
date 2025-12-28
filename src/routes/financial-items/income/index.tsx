@@ -10,10 +10,10 @@ export const Route = createFileRoute("/financial-items/income/")({
 });
 
 function RouteComponent() {
-  const { data: items } = useLiveQuery(financialItemsCollection);
+  const { data: items = [] } = useLiveQuery(financialItemsCollection);
   const navigate = useNavigate();
 
-  const incomeItems = items?.filter((item) => item.type === "income") || [];
+  const incomeItems = items.filter((item) => item.data.type === "income");
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
