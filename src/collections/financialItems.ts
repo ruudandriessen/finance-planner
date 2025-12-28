@@ -24,7 +24,6 @@ const mortgageDataSchema = z.object({
 export const financialItemSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.enum(["income", "mortgage", "expense", "savings", "investment"]),
   priorityOrder: z.number(),
   schedule: z.enum(["monthly", "annually"]).default("monthly"),
   start: z.date().optional(),

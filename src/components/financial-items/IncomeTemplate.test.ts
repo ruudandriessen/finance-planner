@@ -8,7 +8,6 @@ describe("deriveIncome", () => {
   ): FinancialItem<"income"> => ({
     id: "income-1",
     name: "Monthly Salary",
-    type: "income",
     priorityOrder: 1,
     schedule: "monthly",
     data: {

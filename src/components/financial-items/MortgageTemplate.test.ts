@@ -8,7 +8,6 @@ describe("deriveMortgage", () => {
   ): FinancialItem<"mortgage"> => ({
     id: "mortgage-1",
     name: "Home Mortgage",
-    type: "mortgage",
     priorityOrder: 10,
     schedule: "monthly",
     data: {

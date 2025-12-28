@@ -34,7 +34,7 @@ function RouteComponent() {
     }
   };
 
-  if (!item || item.type !== "mortgage") {
+  if (!item || item.data.type !== "mortgage") {
     return (
       <div className="container mx-auto p-6 max-w-2xl">
         <div className="text-center py-12">
