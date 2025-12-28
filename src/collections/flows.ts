@@ -1,7 +1,3 @@
-import {
-  createCollection,
-  localStorageCollectionOptions,
-} from "@tanstack/react-db";
 import z from "zod";
 
 const fixedStrategy = z.object({
@@ -55,12 +51,3 @@ export const flowSchema = z.object({
   ]),
   modifiers: z.array(z.enum(["inflation_adjusted"])),
 });
-
-export const flowsCollection = createCollection(
-  localStorageCollectionOptions({
-    id: "flows",
-    storageKey: "flows",
-    getKey: (item) => item.id,
-    schema: flowSchema,
-  }),
-);
