@@ -4,13 +4,17 @@
  * but the split between interest and principal changes over time.
  *
  * Formula: M = P * [r(1+r)^n] / [(1+r)^n - 1]
+ *
+ * @param loanAmount - The total loan amount
+ * @param annualRate - The annual interest rate as a decimal (e.g., 0.045 for 4.5%)
+ * @param termYears - The loan term in years
  */
 export function calculateAnnuityPayment(
   loanAmount: number,
   annualRate: number,
   termYears: number,
 ): number {
-  const monthlyRate = annualRate / 100 / 12;
+  const monthlyRate = annualRate / 12;
   const totalMonths = termYears * 12;
 
   if (monthlyRate === 0) {

@@ -19,7 +19,7 @@ import type { FinancialItem, FinancialItemFormProps } from "./types";
 
 type MortgageFormData = {
   name: string;
-  interestRate: number;
+  interestRateDisplay: number; // Display value (e.g., 4.5 for 4.5%)
   loanAmount: number;
   loanTermYears: number;
   paymentType: "annuity" | "linear";
@@ -38,7 +38,8 @@ export function MortgageForm({
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<MortgageFormData>({
     name: initialData?.name ?? "",
-    interestRate: initialData?.data?.interestRate ?? 0,
+    // Convert stored decimal (0.045) to display value (4.5)
+    interestRateDisplay: (initialData?.data?.interestRate ?? 0) * 100,
     loanAmount: initialData?.data?.loanAmount ?? 0,
     loanTermYears: initialData?.data?.loanTermYears ?? 30,
     paymentType: initialData?.data?.paymentType ?? "annuity",
@@ -48,16 +49,19 @@ export function MortgageForm({
   });
 
   const calculatedPayment = (() => {
-    const { loanAmount, interestRate, loanTermYears, paymentType } = formData;
+    const { loanAmount, interestRateDisplay, loanTermYears, paymentType } =
+      formData;
     if (loanAmount <= 0 || loanTermYears <= 0) {
       return 0;
     }
+    // Convert display percentage to decimal for calculations
+    const interestRate = interestRateDisplay / 100;
     if (paymentType === "annuity") {
       return calculateAnnuityPayment(loanAmount, interestRate, loanTermYears);
     }
     // For linear, show initial payment (highest payment)
     const principal = calculateLinearPrincipal(loanAmount, loanTermYears);
-    const monthlyInterest = (loanAmount * interestRate) / 100 / 12;
+    const monthlyInterest = (loanAmount * interestRate) / 12;
     return principal + monthlyInterest;
   })();
 
@@ -68,10 +72,15 @@ export function MortgageForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { interestRate, loanAmount, loanTermYears, paymentType, priorityOrder } =
-      formData;
+    const {
+      interestRateDisplay,
+      loanAmount,
+      loanTermYears,
+      paymentType,
+      priorityOrder,
+    } = formData;
 
-    if (interestRate < 0 || loanAmount <= 0 || loanTermYears <= 0) {
+    if (interestRateDisplay < 0 || loanAmount <= 0 || loanTermYears <= 0) {
       return;
     }
 
@@ -84,7 +93,8 @@ export function MortgageForm({
       end: initialData?.end,
       data: {
         type: "mortgage",
-        interestRate,
+        // Convert display percentage (4.5) to decimal (0.045) for storage
+        interestRate: interestRateDisplay / 100,
         loanAmount,
         loanTermYears,
         paymentType,
@@ -131,15 +141,17 @@ export function MortgageForm({
         </div>
 
         <div>
-          <Label htmlFor="interestRate">Annual Interest Rate (%)</Label>
+          <Label htmlFor="interestRateDisplay">Annual Interest Rate (%)</Label>
           <Input
-            id="interestRate"
+            id="interestRateDisplay"
             type="number"
             step="0.01"
             min="0"
             max="100"
-            value={formData.interestRate}
-            onChange={(e) => handleInputChange("interestRate", e.target.value)}
+            value={formData.interestRateDisplay}
+            onChange={(e) =>
+              handleInputChange("interestRateDisplay", e.target.value)
+            }
             placeholder="e.g., 4.5"
             className="mt-2"
             required

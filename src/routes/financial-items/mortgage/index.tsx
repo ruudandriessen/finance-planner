@@ -48,6 +48,7 @@ function RouteComponent() {
             if (item.data.type !== "mortgage") return null;
             const { loanAmount, interestRate, loanTermYears, paymentType } =
               item.data;
+            // interestRate is stored as decimal (e.g., 0.045 for 4.5%)
             const paymentAmount =
               paymentType === "annuity"
                 ? calculateAnnuityPayment(
@@ -56,7 +57,7 @@ function RouteComponent() {
                     loanTermYears,
                   )
                 : calculateLinearPrincipal(loanAmount, loanTermYears) +
-                  (loanAmount * interestRate) / 100 / 12;
+                  (loanAmount * interestRate) / 12;
             return (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between">

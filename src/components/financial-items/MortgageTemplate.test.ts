@@ -12,7 +12,7 @@ describe("deriveMortgage", () => {
     schedule: "monthly",
     data: {
       type: "mortgage",
-      interestRate: 5,
+      interestRate: 0.05, // 5% as decimal
       loanAmount: 300000,
       loanTermYears: 30,
       paymentType: "annuity",
@@ -55,7 +55,7 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        interestRate: 5,
+        interestRate: 0.05,
         loanAmount: 250000,
         loanTermYears: 30,
         paymentType: "annuity",
@@ -74,7 +74,7 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        interestRate: 5,
+        interestRate: 0.05,
         loanAmount: -200000,
         loanTermYears: 30,
         paymentType: "annuity",
@@ -101,7 +101,7 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        interestRate: 5,
+        interestRate: 0.05,
         loanAmount: 400000,
         loanTermYears: 30,
         paymentType: "annuity",
@@ -128,7 +128,7 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        interestRate: 5,
+        interestRate: 0.05,
         loanAmount: 300000,
         loanTermYears: 30,
         paymentType: "annuity",
@@ -155,7 +155,7 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        interestRate: 4.5,
+        interestRate: 0.045, // 4.5% as decimal
         loanAmount: 350000,
         loanTermYears: 30,
         paymentType: "annuity",
@@ -177,7 +177,7 @@ describe("deriveMortgage", () => {
         originalLoanAmount: 350000,
         interestCalculation: {
           type: "FIXED_RATE",
-          baseAnnualRate: 4.5,
+          baseAnnualRate: 0.045,
         },
       },
     });

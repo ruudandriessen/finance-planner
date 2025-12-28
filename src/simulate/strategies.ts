@@ -58,10 +58,8 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
   // We need the absolute value of the debt to calculate interest cost
   const principalRemaining = Math.abs(currentLiabilityBalance);
 
-  // Convert percentage to decimal if needed (e.g., 4.15 -> 0.0415)
-  const annualRateInput = config.interestCalculation.baseAnnualRate ?? 5; // Default 5%
-  const annualRate =
-    annualRateInput > 1 ? annualRateInput / 100 : annualRateInput;
+  // Interest rate is stored as decimal (e.g., 0.045 for 4.5%)
+  const annualRate = config.interestCalculation.baseAnnualRate ?? 0.05; // Default 5%
   const monthlyRate = annualRate / 12;
 
   const interestPayment = principalRemaining * monthlyRate;
