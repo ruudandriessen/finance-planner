@@ -15,9 +15,9 @@ import type { FinancialItem, FinancialItemFormProps } from "./types";
 
 type ExpenseFormData = {
   name: string;
-  amount: string;
+  amount: number;
   sourceAccountId: string;
-  priorityOrder: string;
+  priorityOrder: number;
   schedule: "monthly" | "annually";
 };
 
@@ -31,15 +31,9 @@ export function ExpenseForm({
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<ExpenseFormData>({
     name: initialData?.name ?? "",
-    amount:
-      initialData?.data?.type === "expense"
-        ? initialData.data.amount.toString()
-        : "",
-    sourceAccountId:
-      initialData?.data?.type === "expense"
-        ? initialData.data.sourceAccountId
-        : "",
-    priorityOrder: initialData?.priorityOrder?.toString() ?? "10",
+    amount: initialData?.data?.amount ?? 0,
+    sourceAccountId: initialData?.data?.sourceAccountId ?? "",
+    priorityOrder: initialData?.priorityOrder ?? 10,
     schedule: initialData?.schedule ?? "monthly",
   });
 
@@ -50,10 +44,10 @@ export function ExpenseForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const amount = parseFloat(formData.amount);
-    if (Number.isNaN(amount) || amount <= 0) return;
+    const { amount } = formData;
+    if (amount <= 0) return;
 
-    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 10;
+    const priorityOrder = formData.priorityOrder;
 
     const financialItem: FinancialItem<"expense"> = {
       id: initialData?.id ?? crypto.randomUUID(),

@@ -16,7 +16,9 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { data: items } = useLiveQuery(financialItemsCollection);
 
-  const item = items?.find((i) => i.id === id);
+  const item = items
+    .filter((i): i is FinancialItem<"mortgage"> => i.data.type === "mortgage")
+    .find((i) => i.id === id);
 
   if (!item || item.data.type !== "mortgage") {
     return (
@@ -80,7 +82,7 @@ function RouteComponent() {
         </CardHeader>
         <CardContent>
           <MortgageForm
-            initialData={item as FinancialItem<"mortgage">}
+            initialData={item}
             onSubmit={handleSubmit}
             onCancel={() => navigate({ to: "/financial-items/mortgage" })}
             onDelete={handleDelete}

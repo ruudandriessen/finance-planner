@@ -97,8 +97,8 @@ export function useChartAccounts(monthsToSimulate = 360): {
 
   // Get mortgage financial items
   const mortgages = financialItems.filter(
-    (item) => item.data.type === "mortgage",
-  ) as FinancialItem<"mortgage">[];
+    (item): item is FinancialItem<"mortgage"> => item.data.type === "mortgage",
+  );
 
   // Collect all chart account configs
   const chartAccountConfigs: ChartAccountConfig[] = [
