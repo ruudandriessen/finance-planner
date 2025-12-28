@@ -16,12 +16,15 @@ import { Route as FlowsAddRouteImport } from './routes/flows/add'
 import { Route as AccountsAddRouteImport } from './routes/accounts/add'
 import { Route as FinancialItemsMortgageIndexRouteImport } from './routes/financial-items/mortgage/index'
 import { Route as FinancialItemsIncomeIndexRouteImport } from './routes/financial-items/income/index'
+import { Route as FinancialItemsExpensesIndexRouteImport } from './routes/financial-items/expenses/index'
 import { Route as FlowsFlowIdEditRouteImport } from './routes/flows/$flowId.edit'
 import { Route as FinancialItemsMortgageAddRouteImport } from './routes/financial-items/mortgage/add'
 import { Route as FinancialItemsIncomeAddRouteImport } from './routes/financial-items/income/add'
+import { Route as FinancialItemsExpensesAddRouteImport } from './routes/financial-items/expenses/add'
 import { Route as AccountsAccountIdEditRouteImport } from './routes/accounts/$accountId.edit'
 import { Route as FinancialItemsMortgageIdEditRouteImport } from './routes/financial-items/mortgage/$id.edit'
 import { Route as FinancialItemsIncomeIdEditRouteImport } from './routes/financial-items/income/$id.edit'
+import { Route as FinancialItemsExpensesIdEditRouteImport } from './routes/financial-items/expenses/$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -60,6 +63,12 @@ const FinancialItemsIncomeIndexRoute =
     path: '/financial-items/income/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const FinancialItemsExpensesIndexRoute =
+  FinancialItemsExpensesIndexRouteImport.update({
+    id: '/financial-items/expenses/',
+    path: '/financial-items/expenses/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FlowsFlowIdEditRoute = FlowsFlowIdEditRouteImport.update({
   id: '/flows/$flowId/edit',
   path: '/flows/$flowId/edit',
@@ -76,6 +85,12 @@ const FinancialItemsIncomeAddRoute = FinancialItemsIncomeAddRouteImport.update({
   path: '/financial-items/income/add',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FinancialItemsExpensesAddRoute =
+  FinancialItemsExpensesAddRouteImport.update({
+    id: '/financial-items/expenses/add',
+    path: '/financial-items/expenses/add',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AccountsAccountIdEditRoute = AccountsAccountIdEditRouteImport.update({
   id: '/accounts/$accountId/edit',
   path: '/accounts/$accountId/edit',
@@ -93,6 +108,12 @@ const FinancialItemsIncomeIdEditRoute =
     path: '/financial-items/income/$id/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
+const FinancialItemsExpensesIdEditRoute =
+  FinancialItemsExpensesIdEditRouteImport.update({
+    id: '/financial-items/expenses/$id/edit',
+    path: '/financial-items/expenses/$id/edit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,11 +122,14 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsIndexRoute
   '/flows': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
+  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
+  '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/mortgage': typeof FinancialItemsMortgageIndexRoute
+  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
   '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
 }
@@ -116,11 +140,14 @@ export interface FileRoutesByTo {
   '/accounts': typeof AccountsIndexRoute
   '/flows': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
+  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
+  '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/mortgage': typeof FinancialItemsMortgageIndexRoute
+  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
   '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
 }
@@ -132,11 +159,14 @@ export interface FileRoutesById {
   '/accounts/': typeof AccountsIndexRoute
   '/flows/': typeof FlowsIndexRoute
   '/accounts/$accountId/edit': typeof AccountsAccountIdEditRoute
+  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
+  '/financial-items/expenses/': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income/': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/mortgage/': typeof FinancialItemsMortgageIndexRoute
+  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
   '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
 }
@@ -149,11 +179,14 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/flows'
     | '/accounts/$accountId/edit'
+    | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/flows/$flowId/edit'
+    | '/financial-items/expenses'
     | '/financial-items/income'
     | '/financial-items/mortgage'
+    | '/financial-items/expenses/$id/edit'
     | '/financial-items/income/$id/edit'
     | '/financial-items/mortgage/$id/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -164,11 +197,14 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/flows'
     | '/accounts/$accountId/edit'
+    | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/flows/$flowId/edit'
+    | '/financial-items/expenses'
     | '/financial-items/income'
     | '/financial-items/mortgage'
+    | '/financial-items/expenses/$id/edit'
     | '/financial-items/income/$id/edit'
     | '/financial-items/mortgage/$id/edit'
   id:
@@ -179,11 +215,14 @@ export interface FileRouteTypes {
     | '/accounts/'
     | '/flows/'
     | '/accounts/$accountId/edit'
+    | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/flows/$flowId/edit'
+    | '/financial-items/expenses/'
     | '/financial-items/income/'
     | '/financial-items/mortgage/'
+    | '/financial-items/expenses/$id/edit'
     | '/financial-items/income/$id/edit'
     | '/financial-items/mortgage/$id/edit'
   fileRoutesById: FileRoutesById
@@ -195,11 +234,14 @@ export interface RootRouteChildren {
   AccountsIndexRoute: typeof AccountsIndexRoute
   FlowsIndexRoute: typeof FlowsIndexRoute
   AccountsAccountIdEditRoute: typeof AccountsAccountIdEditRoute
+  FinancialItemsExpensesAddRoute: typeof FinancialItemsExpensesAddRoute
   FinancialItemsIncomeAddRoute: typeof FinancialItemsIncomeAddRoute
   FinancialItemsMortgageAddRoute: typeof FinancialItemsMortgageAddRoute
   FlowsFlowIdEditRoute: typeof FlowsFlowIdEditRoute
+  FinancialItemsExpensesIndexRoute: typeof FinancialItemsExpensesIndexRoute
   FinancialItemsIncomeIndexRoute: typeof FinancialItemsIncomeIndexRoute
   FinancialItemsMortgageIndexRoute: typeof FinancialItemsMortgageIndexRoute
+  FinancialItemsExpensesIdEditRoute: typeof FinancialItemsExpensesIdEditRoute
   FinancialItemsIncomeIdEditRoute: typeof FinancialItemsIncomeIdEditRoute
   FinancialItemsMortgageIdEditRoute: typeof FinancialItemsMortgageIdEditRoute
 }
@@ -255,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinancialItemsIncomeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/financial-items/expenses/': {
+      id: '/financial-items/expenses/'
+      path: '/financial-items/expenses'
+      fullPath: '/financial-items/expenses'
+      preLoaderRoute: typeof FinancialItemsExpensesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/flows/$flowId/edit': {
       id: '/flows/$flowId/edit'
       path: '/flows/$flowId/edit'
@@ -274,6 +323,13 @@ declare module '@tanstack/react-router' {
       path: '/financial-items/income/add'
       fullPath: '/financial-items/income/add'
       preLoaderRoute: typeof FinancialItemsIncomeAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financial-items/expenses/add': {
+      id: '/financial-items/expenses/add'
+      path: '/financial-items/expenses/add'
+      fullPath: '/financial-items/expenses/add'
+      preLoaderRoute: typeof FinancialItemsExpensesAddRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/$accountId/edit': {
@@ -297,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinancialItemsIncomeIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/financial-items/expenses/$id/edit': {
+      id: '/financial-items/expenses/$id/edit'
+      path: '/financial-items/expenses/$id/edit'
+      fullPath: '/financial-items/expenses/$id/edit'
+      preLoaderRoute: typeof FinancialItemsExpensesIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -307,11 +370,14 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsIndexRoute: AccountsIndexRoute,
   FlowsIndexRoute: FlowsIndexRoute,
   AccountsAccountIdEditRoute: AccountsAccountIdEditRoute,
+  FinancialItemsExpensesAddRoute: FinancialItemsExpensesAddRoute,
   FinancialItemsIncomeAddRoute: FinancialItemsIncomeAddRoute,
   FinancialItemsMortgageAddRoute: FinancialItemsMortgageAddRoute,
   FlowsFlowIdEditRoute: FlowsFlowIdEditRoute,
+  FinancialItemsExpensesIndexRoute: FinancialItemsExpensesIndexRoute,
   FinancialItemsIncomeIndexRoute: FinancialItemsIncomeIndexRoute,
   FinancialItemsMortgageIndexRoute: FinancialItemsMortgageIndexRoute,
+  FinancialItemsExpensesIdEditRoute: FinancialItemsExpensesIdEditRoute,
   FinancialItemsIncomeIdEditRoute: FinancialItemsIncomeIdEditRoute,
   FinancialItemsMortgageIdEditRoute: FinancialItemsMortgageIdEditRoute,
 }

@@ -18,22 +18,6 @@ function RouteComponent() {
 
   const item = items?.find((i) => i.id === id);
 
-  const handleSubmit = async (data: FinancialItem<"mortgage">) => {
-    if (!item) return;
-
-    await financialItemsCollection.update(item.id, () => data);
-    navigate({ to: "/financial-items/mortgage" });
-  };
-
-  const handleDelete = async () => {
-    if (!item) return;
-
-    if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
-      await financialItemsCollection.delete(item.id);
-      navigate({ to: "/financial-items/mortgage" });
-    }
-  };
-
   if (!item || item.data.type !== "mortgage") {
     return (
       <div className="container mx-auto p-6 max-w-2xl">
@@ -51,6 +35,25 @@ function RouteComponent() {
       </div>
     );
   }
+
+  const handleSubmit = async (data: FinancialItem<"mortgage">) => {
+    await financialItemsCollection.update(item.id, (oldItem) => {
+      oldItem.name = data.name;
+      oldItem.priorityOrder = data.priorityOrder;
+      oldItem.schedule = data.schedule;
+      oldItem.start = data.start;
+      oldItem.end = data.end;
+      oldItem.data = data.data;
+    });
+    navigate({ to: "/financial-items/mortgage" });
+  };
+
+  const handleDelete = async () => {
+    if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+      await financialItemsCollection.delete(item.id);
+      navigate({ to: "/financial-items/mortgage" });
+    }
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-2xl">

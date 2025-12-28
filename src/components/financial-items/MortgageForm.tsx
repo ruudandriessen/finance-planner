@@ -30,7 +30,7 @@ export function MortgageForm({
   onDelete,
   submitLabel = "Save",
 }: FinancialItemFormProps<"mortgage">) {
-  const { data: accounts } = useLiveQuery(accountsCollection);
+  const { data: accounts = [] } = useLiveQuery(accountsCollection);
   const [formData, setFormData] = useState<MortgageFormData>({
     name: initialData?.name || "",
     paymentAmount:
@@ -95,8 +95,7 @@ export function MortgageForm({
     await onSubmit(financialItem);
   };
 
-  // Filter to only asset accounts (user's accounts like checking, savings)
-  const userAccounts = accounts?.filter((acc) => acc.type === "asset") || [];
+  const userAccounts = accounts.filter((acc) => acc.type === "asset");
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

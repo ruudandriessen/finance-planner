@@ -20,6 +20,13 @@ const mortgageDataSchema = z.object({
   paymentSourceAccountId: z.string(),
 });
 
+// Expense data schema
+const expenseDataSchema = z.object({
+  type: z.literal("expense"),
+  amount: z.number(),
+  sourceAccountId: z.string(),
+});
+
 // Financial item schema
 export const financialItemSchema = z.object({
   id: z.string(),
@@ -31,7 +38,7 @@ export const financialItemSchema = z.object({
   data: z.discriminatedUnion("type", [
     incomeDataSchema,
     mortgageDataSchema,
-    // TODO: Add other types as needed
+    expenseDataSchema,
   ]),
 });
 
