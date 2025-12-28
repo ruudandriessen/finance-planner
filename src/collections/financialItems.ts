@@ -4,11 +4,23 @@ import {
 } from "@tanstack/react-db";
 import z from "zod";
 
+// Savings account data schema
+const savingsDataSchema = z.object({
+  type: z.literal("savings"),
+  initialBalance: z.number(),
+});
+
+// Checking account data schema
+const checkingDataSchema = z.object({
+  type: z.literal("checking"),
+  initialBalance: z.number(),
+});
+
 // Income data schema
 const incomeDataSchema = z.object({
   type: z.literal("income"),
   amount: z.number(),
-  sourceAccountId: z.string(),
+  targetAccountId: z.string(),
 });
 
 // Mortgage data schema
@@ -36,13 +48,15 @@ export const financialItemSchema = z.object({
   start: z.date().optional(),
   end: z.date().optional(),
   data: z.discriminatedUnion("type", [
+    savingsDataSchema,
+    checkingDataSchema,
     incomeDataSchema,
     mortgageDataSchema,
     expenseDataSchema,
   ]),
 });
 
-// Create collection (same pattern as accountsCollection)
+// Create collection
 export const financialItemsCollection = createCollection(
   localStorageCollectionOptions({
     id: "financialItems",

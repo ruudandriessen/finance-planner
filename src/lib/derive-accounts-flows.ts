@@ -1,6 +1,8 @@
+import { deriveChecking } from "@/components/financial-items/CheckingTemplate";
 import { deriveExpense } from "@/components/financial-items/ExpenseTemplate";
 import { deriveIncome } from "@/components/financial-items/IncomeTemplate";
 import { deriveMortgage } from "@/components/financial-items/MortgageTemplate";
+import { deriveSavings } from "@/components/financial-items/SavingsTemplate";
 import type {
   DerivedAccount,
   DeriveResult,
@@ -13,6 +15,10 @@ import type {
  */
 function deriveItem(item: FinancialItemBase): DeriveResult | null {
   switch (item.data.type) {
+    case "savings":
+      return deriveSavings({ ...item, data: item.data });
+    case "checking":
+      return deriveChecking({ ...item, data: item.data });
     case "income":
       return deriveIncome({ ...item, data: item.data });
     case "mortgage":

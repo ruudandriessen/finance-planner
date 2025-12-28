@@ -1,13 +1,19 @@
 import type z from "zod";
-import type { accountSchema } from "@/collections/accounts";
 import type { flowSchema } from "@/collections/flows";
 
 export type Rule = z.infer<typeof flowSchema>;
 
+export type Account = {
+  id: string;
+  name: string;
+  type: "asset" | "liability" | "income" | "expense";
+  amount: number;
+};
+
 export interface SimulationOptions {
   monthsToSimulate: number;
   startDate: Date;
-  initialAccounts: z.infer<typeof accountSchema>[];
+  initialAccounts: Account[];
   rules: Rule[];
 }
 

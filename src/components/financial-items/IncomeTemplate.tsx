@@ -18,14 +18,14 @@ export function deriveIncome(item: FinancialItem<"income">): {
   };
 
   // Derive flow
-  // Income flows FROM the income account TO the user's checking account
+  // Income flows FROM the income account TO the user's target account
   const flow: Flow = {
     id: `flow-${item.id}`,
     name: item.name,
     priorityOrder: item.priorityOrder,
     schedule: item.schedule,
     sourceAccountId: incomeAccountId, // Derived income account (source of money)
-    targetAccountId: item.data.sourceAccountId, // User's checking account (where money goes)
+    targetAccountId: item.data.targetAccountId, // User's savings/checking account (where money goes)
     strategy: {
       type: "fixed",
       config: {

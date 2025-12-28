@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { accountsCollection } from "@/collections/accounts";
+import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -28,19 +28,19 @@ export function ExpenseForm({
   onDelete,
   submitLabel = "Save",
 }: FinancialItemFormProps<"expense">) {
-  const { data: accounts = [] } = useLiveQuery(accountsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<ExpenseFormData>({
-    name: initialData?.name || "",
+    name: initialData?.name ?? "",
     amount:
-      initialData?.data && initialData.data.type === "expense"
+      initialData?.data?.type === "expense"
         ? initialData.data.amount.toString()
         : "",
     sourceAccountId:
-      initialData?.data && initialData.data.type === "expense"
+      initialData?.data?.type === "expense"
         ? initialData.data.sourceAccountId
         : "",
-    priorityOrder: initialData?.priorityOrder?.toString() || "10",
-    schedule: initialData?.schedule || "monthly",
+    priorityOrder: initialData?.priorityOrder?.toString() ?? "10",
+    schedule: initialData?.schedule ?? "monthly",
   });
 
   const handleInputChange = (field: keyof ExpenseFormData, value: string) => {
@@ -56,7 +56,7 @@ export function ExpenseForm({
     const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 10;
 
     const financialItem: FinancialItem<"expense"> = {
-      id: initialData?.id || crypto.randomUUID(),
+      id: initialData?.id ?? crypto.randomUUID(),
       name: formData.name,
       priorityOrder,
       schedule: formData.schedule,
@@ -72,7 +72,10 @@ export function ExpenseForm({
     await onSubmit(financialItem);
   };
 
-  const userAccounts = accounts.filter((acc) => acc.type === "asset");
+  // Filter to savings and checking accounts only
+  const accountItems = financialItems.filter(
+    (item) => item.data.type === "savings" || item.data.type === "checking",
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -107,7 +110,7 @@ export function ExpenseForm({
       </div>
 
       <div>
-        <Label htmlFor="sourceAccount">Payment Source</Label>
+        <Label htmlFor="sourceAccount">Pay From</Label>
         <Select
           value={formData.sourceAccountId}
           onValueChange={(value) => handleInputChange("sourceAccountId", value)}
@@ -116,9 +119,9 @@ export function ExpenseForm({
             <SelectValue placeholder="Select account" />
           </SelectTrigger>
           <SelectContent>
-            {userAccounts.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                {account.name}
+            {accountItems.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name}
               </SelectItem>
             ))}
           </SelectContent>

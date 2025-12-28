@@ -13,7 +13,7 @@ describe("deriveIncome", () => {
     data: {
       type: "income",
       amount: 5000,
-      sourceAccountId: "checking-account",
+      targetAccountId: "checking-account",
     },
     ...overrides,
   });
@@ -59,7 +59,7 @@ describe("deriveIncome", () => {
       data: {
         type: "income",
         amount: 3000,
-        sourceAccountId: "savings-account",
+        targetAccountId: "savings-account",
       },
     });
     const result = deriveIncome(item);
@@ -74,7 +74,7 @@ describe("deriveIncome", () => {
       data: {
         type: "income",
         amount: 7500,
-        sourceAccountId: "checking-account",
+        targetAccountId: "checking-account",
       },
     });
     const result = deriveIncome(item);
