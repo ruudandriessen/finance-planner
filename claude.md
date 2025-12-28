@@ -1,3 +1,114 @@
+# Finance Planner - Agent Guide
+
+> **IMPORTANT FOR AI AGENTS**: When making architectural changes, additions, or significant modifications to this project, you MUST update the `README.md` file to reflect those changes.
+
+## Project Overview
+
+Finance Planner is a client-side financial planning application that simulates financial flows over time. Users create "finance items" (a simplified interface), which are then derived into accounts and flows for simulation.
+
+## Tech Stack
+
+- **Runtime**: Bun
+- **Framework**: React 19 with TypeScript, with the compiler enabled
+- **Routing**: TanStack Router (file-based routing)
+- **State Management**: TanStack React DB (localStorage-based collections)
+- **Styling**: Tailwind CSS v4 with Radix UI components
+- **Build Tool**: Vite
+- **Linting/Formatting**: Biome
+
+## Architecture
+
+### User-Facing: Financial Items
+
+Users interact with **Financial Items** - a simplified abstraction over accounts and flows. Each financial item represents a real-world financial concept:
+
+- **Savings**: A savings account with initial balance
+- **Checking**: A checking account with initial balance
+- **Income**: Regular income deposited to a target account
+- **Expense**: Regular expense paid from a source account
+- **Mortgage**: Loan with payment amount, interest rate, and loan amount
+
+Financial items are stored in `financialItemsCollection` and edited via dedicated form components.
+
+### Internal: Accounts and Flows (Simulation Only)
+
+**Accounts** and **Flows** exist purely as internal simulation concepts. They are **not** stored or edited directly by users. Instead, they are **derived** from financial items at simulation time.
+
+The derivation happens in `src/lib/derive-accounts-flows.ts`:
+1. Each financial item type has a corresponding derive function (e.g., `deriveSavings`, `deriveIncome`)
+2. These functions convert user-friendly financial items into simulation-ready accounts and flows
+3. The `deriveAccountsAndFlows` function aggregates all derived accounts and flows
+
+### Simulation Engine
+
+The simulation engine (`src/simulate/run.ts`) operates on derived accounts and flows:
+
+1. **Input**: Takes derived accounts and flows from `deriveAccountsAndFlows()`
+2. **Initialization**: Creates balance map from derived accounts
+3. **Time Loop**: Iterates month-by-month
+4. **Rule Execution**: Processes flows in priority order (waterfall effect)
+5. **Strategy Execution**: Each flow's strategy generates transactions
+6. **State Updates**: Transactions immediately update balances
+7. **History Recording**: Snapshot of balances and transactions per month
+
+**Key Characteristics**:
+- Waterfall execution: earlier flows affect later flows in the same month
+- Priority-based ordering: lower `priorityOrder` runs first
+- Date-based filtering: flows respect `start`/`end` dates
+
+### Account Types (Internal)
+
+- **Asset**: Positive balances (checking, savings)
+- **Liability**: Negative balances (mortgages, loans)
+- **Income**: Income sources
+- **Expense**: Expense categories
+
+**Important**: Liabilities are stored as negative numbers. Paying off debt means moving positive cash to a negative liability.
+
+### Flow Strategies (Internal)
+
+Flows use a discriminated union strategy pattern:
+
+1. **Fixed** (`type: "fixed"`): Simple fixed-amount transfer
+2. **Mortgage** (`type: "mortgage"`): Calculates interest and principal payments
+3. **Compound** (`type: "compound"`): Applies percentage growth to target account balance
+
+## Data Flow Summary
+
+```
+User creates/edits Financial Items
+         ↓
+Stored in financialItemsCollection (localStorage)
+         ↓
+useSimulation() reads financial items
+         ↓
+deriveAccountsAndFlows() converts to accounts + flows
+         ↓
+runSimulation() executes simulation
+         ↓
+Results displayed to user
+```
+
+## Key Files
+
+- `src/collections/financialItems.ts`: User-facing financial items schema and collection
+- `src/collections/flows.ts`: Internal flow schema (used by derivation)
+- `src/lib/derive-accounts-flows.ts`: Converts financial items to accounts/flows
+- `src/hooks/use-simulation.ts`: Hook that orchestrates derivation and simulation
+- `src/simulate/run.ts`: Core simulation logic
+- `src/simulate/strategies.ts`: Strategy implementations
+- `src/components/financial-items/*.tsx`: Form components and derive functions per item type
+
+## Routing
+
+Uses TanStack Router with file-based routing:
+- Routes defined in `src/routes/`
+- File names map to URL paths
+- Dynamic routes use `$` prefix
+- Root route (`__root.tsx`) provides layout with sidebar
+
+---
+
 # Best Practices
 
 ## Nullish Coalescing
