@@ -16,7 +16,8 @@ export type ChartAccount = {
  * A single data point for the chart (one month)
  */
 export type ChartDataPoint = {
-  date: string;
+  date: Date;
+  dateLabel: string;
   balances: Record<string, number>;
 };
 
@@ -146,7 +147,8 @@ export function useChartAccounts({
     }
 
     return {
-      date: result.date.toLocaleDateString("en-US", {
+      date: result.date,
+      dateLabel: result.date.toLocaleDateString("en-US", {
         month: "short",
         year: "numeric",
       }),
