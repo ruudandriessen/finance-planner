@@ -16,7 +16,7 @@ interface BreadcrumbSegment {
   path: string;
 }
 
-export function DynamicBreadcrumb() {
+export function DynamicBreadcrumb({ planId }: { planId?: string }) {
   const matches = useMatches();
 
   // Generate breadcrumb segments from route matches
@@ -108,7 +108,7 @@ export function DynamicBreadcrumb() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <PlanSelector />
+      <PlanSelector planId={planId} />
     </div>
   );
 }

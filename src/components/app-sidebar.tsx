@@ -1,4 +1,4 @@
-import { Link, useSearch } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import {
   CalendarClock,
   CreditCard,
@@ -54,11 +54,7 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
-  const { planId } = useSearch({
-    from: "/",
-  });
-
+export function AppSidebar({ planId }: { planId?: string }) {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
