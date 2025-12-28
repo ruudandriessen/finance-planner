@@ -10,14 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as FlowsIndexRouteImport } from './routes/flows/index'
-import { Route as FlowsAddRouteImport } from './routes/flows/add'
 import { Route as FinancialItemsSavingsIndexRouteImport } from './routes/financial-items/savings/index'
 import { Route as FinancialItemsMortgageIndexRouteImport } from './routes/financial-items/mortgage/index'
 import { Route as FinancialItemsIncomeIndexRouteImport } from './routes/financial-items/income/index'
 import { Route as FinancialItemsExpensesIndexRouteImport } from './routes/financial-items/expenses/index'
 import { Route as FinancialItemsCheckingIndexRouteImport } from './routes/financial-items/checking/index'
-import { Route as FlowsFlowIdEditRouteImport } from './routes/flows/$flowId.edit'
 import { Route as FinancialItemsSavingsAddRouteImport } from './routes/financial-items/savings/add'
 import { Route as FinancialItemsMortgageAddRouteImport } from './routes/financial-items/mortgage/add'
 import { Route as FinancialItemsIncomeAddRouteImport } from './routes/financial-items/income/add'
@@ -32,16 +29,6 @@ import { Route as FinancialItemsCheckingIdEditRouteImport } from './routes/finan
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FlowsIndexRoute = FlowsIndexRouteImport.update({
-  id: '/flows/',
-  path: '/flows/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FlowsAddRoute = FlowsAddRouteImport.update({
-  id: '/flows/add',
-  path: '/flows/add',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinancialItemsSavingsIndexRoute =
@@ -74,11 +61,6 @@ const FinancialItemsCheckingIndexRoute =
     path: '/financial-items/checking/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const FlowsFlowIdEditRoute = FlowsFlowIdEditRouteImport.update({
-  id: '/flows/$flowId/edit',
-  path: '/flows/$flowId/edit',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const FinancialItemsSavingsAddRoute =
   FinancialItemsSavingsAddRouteImport.update({
     id: '/financial-items/savings/add',
@@ -141,14 +123,11 @@ const FinancialItemsCheckingIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/flows/add': typeof FlowsAddRoute
-  '/flows': typeof FlowsIndexRoute
   '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
   '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
   '/financial-items/checking': typeof FinancialItemsCheckingIndexRoute
   '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
@@ -162,14 +141,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/flows/add': typeof FlowsAddRoute
-  '/flows': typeof FlowsIndexRoute
   '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
   '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
   '/financial-items/checking': typeof FinancialItemsCheckingIndexRoute
   '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
@@ -184,14 +160,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/flows/add': typeof FlowsAddRoute
-  '/flows/': typeof FlowsIndexRoute
   '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
   '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
   '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
   '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/flows/$flowId/edit': typeof FlowsFlowIdEditRoute
   '/financial-items/checking/': typeof FinancialItemsCheckingIndexRoute
   '/financial-items/expenses/': typeof FinancialItemsExpensesIndexRoute
   '/financial-items/income/': typeof FinancialItemsIncomeIndexRoute
@@ -207,14 +180,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/flows/add'
-    | '/flows'
     | '/financial-items/checking/add'
     | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/financial-items/savings/add'
-    | '/flows/$flowId/edit'
     | '/financial-items/checking'
     | '/financial-items/expenses'
     | '/financial-items/income'
@@ -228,14 +198,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/flows/add'
-    | '/flows'
     | '/financial-items/checking/add'
     | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/financial-items/savings/add'
-    | '/flows/$flowId/edit'
     | '/financial-items/checking'
     | '/financial-items/expenses'
     | '/financial-items/income'
@@ -249,14 +216,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/flows/add'
-    | '/flows/'
     | '/financial-items/checking/add'
     | '/financial-items/expenses/add'
     | '/financial-items/income/add'
     | '/financial-items/mortgage/add'
     | '/financial-items/savings/add'
-    | '/flows/$flowId/edit'
     | '/financial-items/checking/'
     | '/financial-items/expenses/'
     | '/financial-items/income/'
@@ -271,14 +235,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  FlowsAddRoute: typeof FlowsAddRoute
-  FlowsIndexRoute: typeof FlowsIndexRoute
   FinancialItemsCheckingAddRoute: typeof FinancialItemsCheckingAddRoute
   FinancialItemsExpensesAddRoute: typeof FinancialItemsExpensesAddRoute
   FinancialItemsIncomeAddRoute: typeof FinancialItemsIncomeAddRoute
   FinancialItemsMortgageAddRoute: typeof FinancialItemsMortgageAddRoute
   FinancialItemsSavingsAddRoute: typeof FinancialItemsSavingsAddRoute
-  FlowsFlowIdEditRoute: typeof FlowsFlowIdEditRoute
   FinancialItemsCheckingIndexRoute: typeof FinancialItemsCheckingIndexRoute
   FinancialItemsExpensesIndexRoute: typeof FinancialItemsExpensesIndexRoute
   FinancialItemsIncomeIndexRoute: typeof FinancialItemsIncomeIndexRoute
@@ -298,20 +259,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/flows/': {
-      id: '/flows/'
-      path: '/flows'
-      fullPath: '/flows'
-      preLoaderRoute: typeof FlowsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/flows/add': {
-      id: '/flows/add'
-      path: '/flows/add'
-      fullPath: '/flows/add'
-      preLoaderRoute: typeof FlowsAddRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/financial-items/savings/': {
@@ -347,13 +294,6 @@ declare module '@tanstack/react-router' {
       path: '/financial-items/checking'
       fullPath: '/financial-items/checking'
       preLoaderRoute: typeof FinancialItemsCheckingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/flows/$flowId/edit': {
-      id: '/flows/$flowId/edit'
-      path: '/flows/$flowId/edit'
-      fullPath: '/flows/$flowId/edit'
-      preLoaderRoute: typeof FlowsFlowIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/financial-items/savings/add': {
@@ -431,14 +371,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  FlowsAddRoute: FlowsAddRoute,
-  FlowsIndexRoute: FlowsIndexRoute,
   FinancialItemsCheckingAddRoute: FinancialItemsCheckingAddRoute,
   FinancialItemsExpensesAddRoute: FinancialItemsExpensesAddRoute,
   FinancialItemsIncomeAddRoute: FinancialItemsIncomeAddRoute,
   FinancialItemsMortgageAddRoute: FinancialItemsMortgageAddRoute,
   FinancialItemsSavingsAddRoute: FinancialItemsSavingsAddRoute,
-  FlowsFlowIdEditRoute: FlowsFlowIdEditRoute,
   FinancialItemsCheckingIndexRoute: FinancialItemsCheckingIndexRoute,
   FinancialItemsExpensesIndexRoute: FinancialItemsExpensesIndexRoute,
   FinancialItemsIncomeIndexRoute: FinancialItemsIncomeIndexRoute,
