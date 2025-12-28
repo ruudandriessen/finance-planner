@@ -1,3 +1,4 @@
+import type { PlanEvent } from "@/collections/plans";
 import { shouldRunRule } from "./shouldRunRule";
 import { StrategyRegistry } from "./strategies";
 import type {
@@ -7,11 +8,81 @@ import type {
   Transaction,
 } from "./types";
 
+/**
+ * Checks if an event should be applied in the current month.
+ * Events are applied if their date falls within the current simulation month.
+ */
+function shouldApplyEvent(event: PlanEvent, currentDate: Date): boolean {
+  const eventDate = new Date(event.date);
+  return (
+    eventDate.getFullYear() === currentDate.getFullYear() &&
+    eventDate.getMonth() === currentDate.getMonth()
+  );
+}
+
+/**
+ * Applies a transaction to the current balances (mutates in place).
+ */
+function applyTransaction(
+  currentBalances: Record<string, number>,
+  tx: Transaction,
+): void {
+  // Decrease Source
+  const sourceBalance = currentBalances[tx.fromId];
+  if (sourceBalance !== undefined) {
+    currentBalances[tx.fromId] = sourceBalance - tx.amount;
+  } else {
+    currentBalances[tx.fromId] = -tx.amount;
+  }
+
+  // Increase Target
+  const targetBalance = currentBalances[tx.toId];
+  if (targetBalance !== undefined) {
+    currentBalances[tx.toId] = targetBalance + tx.amount;
+  } else {
+    currentBalances[tx.toId] = tx.amount;
+  }
+}
+
+/**
+ * Processes plan events for the current month and returns transactions.
+ */
+function processEvents(
+  events: PlanEvent[],
+  currentDate: Date,
+  currentBalances: Record<string, number>,
+): Transaction[] {
+  const eventsToApply = events.filter((event) =>
+    shouldApplyEvent(event, currentDate),
+  );
+  const transactionsToApply = eventsToApply
+    .filter((event) => event.type === "mortgageDownPayment")
+    .map((event) => {
+      const liabilityAccountId = `liability-${event.mortgageId}`;
+      const tx: Transaction = {
+        fromId: event.sourceAccountId,
+        toId: liabilityAccountId,
+        amount: event.amount,
+        date: new Date(currentDate),
+        description: `Down payment: ${event.name}`,
+        type: "TRANSFER",
+      };
+      return tx;
+    });
+
+  transactionsToApply.forEach((tx) => {
+    applyTransaction(currentBalances, tx);
+  });
+
+  return transactionsToApply;
+}
+
 export const runSimulation = ({
   monthsToSimulate,
   startDate,
   initialAccounts,
   rules,
+  events = [],
 }: SimulationOptions): SimulationResult[] => {
   // 1. Initialize State Map (for O(1) lookups)
   // We use a mutable map inside the loop for performance,
@@ -40,7 +111,15 @@ export const runSimulation = ({
       globals: { inflationRate: 0.03 }, // Hardcoded for now
     };
 
-    // 3. Rule Execution Loop (Waterfall)
+    // 3. Process one-time events first (before regular rules)
+    const eventTransactions = processEvents(
+      events,
+      currentDate,
+      currentBalances,
+    );
+    monthlyTransactions.push(...eventTransactions);
+
+    // 4. Rule Execution Loop (Waterfall)
     for (const rule of sortedRules) {
       if (!shouldRunRule(rule, currentDate)) {
         continue;
@@ -58,45 +137,12 @@ export const runSimulation = ({
 
       // Apply Transactions to State Immediately (Waterfall effect)
       for (const tx of ruleTxs) {
-        // Decrease Source
-        const sourceBalance = currentBalances[tx.fromId];
-        if (sourceBalance !== undefined) {
-          currentBalances[tx.fromId] = sourceBalance - tx.amount;
-        } else {
-          // Initialize if implied (e.g. Income buckets usually start at 0)
-          currentBalances[tx.fromId] = -tx.amount;
-        }
-
-        // Increase Target (Asset goes up, or Liability goes down depending on modeling)
-        // In this model:
-        // Asset (+100) -> Target (+100)
-        // Liability (300k) -> Target (-100) means we are reducing debt?
-        // standard accounting: Credits/Debits.
-        // SIMPLIFIED MODEL: We just ADD to the target bucket.
-        // If Target is Liability (300k debt), and we pay 100, we want it to be 299,900.
-        // So we must subtract from liability?
-
-        // CORRECTION: To keep it generic, we simply ADD to the target balance.
-        // Therefore, Liabilities should likely be stored as NEGATIVE numbers
-        // (e.g. -300,000). Moving +100 to it makes it -299,900.
-        // Or if stored as positive, the Strategy needs to emit a negative amount?
-
-        // Let's stick to: Assets Positive, Liabilities Negative.
-        // Paying off debt = Moving Positive Cash to Negative Liability.
-        // -300k + 1k = -299k. Correct.
-
-        const targetBalance = currentBalances[tx.toId];
-        if (targetBalance !== undefined) {
-          currentBalances[tx.toId] = targetBalance + tx.amount;
-        } else {
-          currentBalances[tx.toId] = tx.amount;
-        }
-
+        applyTransaction(currentBalances, tx);
         monthlyTransactions.push(tx);
       }
     }
 
-    // 4. Record History
+    // 5. Record History
     history.push({
       date: new Date(currentDate),
       balances: { ...currentBalances }, // Shallow clone snapshot

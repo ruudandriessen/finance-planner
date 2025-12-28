@@ -7,14 +7,19 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
+import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
+  const { planId } = RootRoute.useSearch();
   const numberOfMonthsInSimulation = 30 * 12;
-  const chartAccounts = useChartAccounts(numberOfMonthsInSimulation);
+  const chartAccounts = useChartAccounts({
+    monthsToSimulate: numberOfMonthsInSimulation,
+    planId,
+  });
 
   // Transform chart data to the format recharts expects
   const chartData =

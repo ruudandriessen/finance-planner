@@ -1,5 +1,6 @@
 import type z from "zod";
 import type { flowSchema } from "@/collections/flows";
+import type { PlanEvent } from "@/collections/plans";
 
 export type Rule = z.infer<typeof flowSchema>;
 
@@ -14,6 +15,7 @@ export interface SimulationOptions {
   startDate: Date;
   initialAccounts: Account[];
   rules: Rule[];
+  events?: PlanEvent[];
 }
 
 export interface SimulationContext {
