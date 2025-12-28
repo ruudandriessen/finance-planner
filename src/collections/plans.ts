@@ -14,7 +14,7 @@ const oneTimeEvent = z.object({
   amount: z.number(),
 });
 
-export const planSchema = z.object({
+const planSchema = z.object({
   id: z.string(),
   name: z.string(),
   globalParams: z

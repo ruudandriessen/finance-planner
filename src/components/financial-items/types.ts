@@ -26,7 +26,7 @@ export type FinancialItemData =
   | ExpenseData;
 
 // Type map: maps type literal to its data type
-export type FinancialItemDataMap = {
+type FinancialItemDataMap = {
   savings: SavingsData;
   checking: CheckingData;
   income: IncomeData;
@@ -65,25 +65,6 @@ export type DeriveResult = {
   accounts: DerivedAccount[];
   flows: Flow[];
 };
-
-// Derive function type for a specific data type
-export type DeriveFn<T extends keyof FinancialItemDataMap> = (
-  item: FinancialItem<T>,
-) => DeriveResult;
-
-// Registry type for derive functions
-export type DeriveRegistry = {
-  [K in keyof FinancialItemDataMap]: DeriveFn<K>;
-};
-
-// Template interface
-export interface FinancialItemTemplate<T extends keyof FinancialItemDataMap> {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  derive: (item: FinancialItem<T>) => DeriveResult;
-}
 
 // Form props
 export interface FinancialItemFormProps<T extends keyof FinancialItemDataMap> {
