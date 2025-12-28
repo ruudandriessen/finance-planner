@@ -11,6 +11,8 @@ export const accountSchema = z.object({
   amount: z.number(),
 });
 
+export type Account = z.infer<typeof accountSchema>;
+
 export const accountsCollection = createCollection(
   localStorageCollectionOptions({
     id: "accounts",
