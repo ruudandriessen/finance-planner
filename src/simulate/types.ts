@@ -5,7 +5,6 @@ export type Rule = z.infer<typeof flowSchema>;
 
 export type Account = {
   id: string;
-  name: string;
   type: "asset" | "liability" | "income" | "expense";
   amount: number;
 };
