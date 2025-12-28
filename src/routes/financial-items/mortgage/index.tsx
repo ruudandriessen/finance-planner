@@ -4,6 +4,10 @@ import { Edit3, Plus } from "lucide-react";
 import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  calculateAnnuityPayment,
+  calculateLinearPrincipal,
+} from "@/lib/mortgage-calculations";
 
 export const Route = createFileRoute("/financial-items/mortgage/")({
   component: RouteComponent,
@@ -41,8 +45,18 @@ function RouteComponent() {
       {mortgageItems.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {mortgageItems.map((item) => {
+            if (item.data.type !== "mortgage") return null;
+            const { loanAmount, interestRate, loanTermYears, paymentType } =
+              item.data;
             const paymentAmount =
-              item.data.type === "mortgage" ? item.data.paymentAmount : 0;
+              paymentType === "annuity"
+                ? calculateAnnuityPayment(
+                    loanAmount,
+                    interestRate,
+                    loanTermYears,
+                  )
+                : calculateLinearPrincipal(loanAmount, loanTermYears) +
+                  (loanAmount * interestRate) / 100 / 12;
             return (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -65,7 +79,7 @@ function RouteComponent() {
                     {formatCurrency(paymentAmount)}
                   </div>
                   <p className="text-sm text-muted-foreground mt-1 capitalize">
-                    {item.schedule} payment
+                    {item.schedule} {paymentType} payment
                   </p>
                 </CardContent>
               </Card>

@@ -28,9 +28,10 @@ export type IncomeData = z.infer<typeof incomeDataSchema>;
 
 const mortgageDataSchema = z.object({
   type: z.literal("mortgage"),
-  paymentAmount: z.number(),
   interestRate: z.number(),
   loanAmount: z.number(),
+  loanTermYears: z.number(),
+  paymentType: z.enum(["annuity", "linear"]),
   paymentSourceAccountId: z.string(),
 });
 

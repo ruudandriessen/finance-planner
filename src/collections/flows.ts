@@ -13,7 +13,9 @@ const morgageStrategy = z.object({
     liabilityAccountId: z.string(),
     interestExpenseAccountId: z.string(),
     assetAccountId: z.string(),
-    totalPaymentAmount: z.number(),
+    paymentType: z.enum(["annuity", "linear"]),
+    loanTermMonths: z.number(),
+    originalLoanAmount: z.number(),
     interestCalculation: z.object({
       type: z.literal("FIXED_RATE"),
       baseAnnualRate: z.number(),
