@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
+import { MoneyFlowSankey } from "@/components/MoneyFlowSankey";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -61,6 +62,7 @@ function Home() {
 
       {chartAccounts ? (
         <div className="mt-6 space-y-6">
+          <MoneyFlowSankey />
           <Card>
             <CardHeader>
               <CardTitle>Account Balances Over Time (30 Years)</CardTitle>
