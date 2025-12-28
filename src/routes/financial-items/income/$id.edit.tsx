@@ -16,7 +16,9 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { data: items } = useLiveQuery(financialItemsCollection);
 
-  const item = items?.find((i) => i.id === id);
+  const item = items
+    .filter((i): i is FinancialItem<"income"> => i.data.type === "income")
+    .find((i) => i.id === id);
 
   if (!item || item.data.type !== "income") {
     return (
@@ -76,7 +78,7 @@ function RouteComponent() {
         </CardHeader>
         <CardContent>
           <IncomeForm
-            initialData={item as FinancialItem<"income">}
+            initialData={item}
             onSubmit={handleSubmit}
             onCancel={() => navigate({ to: "/financial-items/income" })}
             onDelete={handleDelete}

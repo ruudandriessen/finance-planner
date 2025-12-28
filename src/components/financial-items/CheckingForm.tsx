@@ -6,7 +6,7 @@ import type { FinancialItem, FinancialItemFormProps } from "./types";
 
 type CheckingFormData = {
   name: string;
-  initialBalance: string;
+  initialBalance: number;
 };
 
 export function CheckingForm({
@@ -18,10 +18,7 @@ export function CheckingForm({
 }: FinancialItemFormProps<"checking">) {
   const [formData, setFormData] = useState<CheckingFormData>({
     name: initialData?.name ?? "",
-    initialBalance:
-      initialData?.data?.type === "checking"
-        ? initialData.data.initialBalance.toString()
-        : "",
+    initialBalance: initialData?.data?.initialBalance ?? 0,
   });
 
   const handleInputChange = (field: keyof CheckingFormData, value: string) => {
@@ -31,8 +28,8 @@ export function CheckingForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const initialBalance = parseFloat(formData.initialBalance);
-    if (Number.isNaN(initialBalance) || initialBalance < 0) return;
+    const { initialBalance } = formData;
+    if (initialBalance < 0) return;
 
     const financialItem: FinancialItem<"checking"> = {
       id: initialData?.id ?? crypto.randomUUID(),

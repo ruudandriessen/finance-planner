@@ -15,11 +15,11 @@ import type { FinancialItem, FinancialItemFormProps } from "./types";
 
 type MortgageFormData = {
   name: string;
-  paymentAmount: string;
-  interestRate: string;
-  loanAmount: string;
+  paymentAmount: number;
+  interestRate: number;
+  loanAmount: number;
   paymentSourceAccountId: string;
-  priorityOrder: string;
+  priorityOrder: number;
   schedule: "monthly" | "annually";
 };
 
@@ -33,23 +33,11 @@ export function MortgageForm({
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<MortgageFormData>({
     name: initialData?.name ?? "",
-    paymentAmount:
-      initialData?.data?.type === "mortgage"
-        ? initialData.data.paymentAmount.toString()
-        : "",
-    interestRate:
-      initialData?.data?.type === "mortgage"
-        ? initialData.data.interestRate.toString()
-        : "",
-    loanAmount:
-      initialData?.data?.type === "mortgage"
-        ? initialData.data.loanAmount.toString()
-        : "",
-    paymentSourceAccountId:
-      initialData?.data?.type === "mortgage"
-        ? initialData.data.paymentSourceAccountId
-        : "",
-    priorityOrder: initialData?.priorityOrder?.toString() ?? "10",
+    paymentAmount: initialData?.data?.paymentAmount ?? 0,
+    interestRate: initialData?.data?.interestRate ?? 0,
+    loanAmount: initialData?.data?.loanAmount ?? 0,
+    paymentSourceAccountId: initialData?.data?.paymentSourceAccountId ?? "",
+    priorityOrder: initialData?.priorityOrder ?? 10,
     schedule: initialData?.schedule ?? "monthly",
   });
 
@@ -60,19 +48,9 @@ export function MortgageForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const paymentAmount = parseFloat(formData.paymentAmount);
-    const interestRate = parseFloat(formData.interestRate);
-    const loanAmount = parseFloat(formData.loanAmount);
-    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 10;
+    const { paymentAmount, interestRate, loanAmount, priorityOrder } = formData;
 
-    if (
-      Number.isNaN(paymentAmount) ||
-      paymentAmount <= 0 ||
-      Number.isNaN(interestRate) ||
-      interestRate < 0 ||
-      Number.isNaN(loanAmount) ||
-      loanAmount <= 0
-    ) {
+    if (paymentAmount <= 0 || interestRate < 0 || loanAmount <= 0) {
       return;
     }
 

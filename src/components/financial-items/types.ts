@@ -1,4 +1,11 @@
 import type z from "zod";
+import type {
+  CheckingData,
+  ExpenseData,
+  IncomeData,
+  MortgageData,
+  SavingsData,
+} from "@/collections/financialItems";
 import type { flowSchema } from "@/collections/flows";
 
 // Type for derived accounts
@@ -9,37 +16,6 @@ export type DerivedAccount = {
 };
 
 export type Flow = z.infer<typeof flowSchema>;
-
-// Financial item data types
-export type SavingsData = {
-  type: "savings";
-  initialBalance: number;
-};
-
-export type CheckingData = {
-  type: "checking";
-  initialBalance: number;
-};
-
-export type IncomeData = {
-  type: "income";
-  amount: number;
-  targetAccountId: string;
-};
-
-export type MortgageData = {
-  type: "mortgage";
-  paymentAmount: number;
-  interestRate: number;
-  loanAmount: number;
-  paymentSourceAccountId: string;
-};
-
-export type ExpenseData = {
-  type: "expense";
-  amount: number;
-  sourceAccountId: string;
-};
 
 // Union type for all financial item data
 export type FinancialItemData =

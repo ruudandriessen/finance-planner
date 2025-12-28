@@ -10,11 +10,15 @@ const savingsDataSchema = z.object({
   initialBalance: z.number(),
 });
 
+export type SavingsData = z.infer<typeof savingsDataSchema>;
+
 // Checking account data schema
 const checkingDataSchema = z.object({
   type: z.literal("checking"),
   initialBalance: z.number(),
 });
+
+export type CheckingData = z.infer<typeof checkingDataSchema>;
 
 // Income data schema
 const incomeDataSchema = z.object({
@@ -22,6 +26,8 @@ const incomeDataSchema = z.object({
   amount: z.number(),
   targetAccountId: z.string(),
 });
+
+export type IncomeData = z.infer<typeof incomeDataSchema>;
 
 // Mortgage data schema
 const mortgageDataSchema = z.object({
@@ -32,12 +38,16 @@ const mortgageDataSchema = z.object({
   paymentSourceAccountId: z.string(),
 });
 
+export type MortgageData = z.infer<typeof mortgageDataSchema>;
+
 // Expense data schema
 const expenseDataSchema = z.object({
   type: z.literal("expense"),
   amount: z.number(),
   sourceAccountId: z.string(),
 });
+
+export type ExpenseData = z.infer<typeof expenseDataSchema>;
 
 // Financial item schema
 export const financialItemSchema = z.object({

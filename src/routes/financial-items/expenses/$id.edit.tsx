@@ -14,9 +14,11 @@ export const Route = createFileRoute("/financial-items/expenses/$id/edit")({
 function RouteComponent() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const { data: items } = useLiveQuery(financialItemsCollection);
+  const { data: items = [] } = useLiveQuery(financialItemsCollection);
 
-  const item = items?.find((i) => i.id === id);
+  const item = items
+    .filter((i): i is FinancialItem<"expense"> => i.data.type === "expense")
+    .find((i) => i.id === id);
 
   if (!item || item.data.type !== "expense") {
     return (
@@ -81,7 +83,7 @@ function RouteComponent() {
         <CardContent>
           <ExpenseForm
             key={item.id}
-            initialData={item as FinancialItem<"expense">}
+            initialData={item}
             onSubmit={handleSubmit}
             onCancel={() => navigate({ to: "/financial-items/expenses" })}
             onDelete={handleDelete}
