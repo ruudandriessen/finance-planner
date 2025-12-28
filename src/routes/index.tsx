@@ -1,58 +1,31 @@
-import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { accountsCollection } from "@/collections/accounts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useSimulation } from "@/hooks/use-simulation";
+import { useChartAccounts } from "@/hooks/use-chart-accounts";
 
 export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
-  const { data: accounts } = useLiveQuery(accountsCollection);
   const numberOfMonthsInSimulation = 30 * 12;
-  const simulationResults = useSimulation(numberOfMonthsInSimulation);
+  const chartAccounts = useChartAccounts(numberOfMonthsInSimulation);
 
-  // Filter to only show assets and liabilities
-  const relevantAccounts = accounts?.filter(
-    (account) => account.type === "asset" || account.type === "liability",
-  );
-
-  // Create a set of liability account IDs for quick lookup
-  const liabilityAccountIds = new Set(
-    accounts
-      ?.filter((account) => account.type === "liability")
-      .map((a) => a.id),
-  );
-
-  // Prepare chart data - display liabilities as positive values
+  // Transform chart data to the format recharts expects
   const chartData =
-    simulationResults?.map((result) => {
-      const displayBalances: Record<string, number> = {};
-      for (const [accountId, balance] of Object.entries(result.balances)) {
-        // Show liabilities as positive (flip the sign)
-        displayBalances[accountId] = liabilityAccountIds.has(accountId)
-          ? Math.abs(balance)
-          : balance;
-      }
-      return {
-        date: result.date.toLocaleDateString("en-US", {
-          month: "short",
-          year: "numeric",
-        }),
-        ...displayBalances,
-      };
-    }) ?? [];
+    chartAccounts?.data.map((point) => ({
+      date: point.date,
+      ...point.balances,
+    })) ?? [];
 
   // Create chart config with colors for each account
   const chartConfig =
-    relevantAccounts?.reduce(
+    chartAccounts?.accounts.reduce(
       (config, account, index) => {
         const colors = [
           "var(--chart-1)",
@@ -86,7 +59,7 @@ function Home() {
         Welcome to your personal finance planning application!
       </p>
 
-      {simulationResults && accounts && accounts.length > 0 ? (
+      {chartAccounts ? (
         <div className="mt-6 space-y-6">
           <Card>
             <CardHeader>
@@ -109,7 +82,7 @@ function Home() {
                     tickFormatter={formatCurrency}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  {relevantAccounts?.map((account) => (
+                  {chartAccounts.accounts.map((account) => (
                     <Line
                       key={account.id}
                       type="monotone"
@@ -121,17 +94,6 @@ function Home() {
                   ))}
                 </LineChart>
               </ChartContainer>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Simulation Results (JSON)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <pre className="bg-muted p-4 rounded-lg overflow-auto max-h-[400px] text-sm">
-                {JSON.stringify(simulationResults, null, 2)}
-              </pre>
             </CardContent>
           </Card>
         </div>
