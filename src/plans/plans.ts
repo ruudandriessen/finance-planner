@@ -3,24 +3,8 @@ import {
   localStorageCollectionOptions,
 } from "@tanstack/react-db";
 import z from "zod";
-import { flowSchema } from "./flows";
-
-const mortgageDownPaymentEvent = z.object({
-  id: z.string(),
-  type: z.literal("mortgageDownPayment"),
-  name: z.string(),
-  date: z.string(),
-  mortgageId: z.string(),
-  sourceAccountId: z.string(),
-  amount: z.number(),
-});
-
-const planEventSchema = z.discriminatedUnion("type", [
-  mortgageDownPaymentEvent,
-]);
-
-export type PlanEvent = z.infer<typeof planEventSchema>;
-export type MortgageDownPaymentEvent = z.infer<typeof mortgageDownPaymentEvent>;
+import { eventsSchema } from "@/events/schema";
+import { flowSchema } from "../flows/flows";
 
 const planSchema = z.object({
   id: z.string(),
@@ -36,7 +20,7 @@ const planSchema = z.object({
       patch: flowSchema.partial(),
     }),
   ),
-  events: z.array(planEventSchema),
+  events: z.array(eventsSchema),
 });
 
 export const plansCollection = createCollection(

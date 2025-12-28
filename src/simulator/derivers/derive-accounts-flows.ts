@@ -1,14 +1,25 @@
-import { deriveChecking } from "@/components/financial-items/CheckingTemplate";
-import { deriveExpense } from "@/components/financial-items/ExpenseTemplate";
-import { deriveIncome } from "@/components/financial-items/IncomeTemplate";
-import { deriveMortgage } from "@/components/financial-items/MortgageTemplate";
-import { deriveSavings } from "@/components/financial-items/SavingsTemplate";
-import type {
-  DerivedAccount,
-  DeriveResult,
-  FinancialItemBase,
-  Flow,
-} from "@/components/financial-items/types";
+import type { FinancialItemBase } from "@/financial-items/types";
+import type { Flow } from "@/flows/flows";
+import { deriveChecking } from "./deriveChecking";
+import { deriveExpense } from "./deriveExpense";
+import { deriveIncome } from "./deriveIncome";
+import { deriveMortgage } from "./deriveMortgage";
+import { deriveSavings } from "./deriveSavings";
+
+// Type for derived accounts
+export type DerivedAccount = {
+  id: string;
+  type: "asset" | "liability" | "income" | "expense";
+  amount: number;
+};
+
+export type DerivedFlow = Flow;
+
+// Result type for derive functions
+export interface DeriveResult {
+  accounts: DerivedAccount[];
+  flows: DerivedFlow[];
+}
 
 /**
  * Derives accounts and flows from a single financial item

@@ -1,9 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { financialItemsCollection } from "@/collections/financialItems";
-import type {
-  FinancialItem,
-  FinancialItemBase,
-} from "@/components/financial-items/types";
+import { financialItemsCollection } from "@/financial-items/collection";
+import type { FinancialItem, FinancialItemBase } from "@/financial-items/types";
 import { useSimulation } from "@/hooks/use-simulation";
 
 /**

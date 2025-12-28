@@ -1,12 +1,14 @@
-import type { DerivedAccount, FinancialItem, Flow } from "./types";
+import type { FinancialItem } from "@/financial-items/types";
+import type {
+  DerivedAccount,
+  DerivedFlow,
+  DeriveResult,
+} from "./derive-accounts-flows";
 
 /**
  * Derives accounts and flows from an income financial item
  */
-export function deriveIncome(item: FinancialItem<"income">): {
-  accounts: DerivedAccount[];
-  flows: Flow[];
-} {
+export function deriveIncome(item: FinancialItem<"income">): DeriveResult {
   // Generate account ID deterministically (based on financial item ID)
   const incomeAccountId = `income-${item.id}`;
 
@@ -19,7 +21,7 @@ export function deriveIncome(item: FinancialItem<"income">): {
 
   // Derive flow
   // Income flows FROM the income account TO the user's target account
-  const flow: Flow = {
+  const flow: DerivedFlow = {
     id: `flow-${item.id}`,
     name: item.name,
     priorityOrder: item.priorityOrder,

@@ -1,9 +1,9 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { financialItemsCollection } from "@/collections/financialItems";
-import { plansCollection } from "@/collections/plans";
-import { deriveAccountsAndFlows } from "@/lib/derive-accounts-flows";
-import { runSimulation } from "@/simulate/run";
-import type { SimulationResult } from "@/simulate/types";
+import { financialItemsCollection } from "@/financial-items/collection";
+import { plansCollection } from "@/plans/plans";
+import { deriveAccountsAndFlows } from "@/simulator/derivers/derive-accounts-flows";
+import { runSimulation } from "@/simulator/run";
+import type { SimulationResult } from "@/simulator/types";
 
 type UseSimulationOptions = {
   monthsToSimulate?: number;

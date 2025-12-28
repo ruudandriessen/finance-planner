@@ -53,3 +53,5 @@ export const flowSchema = z.object({
   ]),
   modifiers: z.array(z.enum(["inflation_adjusted"])),
 });
+
+export type Flow = z.infer<typeof flowSchema>;

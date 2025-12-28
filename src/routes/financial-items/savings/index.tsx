@@ -1,9 +1,9 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Edit3, Plus } from "lucide-react";
-import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { financialItemsCollection } from "@/financial-items/collection";
 
 export const Route = createFileRoute("/financial-items/savings/")({
   component: RouteComponent,

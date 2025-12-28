@@ -1,17 +1,20 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { financialItemsCollection } from "@/collections/financialItems";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import type { FinancialItem, FinancialItemFormProps } from "./types";
+} from "@/components/ui/select";
+import { financialItemsCollection } from "@/financial-items/collection";
+import type {
+  FinancialItem,
+  FinancialItemFormProps,
+} from "@/financial-items/types";
 
 type IncomeFormData = {
   name: string;

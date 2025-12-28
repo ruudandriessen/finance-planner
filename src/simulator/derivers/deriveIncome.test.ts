@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { deriveIncome } from "./IncomeTemplate";
-import type { FinancialItem } from "./types";
+import type { FinancialItem } from "@/financial-items/types";
+import { deriveIncome } from "./deriveIncome";
 
 describe("deriveIncome", () => {
   const createIncomeItem = (
