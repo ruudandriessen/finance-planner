@@ -4,6 +4,7 @@ import {
   CreditCard,
   DollarSign,
   Home,
+  LayoutDashboard,
   PiggyBank,
   Receipt,
 } from "lucide-react";
@@ -20,6 +21,11 @@ import {
 } from "./ui/sidebar";
 
 const items = [
+  {
+    title: "Dashboard",
+    url: "/",
+    icon: () => <LayoutDashboard />,
+  },
   {
     title: "Savings",
     url: "/financial-items/savings",
