@@ -18,7 +18,6 @@ export interface SimulationContext {
   // Global world parameters
   globals: {
     inflationRate: number;
-    interestRateVector?: number; // Futureproofing
   };
 }
 
@@ -33,8 +32,6 @@ export interface Transaction {
 
 export interface SimulationResult {
   date: Date;
-  // A snapshot of all account balances at the end of this month
   balances: Record<string, number>;
-  // The specific transactions that occurred this month
   transactions: Transaction[];
 }
