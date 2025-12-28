@@ -2,10 +2,10 @@ import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
-import type { Rule, SimulationContext, Transaction } from "./types";
+import type { Flow, SimulationContext, Transaction } from "./types";
 
 // Define the signature for any strategy function
-type StrategyFn = (rule: Rule, ctx: SimulationContext) => Transaction[];
+type StrategyFn = (rule: Flow, ctx: SimulationContext) => Transaction[];
 
 /**
  * STRATEGY 1: FIXED_TRANSFER
