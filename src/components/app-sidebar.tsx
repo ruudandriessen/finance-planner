@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {
+  CalendarClock,
   CreditCard,
   DollarSign,
   Home,
@@ -7,6 +8,7 @@ import {
   PiggyBank,
   Receipt,
 } from "lucide-react";
+import { Route } from "@/routes/__root";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -17,6 +19,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "./ui/sidebar";
 
 const items = [
@@ -53,6 +56,8 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { planId } = Route.useSearch();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -71,6 +76,24 @@ export function AppSidebar() {
             ))}
           </SidebarMenu>
         </SidebarGroup>
+        {planId != null && (
+          <>
+            <SidebarSeparator />
+            <SidebarGroup>
+              <SidebarGroupLabel>Plan</SidebarGroupLabel>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/events">
+                      <CalendarClock />
+                      <span>Events</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <ModeToggle />

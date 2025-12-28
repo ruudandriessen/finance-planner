@@ -80,16 +80,24 @@ function computeAccountItemChartAccounts(
     }));
 }
 
+type UseChartAccountsOptions = {
+  monthsToSimulate?: number;
+  planId?: string;
+};
+
 /**
  * Hook that returns chart-ready account data with computed values over time.
  * Uses savings/checking financial items as the account source.
  */
-export function useChartAccounts(monthsToSimulate = 360): {
+export function useChartAccounts({
+  monthsToSimulate = 360,
+  planId,
+}: UseChartAccountsOptions = {}): {
   accounts: ChartAccount[];
   data: ChartDataPoint[];
 } | null {
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
-  const simulationResults = useSimulation(monthsToSimulate);
+  const simulationResults = useSimulation({ monthsToSimulate, planId });
 
   if (!simulationResults) {
     return null;

@@ -5,14 +5,22 @@ import {
 import z from "zod";
 import { flowSchema } from "./flows";
 
-const oneTimeEvent = z.object({
+const mortgageDownPaymentEvent = z.object({
   id: z.string(),
+  type: z.literal("mortgageDownPayment"),
+  name: z.string(),
   date: z.string(),
-  type: z.enum(["transfer", "adjustment"]),
-  sourceAccountId: z.string().optional(),
-  targetAccountId: z.string().optional(),
+  mortgageId: z.string(),
+  sourceAccountId: z.string(),
   amount: z.number(),
 });
+
+const planEventSchema = z.discriminatedUnion("type", [
+  mortgageDownPaymentEvent,
+]);
+
+export type PlanEvent = z.infer<typeof planEventSchema>;
+export type MortgageDownPaymentEvent = z.infer<typeof mortgageDownPaymentEvent>;
 
 const planSchema = z.object({
   id: z.string(),
@@ -28,7 +36,7 @@ const planSchema = z.object({
       patch: flowSchema.partial(),
     }),
   ),
-  events: z.array(oneTimeEvent),
+  events: z.array(planEventSchema),
 });
 
 export const plansCollection = createCollection(
