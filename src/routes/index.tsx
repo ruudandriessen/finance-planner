@@ -1,5 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -23,10 +30,13 @@ function Home() {
 
   // Transform chart data to the format recharts expects
   const chartData =
-    chartAccounts?.data.map((point) => ({
-      date: point.date,
-      ...point.balances,
-    })) ?? [];
+    chartAccounts?.data
+      // take only the first month of each year
+      .filter((point) => point.date.getMonth() === 0)
+      .map((point) => ({
+        date: point.dateLabel,
+        ...point.balances,
+      })) ?? [];
 
   // Create chart config with colors for each account
   const chartConfig =
@@ -72,7 +82,7 @@ function Home() {
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig}>
-                <LineChart data={chartData}>
+                <ComposedChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="date"
@@ -87,17 +97,30 @@ function Home() {
                     tickFormatter={formatCurrency}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  {chartAccounts.accounts.map((account) => (
-                    <Line
-                      key={account.id}
-                      type="monotone"
-                      dataKey={account.id}
-                      stroke={chartConfig[account.id]?.color}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  ))}
-                </LineChart>
+                  {chartAccounts.accounts.map((account, index) => {
+                    const isLast = chartAccounts.accounts.length === index + 1;
+                    const isTotal = account.id === "total-assets";
+                    if (isTotal) {
+                      return (
+                        <Line
+                          dataKey={account.id}
+                          stroke="transparent"
+                          dot={false}
+                        />
+                      );
+                    }
+
+                    return (
+                      <Bar
+                        key={account.id}
+                        stackId="a"
+                        dataKey={account.id}
+                        fill={chartConfig[account.id]?.color}
+                        radius={isLast ? [4, 4, 0, 0] : undefined}
+                      />
+                    );
+                  })}
+                </ComposedChart>
               </ChartContainer>
             </CardContent>
           </Card>
