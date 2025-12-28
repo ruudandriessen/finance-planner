@@ -2,6 +2,7 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": ["src/routeTree.gen.ts", "src/components/ui/**/*.tsx"],
   "ignoreDependencies": ["tailwindcss", "tw-animate-css"],
+  "ignoreBinaries": ["dot"],
   "entry": ["src/main.tsx"],
   "project": ["src/**/*.{ts,tsx}"]
 }
