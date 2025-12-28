@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import {
   CalendarClock,
   CreditCard,
@@ -8,7 +8,6 @@ import {
   PiggyBank,
   Receipt,
 } from "lucide-react";
-import { Route } from "@/routes/__root";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -56,7 +55,9 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { planId } = Route.useSearch();
+  const { planId } = useSearch({
+    from: "/",
+  });
 
   return (
     <Sidebar collapsible="icon">

@@ -1,5 +1,5 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { plansCollection } from "@/collections/plans";
@@ -22,14 +22,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Route } from "@/routes/__root";
 
 export function PlanSelector() {
   const { data: plans } = useLiveQuery(plansCollection);
   const navigate = useNavigate({
     from: "/",
   });
-  const { planId } = Route.useSearch();
+  const { planId } = useSearch({ from: "/" });
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newPlanName, setNewPlanName] = useState("");
 
