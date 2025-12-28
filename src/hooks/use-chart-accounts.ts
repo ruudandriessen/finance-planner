@@ -101,9 +101,28 @@ export function useChartAccounts(monthsToSimulate = 360): {
   );
 
   // Collect all chart account configs
-  const chartAccountConfigs: ChartAccountConfig[] = [
+  const individualConfigs: ChartAccountConfig[] = [
     ...computeAccountItemChartAccounts(financialItems),
     ...computeMortgageChartAccounts(mortgages),
+  ];
+
+  // Add total assets line that sums all individual asset values
+  const totalAssetsConfig: ChartAccountConfig = {
+    account: {
+      id: "total-assets",
+      name: "Total Assets",
+      type: "asset",
+    },
+    computeValue: (balances: Record<string, number>) => {
+      return individualConfigs.reduce((sum, config) => {
+        return sum + config.computeValue(balances);
+      }, 0);
+    },
+  };
+
+  const chartAccountConfigs: ChartAccountConfig[] = [
+    ...individualConfigs,
+    totalAssetsConfig,
   ];
 
   if (chartAccountConfigs.length === 0) {
