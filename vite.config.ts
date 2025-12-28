@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import path from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-vite-plugin";
@@ -21,5 +22,9 @@ export default defineConfig({
   },
   server: {
     hmr: true,
+  },
+  test: {
+    globals: true,
+    environment: "node",
   },
 });
