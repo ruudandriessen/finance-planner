@@ -1,20 +1,14 @@
 import type z from "zod";
 import type { PlanEvent } from "@/events/schema";
+import type { FinancialItemBase } from "@/financial-items/types";
 import type { flowSchema } from "@/flows/flows";
 
-export type Rule = z.infer<typeof flowSchema>;
-
-export type Account = {
-  id: string;
-  type: "asset" | "liability" | "income" | "expense";
-  amount: number;
-};
+export type Flow = z.infer<typeof flowSchema>;
 
 export interface SimulationOptions {
+  financialItems: FinancialItemBase[];
   monthsToSimulate: number;
   startDate: Date;
-  initialAccounts: Account[];
-  rules: Rule[];
   events?: PlanEvent[];
 }
 

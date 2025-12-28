@@ -1,4 +1,5 @@
 import type { PlanEvent } from "@/events/schema";
+import { deriveAccountsAndFlows } from "./derivers/derive-accounts-flows";
 import { shouldRunRule } from "./shouldRunRule";
 import { StrategyRegistry } from "./strategies";
 import type {
@@ -80,10 +81,16 @@ function processEvents(
 export const runSimulation = ({
   monthsToSimulate,
   startDate,
-  initialAccounts,
-  rules,
+  financialItems,
   events = [],
 }: SimulationOptions): SimulationResult[] => {
+  const { flows, accounts: initialAccounts } =
+    deriveAccountsAndFlows(financialItems);
+
+  if (initialAccounts.length === 0 || flows.length === 0) {
+    return [];
+  }
+
   // 1. Initialize State Map (for O(1) lookups)
   // We use a mutable map inside the loop for performance,
   // but we snapshot it for the results.
@@ -93,7 +100,7 @@ export const runSimulation = ({
   });
 
   // Sort rules once by priority
-  const sortedRules = [...rules].sort(
+  const sortedRules = [...flows].sort(
     (a, b) => a.priorityOrder - b.priorityOrder,
   );
 

@@ -1,6 +1,6 @@
-import type { Rule } from "./types";
+import type { Flow } from "./types";
 
-export const shouldRunRule = (rule: Rule, currentDate: Date): boolean => {
+export const shouldRunRule = (rule: Flow, currentDate: Date): boolean => {
   // 1. Check Lifespan (Start / End dates)
   if (rule.start && currentDate < rule.start) return false;
   if (rule.end && currentDate > rule.end) return false;
