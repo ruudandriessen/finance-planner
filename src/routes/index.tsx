@@ -102,10 +102,10 @@ function Home() {
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
               <p className="text-lg font-medium mb-2 text-foreground">
-                No accounts or flows yet
+                No accounts yet
               </p>
               <p className="text-sm text-muted-foreground">
-                Add accounts and flows to see your financial simulation
+                Add accounts to see your financial simulation
               </p>
             </div>
           </CardContent>

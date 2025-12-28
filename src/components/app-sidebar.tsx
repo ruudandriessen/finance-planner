@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import {
-  ArrowRightLeft,
   CreditCard,
   DollarSign,
   Home,
@@ -50,11 +49,6 @@ const items = [
     title: "Mortgages",
     url: "/financial-items/mortgage",
     icon: () => <Home />,
-  },
-  {
-    title: "Flows",
-    url: "/flows",
-    icon: () => <ArrowRightLeft />,
   },
 ];
 
