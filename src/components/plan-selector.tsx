@@ -1,5 +1,5 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,12 +23,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { plansCollection } from "@/plans/plans";
 
-export function PlanSelector() {
+export function PlanSelector({ planId }: { planId?: string }) {
   const { data: plans } = useLiveQuery(plansCollection);
   const navigate = useNavigate({
     from: "/",
   });
-  const { planId } = useSearch({ from: "/" });
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newPlanName, setNewPlanName] = useState("");
 

@@ -6,17 +6,20 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const Route = createRootRoute({
-  component: () => (
-    <ThemeProvider defaultTheme="system">
-      <SidebarProvider defaultOpen={false}>
-        <AppSidebar />
-        <main className="w-full">
-          <DynamicBreadcrumb />
-          <Outlet />
-        </main>
-      </SidebarProvider>
-    </ThemeProvider>
-  ),
+  component: () => {
+    const { planId } = Route.useSearch();
+    return (
+      <ThemeProvider defaultTheme="system">
+        <SidebarProvider defaultOpen={false}>
+          <AppSidebar planId={planId} />
+          <main className="w-full">
+            <DynamicBreadcrumb planId={planId} />
+            <Outlet />
+          </main>
+        </SidebarProvider>
+      </ThemeProvider>
+    );
+  },
   validateSearch: z.object({
     planId: z.string().optional(),
   }),
