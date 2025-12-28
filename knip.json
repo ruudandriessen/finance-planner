@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignore": ["src/routeTree.gen.ts"],
+  "ignoreDependencies": ["tailwindcss", "tw-animate-css"],
+  "entry": ["src/main.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "rules": {
+    "exports": "warn",
+    "types": "warn"
+  }
+}
