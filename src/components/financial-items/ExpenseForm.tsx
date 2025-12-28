@@ -13,7 +13,7 @@ import {
 } from "../ui/select";
 import type { FinancialItem, FinancialItemFormProps } from "./types";
 
-type IncomeFormData = {
+type ExpenseFormData = {
   name: string;
   amount: string;
   sourceAccountId: string;
@@ -21,29 +21,29 @@ type IncomeFormData = {
   schedule: "monthly" | "annually";
 };
 
-export function IncomeForm({
+export function ExpenseForm({
   initialData,
   onSubmit,
   onCancel,
   onDelete,
   submitLabel = "Save",
-}: FinancialItemFormProps<"income">) {
+}: FinancialItemFormProps<"expense">) {
   const { data: accounts = [] } = useLiveQuery(accountsCollection);
-  const [formData, setFormData] = useState<IncomeFormData>({
+  const [formData, setFormData] = useState<ExpenseFormData>({
     name: initialData?.name || "",
     amount:
-      initialData?.data && initialData.data.type === "income"
+      initialData?.data && initialData.data.type === "expense"
         ? initialData.data.amount.toString()
         : "",
     sourceAccountId:
-      initialData?.data && initialData.data.type === "income"
+      initialData?.data && initialData.data.type === "expense"
         ? initialData.data.sourceAccountId
         : "",
-    priorityOrder: initialData?.priorityOrder?.toString() || "1",
+    priorityOrder: initialData?.priorityOrder?.toString() || "10",
     schedule: initialData?.schedule || "monthly",
   });
 
-  const handleInputChange = (field: keyof IncomeFormData, value: string) => {
+  const handleInputChange = (field: keyof ExpenseFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -53,9 +53,9 @@ export function IncomeForm({
     const amount = parseFloat(formData.amount);
     if (Number.isNaN(amount) || amount <= 0) return;
 
-    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 1;
+    const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 10;
 
-    const financialItem: FinancialItem<"income"> = {
+    const financialItem: FinancialItem<"expense"> = {
       id: initialData?.id || crypto.randomUUID(),
       name: formData.name,
       priorityOrder,
@@ -63,7 +63,7 @@ export function IncomeForm({
       start: initialData?.start,
       end: initialData?.end,
       data: {
-        type: "income",
+        type: "expense",
         amount,
         sourceAccountId: formData.sourceAccountId,
       },
@@ -77,12 +77,12 @@ export function IncomeForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <Label htmlFor="name">Income Name</Label>
+        <Label htmlFor="name">Expense Name</Label>
         <Input
           id="name"
           value={formData.name}
           onChange={(e) => handleInputChange("name", e.target.value)}
-          placeholder="e.g., My Salary"
+          placeholder="e.g., Groceries"
           className="mt-2"
           required
         />
@@ -97,7 +97,7 @@ export function IncomeForm({
           min="0"
           value={formData.amount}
           onChange={(e) => handleInputChange("amount", e.target.value)}
-          placeholder="Enter monthly amount"
+          placeholder="Enter expense amount"
           className="mt-2"
           required
         />
@@ -124,7 +124,7 @@ export function IncomeForm({
           </SelectContent>
         </Select>
         <p className="text-xs text-muted-foreground mt-1">
-          Select the account where you receive this income
+          Select the account this expense is paid from
         </p>
       </div>
 

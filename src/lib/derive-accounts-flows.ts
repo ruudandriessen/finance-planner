@@ -1,3 +1,4 @@
+import { deriveExpense } from "@/components/financial-items/ExpenseTemplate";
 import { deriveIncome } from "@/components/financial-items/IncomeTemplate";
 import { deriveMortgage } from "@/components/financial-items/MortgageTemplate";
 import type {
@@ -16,6 +17,8 @@ function deriveItem(item: FinancialItemBase): DeriveResult | null {
       return deriveIncome({ ...item, data: item.data });
     case "mortgage":
       return deriveMortgage({ ...item, data: item.data });
+    case "expense":
+      return deriveExpense({ ...item, data: item.data });
     default:
       return null;
   }

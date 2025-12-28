@@ -21,13 +21,20 @@ export type MortgageData = {
   paymentSourceAccountId: string;
 };
 
+export type ExpenseData = {
+  type: "expense";
+  amount: number;
+  sourceAccountId: string;
+};
+
 // Union type for all financial item data
-export type FinancialItemData = IncomeData | MortgageData;
+export type FinancialItemData = IncomeData | MortgageData | ExpenseData;
 
 // Type map: maps type literal to its data type
 export type FinancialItemDataMap = {
   income: IncomeData;
   mortgage: MortgageData;
+  expense: ExpenseData;
 };
 
 // Helper type to extract data type from type literal

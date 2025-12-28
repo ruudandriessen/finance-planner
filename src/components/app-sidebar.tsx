@@ -1,5 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRightLeft, DollarSign, Home, HouseIcon } from "lucide-react";
+import {
+  ArrowRightLeft,
+  DollarSign,
+  Home,
+  HouseIcon,
+  Receipt,
+} from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -32,6 +38,11 @@ const items = [
     title: "Mortgages",
     url: "/financial-items/mortgage",
     icon: () => <Home />,
+  },
+  {
+    title: "Expenses",
+    url: "/financial-items/expenses",
+    icon: () => <Receipt />,
   },
 ];
 
