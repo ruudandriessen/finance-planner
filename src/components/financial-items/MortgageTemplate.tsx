@@ -7,8 +7,13 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): {
   accounts: DerivedAccount[];
   flows: Flow[];
 } {
-  const { paymentAmount, interestRate, loanAmount, paymentSourceAccountId } =
-    item.data;
+  const {
+    interestRate,
+    loanAmount,
+    loanTermYears,
+    paymentType,
+    paymentSourceAccountId,
+  } = item.data;
 
   // Generate account IDs deterministically
   const liabilityAccountId = `liability-${item.id}`;
@@ -48,7 +53,9 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): {
         liabilityAccountId,
         interestExpenseAccountId: expenseAccountId,
         assetAccountId,
-        totalPaymentAmount: paymentAmount,
+        paymentType,
+        loanTermMonths: loanTermYears * 12,
+        originalLoanAmount: loanAmount,
         interestCalculation: {
           type: "FIXED_RATE",
           baseAnnualRate: interestRate,

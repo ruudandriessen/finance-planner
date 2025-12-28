@@ -12,9 +12,10 @@ describe("deriveMortgage", () => {
     schedule: "monthly",
     data: {
       type: "mortgage",
-      paymentAmount: 2000,
-      interestRate: 0.05,
+      interestRate: 5,
       loanAmount: 300000,
+      loanTermYears: 30,
+      paymentType: "annuity",
       paymentSourceAccountId: "checking-account",
     },
     ...overrides,
@@ -54,9 +55,10 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        paymentAmount: 2000,
-        interestRate: 0.05,
+        interestRate: 5,
         loanAmount: 250000,
+        loanTermYears: 30,
+        paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
       },
     });
@@ -72,9 +74,10 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        paymentAmount: 2000,
-        interestRate: 0.05,
+        interestRate: 5,
         loanAmount: -200000,
+        loanTermYears: 30,
+        paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
       },
     });
@@ -98,9 +101,10 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        paymentAmount: 2000,
-        interestRate: 0.05,
+        interestRate: 5,
         loanAmount: 400000,
+        loanTermYears: 30,
+        paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
       },
     });
@@ -124,9 +128,10 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        paymentAmount: 2000,
-        interestRate: 0.05,
+        interestRate: 5,
         loanAmount: 300000,
+        loanTermYears: 30,
+        paymentType: "annuity",
         paymentSourceAccountId: "savings-account",
       },
     });
@@ -150,9 +155,10 @@ describe("deriveMortgage", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
-        paymentAmount: 2500,
-        interestRate: 0.045,
+        interestRate: 4.5,
         loanAmount: 350000,
+        loanTermYears: 30,
+        paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
       },
     });
@@ -166,10 +172,12 @@ describe("deriveMortgage", () => {
         liabilityAccountId: "liability-mortgage-1",
         interestExpenseAccountId: "expense-mortgage-1",
         assetAccountId: "asset-mortgage-1",
-        totalPaymentAmount: 2500,
+        paymentType: "annuity",
+        loanTermMonths: 360,
+        originalLoanAmount: 350000,
         interestCalculation: {
           type: "FIXED_RATE",
-          baseAnnualRate: 0.045,
+          baseAnnualRate: 4.5,
         },
       },
     });
