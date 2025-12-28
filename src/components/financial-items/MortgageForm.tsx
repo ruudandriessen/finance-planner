@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { accountsCollection } from "@/collections/accounts";
+import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -30,27 +30,27 @@ export function MortgageForm({
   onDelete,
   submitLabel = "Save",
 }: FinancialItemFormProps<"mortgage">) {
-  const { data: accounts = [] } = useLiveQuery(accountsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<MortgageFormData>({
-    name: initialData?.name || "",
+    name: initialData?.name ?? "",
     paymentAmount:
-      initialData?.data && initialData.data.type === "mortgage"
+      initialData?.data?.type === "mortgage"
         ? initialData.data.paymentAmount.toString()
         : "",
     interestRate:
-      initialData?.data && initialData.data.type === "mortgage"
+      initialData?.data?.type === "mortgage"
         ? initialData.data.interestRate.toString()
         : "",
     loanAmount:
-      initialData?.data && initialData.data.type === "mortgage"
+      initialData?.data?.type === "mortgage"
         ? initialData.data.loanAmount.toString()
         : "",
     paymentSourceAccountId:
-      initialData?.data && initialData.data.type === "mortgage"
+      initialData?.data?.type === "mortgage"
         ? initialData.data.paymentSourceAccountId
         : "",
-    priorityOrder: initialData?.priorityOrder?.toString() || "10",
-    schedule: initialData?.schedule || "monthly",
+    priorityOrder: initialData?.priorityOrder?.toString() ?? "10",
+    schedule: initialData?.schedule ?? "monthly",
   });
 
   const handleInputChange = (field: keyof MortgageFormData, value: string) => {
@@ -77,7 +77,7 @@ export function MortgageForm({
     }
 
     const financialItem: FinancialItem<"mortgage"> = {
-      id: initialData?.id || crypto.randomUUID(),
+      id: initialData?.id ?? crypto.randomUUID(),
       name: formData.name,
       priorityOrder,
       schedule: formData.schedule,
@@ -95,7 +95,10 @@ export function MortgageForm({
     await onSubmit(financialItem);
   };
 
-  const userAccounts = accounts.filter((acc) => acc.type === "asset");
+  // Filter to savings and checking accounts only
+  const accountItems = financialItems.filter(
+    (item) => item.data.type === "savings" || item.data.type === "checking",
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -163,7 +166,7 @@ export function MortgageForm({
       </div>
 
       <div>
-        <Label htmlFor="paymentSourceAccount">Payment Source</Label>
+        <Label htmlFor="paymentSourceAccount">Pay From</Label>
         <Select
           value={formData.paymentSourceAccountId}
           onValueChange={(value) =>
@@ -174,9 +177,9 @@ export function MortgageForm({
             <SelectValue placeholder="Select account" />
           </SelectTrigger>
           <SelectContent>
-            {userAccounts.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                {account.name}
+            {accountItems.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name}
               </SelectItem>
             ))}
           </SelectContent>

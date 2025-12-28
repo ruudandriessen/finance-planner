@@ -1,7 +1,9 @@
 import { useLiveQuery } from "@tanstack/react-db";
-import { type Account, accountsCollection } from "@/collections/accounts";
 import { financialItemsCollection } from "@/collections/financialItems";
-import type { FinancialItem } from "@/components/financial-items/types";
+import type {
+  FinancialItem,
+  FinancialItemBase,
+} from "@/components/financial-items/types";
 import { useSimulation } from "@/hooks/use-simulation";
 
 /**
@@ -57,56 +59,56 @@ function computeMortgageChartAccounts(
 }
 
 /**
- * Computes chart accounts for user-created accounts.
- * Liabilities are displayed as positive values.
+ * Computes chart accounts for savings and checking financial items.
  */
-function computeUserAccountChartAccounts(
-  accounts: Array<Account>,
+function computeAccountItemChartAccounts(
+  items: FinancialItemBase[],
 ): ChartAccountConfig[] {
-  return accounts
+  return items
     .filter(
-      (account) => account.type === "asset" || account.type === "liability",
+      (item) => item.data.type === "savings" || item.data.type === "checking",
     )
-    .map((account) => ({
+    .map((item) => ({
       account: {
-        id: account.id,
-        name: account.name,
-        type: account.type,
+        id: item.id,
+        name: item.name,
+        type: "asset" as const,
       },
       computeValue: (balances: Record<string, number>) => {
-        const balance = balances[account.id] ?? 0;
-        // Show liabilities as positive values
-        return account.type === "liability" ? Math.abs(balance) : balance;
+        return balances[item.id] ?? 0;
       },
     }));
 }
 
 /**
  * Hook that returns chart-ready account data with computed values over time.
- * Combines user accounts with derived accounts from financial items.
+ * Uses savings/checking financial items as the account source.
  */
 export function useChartAccounts(monthsToSimulate = 360): {
   accounts: ChartAccount[];
   data: ChartDataPoint[];
 } | null {
-  const { data: accounts } = useLiveQuery(accountsCollection);
-  const { data: financialItems } = useLiveQuery(financialItemsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const simulationResults = useSimulation(monthsToSimulate);
 
-  if (!simulationResults || !accounts || accounts.length === 0) {
+  if (!simulationResults) {
     return null;
   }
 
   // Get mortgage financial items
-  const mortgages = (financialItems?.filter(
+  const mortgages = financialItems.filter(
     (item) => item.data.type === "mortgage",
-  ) || []) as FinancialItem<"mortgage">[];
+  ) as FinancialItem<"mortgage">[];
 
   // Collect all chart account configs
   const chartAccountConfigs: ChartAccountConfig[] = [
-    ...computeUserAccountChartAccounts(accounts),
+    ...computeAccountItemChartAccounts(financialItems),
     ...computeMortgageChartAccounts(mortgages),
   ];
+
+  if (chartAccountConfigs.length === 0) {
+    return null;
+  }
 
   // Extract just the accounts for the chart config
   const chartAccounts = chartAccountConfigs.map((config) => config.account);

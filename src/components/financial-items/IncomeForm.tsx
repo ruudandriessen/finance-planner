@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { accountsCollection } from "@/collections/accounts";
+import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -16,7 +16,7 @@ import type { FinancialItem, FinancialItemFormProps } from "./types";
 type IncomeFormData = {
   name: string;
   amount: string;
-  sourceAccountId: string;
+  targetAccountId: string;
   priorityOrder: string;
   schedule: "monthly" | "annually";
 };
@@ -28,19 +28,19 @@ export function IncomeForm({
   onDelete,
   submitLabel = "Save",
 }: FinancialItemFormProps<"income">) {
-  const { data: accounts = [] } = useLiveQuery(accountsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<IncomeFormData>({
-    name: initialData?.name || "",
+    name: initialData?.name ?? "",
     amount:
-      initialData?.data && initialData.data.type === "income"
+      initialData?.data?.type === "income"
         ? initialData.data.amount.toString()
         : "",
-    sourceAccountId:
-      initialData?.data && initialData.data.type === "income"
-        ? initialData.data.sourceAccountId
+    targetAccountId:
+      initialData?.data?.type === "income"
+        ? initialData.data.targetAccountId
         : "",
-    priorityOrder: initialData?.priorityOrder?.toString() || "1",
-    schedule: initialData?.schedule || "monthly",
+    priorityOrder: initialData?.priorityOrder?.toString() ?? "1",
+    schedule: initialData?.schedule ?? "monthly",
   });
 
   const handleInputChange = (field: keyof IncomeFormData, value: string) => {
@@ -56,7 +56,7 @@ export function IncomeForm({
     const priorityOrder = parseInt(formData.priorityOrder, 10) ?? 1;
 
     const financialItem: FinancialItem<"income"> = {
-      id: initialData?.id || crypto.randomUUID(),
+      id: initialData?.id ?? crypto.randomUUID(),
       name: formData.name,
       priorityOrder,
       schedule: formData.schedule,
@@ -65,14 +65,17 @@ export function IncomeForm({
       data: {
         type: "income",
         amount,
-        sourceAccountId: formData.sourceAccountId,
+        targetAccountId: formData.targetAccountId,
       },
     };
 
     await onSubmit(financialItem);
   };
 
-  const userAccounts = accounts.filter((acc) => acc.type === "asset");
+  // Filter to savings and checking accounts only
+  const accountItems = financialItems.filter(
+    (item) => item.data.type === "savings" || item.data.type === "checking",
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -107,18 +110,18 @@ export function IncomeForm({
       </div>
 
       <div>
-        <Label htmlFor="sourceAccount">Payment Source</Label>
+        <Label htmlFor="targetAccount">Deposit To</Label>
         <Select
-          value={formData.sourceAccountId}
-          onValueChange={(value) => handleInputChange("sourceAccountId", value)}
+          value={formData.targetAccountId}
+          onValueChange={(value) => handleInputChange("targetAccountId", value)}
         >
           <SelectTrigger className="mt-2">
             <SelectValue placeholder="Select account" />
           </SelectTrigger>
           <SelectContent>
-            {userAccounts.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                {account.name}
+            {accountItems.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name}
               </SelectItem>
             ))}
           </SelectContent>

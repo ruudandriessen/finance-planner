@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import {
   ArrowRightLeft,
+  CreditCard,
   DollarSign,
   Home,
-  HouseIcon,
+  PiggyBank,
   Receipt,
 } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
@@ -20,14 +21,14 @@ import {
 
 const items = [
   {
-    title: "Accounts",
-    url: "/accounts",
-    icon: () => <HouseIcon />,
+    title: "Savings",
+    url: "/financial-items/savings",
+    icon: () => <PiggyBank />,
   },
   {
-    title: "Flows",
-    url: "/flows",
-    icon: () => <ArrowRightLeft />,
+    title: "Checking",
+    url: "/financial-items/checking",
+    icon: () => <CreditCard />,
   },
   {
     title: "Income",
@@ -35,14 +36,19 @@ const items = [
     icon: () => <DollarSign />,
   },
   {
+    title: "Expenses",
+    url: "/financial-items/expenses",
+    icon: () => <Receipt />,
+  },
+  {
     title: "Mortgages",
     url: "/financial-items/mortgage",
     icon: () => <Home />,
   },
   {
-    title: "Expenses",
-    url: "/financial-items/expenses",
-    icon: () => <Receipt />,
+    title: "Flows",
+    url: "/flows",
+    icon: () => <ArrowRightLeft />,
   },
 ];
 

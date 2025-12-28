@@ -1,16 +1,11 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowRightLeft, Edit3, Plus } from "lucide-react";
-import { accountsCollection } from "../../collections/accounts";
-import { flowsCollection } from "../../collections/flows";
-import { Badge } from "../../components/ui/badge";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { financialItemsCollection } from "@/collections/financialItems";
+import { flowsCollection } from "@/collections/flows";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/flows/")({
   component: RouteComponent,
@@ -18,7 +13,7 @@ export const Route = createFileRoute("/flows/")({
 
 function RouteComponent() {
   const { data: flows } = useLiveQuery(flowsCollection);
-  const { data: accounts } = useLiveQuery(accountsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const navigate = useNavigate();
 
   const formatCurrency = (amount: number) => {
@@ -29,7 +24,8 @@ function RouteComponent() {
   };
 
   const getAccountName = (accountId: string) => {
-    return accounts?.find((a) => a.id === accountId)?.name || "Unknown";
+    const item = financialItems.find((i) => i.id === accountId);
+    return item?.name ?? "Unknown";
   };
 
   const getFlowAmount = (
@@ -37,7 +33,8 @@ function RouteComponent() {
   ) => {
     if (flow.strategy.type === "fixed") {
       return flow.strategy.config.amount;
-    } else if (flow.strategy.type === "mortgage") {
+    }
+    if (flow.strategy.type === "mortgage") {
       return flow.strategy.config.totalPaymentAmount;
     }
     return 0;

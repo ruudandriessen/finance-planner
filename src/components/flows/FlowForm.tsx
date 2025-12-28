@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { useState } from "react";
-import { accountsCollection } from "@/collections/accounts";
+import { financialItemsCollection } from "@/collections/financialItems";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -48,16 +48,16 @@ export function FlowForm({
   submitLabel,
   mode,
 }: FlowFormProps) {
-  const { data: accounts } = useLiveQuery(accountsCollection);
+  const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const [formData, setFormData] = useState<FlowFormData>({
-    name: initialData.name || "",
-    sourceAccountId: initialData.sourceAccountId || "",
-    targetAccountId: initialData.targetAccountId || "",
-    schedule: initialData.schedule || "monthly",
+    name: initialData.name ?? "",
+    sourceAccountId: initialData.sourceAccountId ?? "",
+    targetAccountId: initialData.targetAccountId ?? "",
+    schedule: initialData.schedule ?? "monthly",
     priorityOrder: initialData.priorityOrder ?? 10,
-    strategyType: initialData.strategyType || "fixed",
+    strategyType: initialData.strategyType ?? "fixed",
     amount: initialData.amount,
-    inflationAdjusted: initialData.inflationAdjusted || false,
+    inflationAdjusted: initialData.inflationAdjusted ?? false,
     liabilityAccountId: initialData.liabilityAccountId,
     interestExpenseAccountId: initialData.interestExpenseAccountId,
     assetAccountId: initialData.assetAccountId,
@@ -79,6 +79,11 @@ export function FlowForm({
   };
 
   const defaultSubmitLabel = mode === "add" ? "Add Flow" : "Update Flow";
+
+  // Filter to savings and checking accounts
+  const accountItems = financialItems.filter(
+    (item) => item.data.type === "savings" || item.data.type === "checking",
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -147,9 +152,9 @@ export function FlowForm({
             <SelectValue placeholder="Select source account" />
           </SelectTrigger>
           <SelectContent id="sourceAccount">
-            {accounts?.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                {account.name} ({account.type})
+            {accountItems.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name} ({item.data.type})
               </SelectItem>
             ))}
           </SelectContent>
@@ -166,9 +171,9 @@ export function FlowForm({
             <SelectValue placeholder="Select target account" />
           </SelectTrigger>
           <SelectContent id="targetAccount">
-            {accounts?.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                {account.name} ({account.type})
+            {accountItems.map((item) => (
+              <SelectItem key={item.id} value={item.id}>
+                {item.name} ({item.data.type})
               </SelectItem>
             ))}
           </SelectContent>
@@ -188,12 +193,11 @@ export function FlowForm({
           </SelectTrigger>
           <SelectContent id="strategyType">
             <SelectItem value="fixed">Fixed Amount</SelectItem>
-            <SelectItem value="mortgage">Mortgage</SelectItem>
             <SelectItem value="compound">Compound Interest</SelectItem>
           </SelectContent>
         </Select>
         <p className="text-xs text-muted-foreground mt-1">
-          Fixed for simple transfers, Mortgage for complex loan calculations
+          Fixed for simple transfers, Compound for interest calculations
         </p>
       </div>
 
@@ -205,9 +209,9 @@ export function FlowForm({
             type="number"
             step="0.01"
             min="0"
-            value={formData.amount || ""}
+            value={formData.amount ?? ""}
             onChange={(e) =>
-              handleInputChange("amount", parseFloat(e.target.value) || 0)
+              handleInputChange("amount", parseFloat(e.target.value) ?? 0)
             }
             placeholder="Enter amount"
             className="mt-2"
@@ -239,124 +243,6 @@ export function FlowForm({
           <p className="text-sm text-muted-foreground mt-1">
             Percentage growth rate per {formData.schedule} period
           </p>
-        </div>
-      )}
-
-      {formData.strategyType === "mortgage" && (
-        <div className="space-y-4 border rounded-lg p-4 bg-muted/30">
-          <h3 className="font-semibold text-sm">Mortgage Configuration</h3>
-
-          <div>
-            <Label htmlFor="liabilityAccount">Liability Account</Label>
-            <Select
-              value={formData.liabilityAccountId || ""}
-              onValueChange={(value) =>
-                handleInputChange("liabilityAccountId", value)
-              }
-            >
-              <SelectTrigger className="mt-2">
-                <SelectValue placeholder="Select liability account" />
-              </SelectTrigger>
-              <SelectContent id="liabilityAccount">
-                {accounts
-                  ?.filter((a) => a.type === "liability")
-                  .map((account) => (
-                    <SelectItem key={account.id} value={account.id}>
-                      {account.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="interestExpenseAccount">
-              Interest Expense Account
-            </Label>
-            <Select
-              value={formData.interestExpenseAccountId || ""}
-              onValueChange={(value) =>
-                handleInputChange("interestExpenseAccountId", value)
-              }
-            >
-              <SelectTrigger className="mt-2">
-                <SelectValue placeholder="Select expense account" />
-              </SelectTrigger>
-              <SelectContent id="interestExpenseAccount">
-                {accounts
-                  ?.filter((a) => a.type === "expense")
-                  .map((account) => (
-                    <SelectItem key={account.id} value={account.id}>
-                      {account.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="assetAccount">Asset Account</Label>
-            <Select
-              value={formData.assetAccountId || ""}
-              onValueChange={(value) =>
-                handleInputChange("assetAccountId", value)
-              }
-            >
-              <SelectTrigger className="mt-2">
-                <SelectValue placeholder="Select asset account" />
-              </SelectTrigger>
-              <SelectContent id="assetAccount">
-                {accounts
-                  ?.filter((a) => a.type === "asset")
-                  .map((account) => (
-                    <SelectItem key={account.id} value={account.id}>
-                      {account.name}
-                    </SelectItem>
-                  ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label htmlFor="totalPaymentAmount">Total Payment Amount ($)</Label>
-            <Input
-              id="totalPaymentAmount"
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.totalPaymentAmount || ""}
-              onChange={(e) =>
-                handleInputChange(
-                  "totalPaymentAmount",
-                  parseFloat(e.target.value) || 0,
-                )
-              }
-              placeholder="Monthly payment amount"
-              className="mt-2"
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="baseAnnualRate">Annual Interest Rate (%)</Label>
-            <Input
-              id="baseAnnualRate"
-              type="number"
-              step="0.01"
-              min="0"
-              max="100"
-              value={formData.baseAnnualRate || ""}
-              onChange={(e) =>
-                handleInputChange(
-                  "baseAnnualRate",
-                  parseFloat(e.target.value) || 0,
-                )
-              }
-              placeholder="e.g., 4.5"
-              className="mt-2"
-              required
-            />
-          </div>
         </div>
       )}
 
@@ -395,7 +281,7 @@ export function FlowForm({
           </Button>
         )}
         <Button type="submit" className="flex-1">
-          {submitLabel || defaultSubmitLabel}
+          {submitLabel ?? defaultSubmitLabel}
         </Button>
       </div>
     </form>

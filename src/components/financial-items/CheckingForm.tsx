@@ -1,0 +1,110 @@
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import type { FinancialItem, FinancialItemFormProps } from "./types";
+
+type CheckingFormData = {
+  name: string;
+  initialBalance: string;
+};
+
+export function CheckingForm({
+  initialData,
+  onSubmit,
+  onCancel,
+  onDelete,
+  submitLabel = "Save",
+}: FinancialItemFormProps<"checking">) {
+  const [formData, setFormData] = useState<CheckingFormData>({
+    name: initialData?.name ?? "",
+    initialBalance:
+      initialData?.data?.type === "checking"
+        ? initialData.data.initialBalance.toString()
+        : "",
+  });
+
+  const handleInputChange = (field: keyof CheckingFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const initialBalance = parseFloat(formData.initialBalance);
+    if (Number.isNaN(initialBalance) || initialBalance < 0) return;
+
+    const financialItem: FinancialItem<"checking"> = {
+      id: initialData?.id ?? crypto.randomUUID(),
+      name: formData.name,
+      priorityOrder: initialData?.priorityOrder ?? 0,
+      schedule: "monthly",
+      start: initialData?.start,
+      end: initialData?.end,
+      data: {
+        type: "checking",
+        initialBalance,
+      },
+    };
+
+    await onSubmit(financialItem);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div>
+        <Label htmlFor="name">Account Name</Label>
+        <Input
+          id="name"
+          value={formData.name}
+          onChange={(e) => handleInputChange("name", e.target.value)}
+          placeholder="e.g., Main Checking"
+          className="mt-2"
+          required
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="initialBalance">Initial Balance ($)</Label>
+        <Input
+          id="initialBalance"
+          type="number"
+          step="0.01"
+          min="0"
+          value={formData.initialBalance}
+          onChange={(e) => handleInputChange("initialBalance", e.target.value)}
+          placeholder="Enter initial balance"
+          className="mt-2"
+          required
+        />
+        <p className="text-xs text-muted-foreground mt-1">
+          Current balance in this checking account
+        </p>
+      </div>
+
+      <div className="flex gap-4 pt-4">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          className="flex-1"
+        >
+          Cancel
+        </Button>
+        {onDelete && (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={onDelete}
+            className="flex-1"
+          >
+            Delete
+          </Button>
+        )}
+        <Button type="submit" className="flex-1">
+          {submitLabel}
+        </Button>
+      </div>
+    </form>
+  );
+}
