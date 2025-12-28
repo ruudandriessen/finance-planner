@@ -1,6 +1,6 @@
 import type z from "zod";
-import type { flowSchema } from "@/collections/flows";
-import type { PlanEvent } from "@/collections/plans";
+import type { PlanEvent } from "@/events/schema";
+import type { flowSchema } from "@/flows/flows";
 
 export type Rule = z.infer<typeof flowSchema>;
 

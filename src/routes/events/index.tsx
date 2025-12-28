@@ -1,10 +1,10 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Edit3, Plus } from "lucide-react";
-import { financialItemsCollection } from "@/collections/financialItems";
-import { plansCollection } from "@/collections/plans";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { financialItemsCollection } from "@/financial-items/collection";
+import { plansCollection } from "@/plans/plans";
 import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/events/")({

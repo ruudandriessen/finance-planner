@@ -1,7 +1,7 @@
 import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
-} from "@/lib/mortgage-calculations";
+} from "@/financial-items/mortgage/mortgage-calculations";
 import type { Rule, SimulationContext, Transaction } from "./types";
 
 // Define the signature for any strategy function

@@ -1,12 +1,14 @@
-import type { DerivedAccount, FinancialItem, Flow } from "./types";
+import type { FinancialItem } from "@/financial-items/types";
+import type {
+  DerivedAccount,
+  DerivedFlow,
+  DeriveResult,
+} from "./derive-accounts-flows";
 
 /**
  * Derives accounts and flows from a mortgage financial item
  */
-export function deriveMortgage(item: FinancialItem<"mortgage">): {
-  accounts: DerivedAccount[];
-  flows: Flow[];
-} {
+export function deriveMortgage(item: FinancialItem<"mortgage">): DeriveResult {
   const {
     interestRate,
     loanAmount,
@@ -20,7 +22,6 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): {
   const expenseAccountId = `expense-${item.id}`;
   const assetAccountId = `asset-${item.id}`;
 
-  // Derive accounts (no name field - not needed for simulation)
   const accounts: DerivedAccount[] = [
     {
       id: liabilityAccountId,
@@ -39,8 +40,7 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): {
     },
   ];
 
-  // Derive flow
-  const flow: Flow = {
+  const flow: DerivedFlow = {
     id: `flow-${item.id}`,
     name: item.name,
     priorityOrder: item.priorityOrder,

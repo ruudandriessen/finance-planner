@@ -1,11 +1,11 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import type { MortgageDownPaymentEvent } from "@/collections/plans";
-import { plansCollection } from "@/collections/plans";
-import { MortgageDownPaymentForm } from "@/components/events/MortgageDownPaymentForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MortgageDownPaymentForm } from "@/events/components/MortgageDownPaymentForm";
+import type { MortgageDownPaymentEvent } from "@/events/schema";
+import { plansCollection } from "@/plans/plans";
 import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/events/mortgage-down-payment/add")({

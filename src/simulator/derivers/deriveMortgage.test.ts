@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { deriveMortgage } from "./MortgageTemplate";
-import type { FinancialItem } from "./types";
+import type { FinancialItem } from "@/financial-items/types";
+import { deriveMortgage } from "./deriveMortgage";
 
 describe("deriveMortgage", () => {
   const createMortgageItem = (

@@ -2,7 +2,6 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { plansCollection } from "@/collections/plans";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { plansCollection } from "@/plans/plans";
 
 export function PlanSelector() {
   const { data: plans } = useLiveQuery(plansCollection);

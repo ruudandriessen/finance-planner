@@ -1,21 +1,10 @@
-import type z from "zod";
 import type {
   CheckingData,
   ExpenseData,
   IncomeData,
   MortgageData,
   SavingsData,
-} from "@/collections/financialItems";
-import type { flowSchema } from "@/collections/flows";
-
-// Type for derived accounts
-export type DerivedAccount = {
-  id: string;
-  type: "asset" | "liability" | "income" | "expense";
-  amount: number;
-};
-
-export type Flow = z.infer<typeof flowSchema>;
+} from "@/financial-items/collection";
 
 // Union type for all financial item data
 export type FinancialItemData =
@@ -58,12 +47,6 @@ export type FinancialItem<T extends keyof FinancialItemDataMap> = {
   start?: Date;
   end?: Date;
   data: DataTypeForType<T>;
-};
-
-// Result type for derive functions
-export type DeriveResult = {
-  accounts: DerivedAccount[];
-  flows: Flow[];
 };
 
 // Form props

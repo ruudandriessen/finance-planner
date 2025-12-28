@@ -1,4 +1,4 @@
-import type { PlanEvent } from "@/collections/plans";
+import type { PlanEvent } from "@/events/schema";
 import { shouldRunRule } from "./shouldRunRule";
 import { StrategyRegistry } from "./strategies";
 import type {

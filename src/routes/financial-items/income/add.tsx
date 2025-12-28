@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
-import { financialItemsCollection } from "@/collections/financialItems";
-import { IncomeForm } from "@/components/financial-items/IncomeForm";
-import type { FinancialItem } from "@/components/financial-items/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { financialItemsCollection } from "@/financial-items/collection";
+import { IncomeForm } from "@/financial-items/components/IncomeForm";
+import type { FinancialItem } from "@/financial-items/types";
 
 export const Route = createFileRoute("/financial-items/income/add")({
   component: RouteComponent,
