@@ -4,15 +4,14 @@ import {
 } from "@tanstack/react-db";
 import z from "zod";
 
-export const fixedStrategy = z.object({
+const fixedStrategy = z.object({
   type: z.literal("fixed"),
   config: z.object({
     amount: z.number(),
-    // insufficientFundsBehavior: z.enum(["strict", "partial"]),
   }),
 });
 
-export const morgageStrategy = z.object({
+const morgageStrategy = z.object({
   type: z.literal("mortgage"),
   config: z.object({
     liabilityAccountId: z.string(),
@@ -26,7 +25,7 @@ export const morgageStrategy = z.object({
   }),
 });
 
-export const compoundInterestStrategy = z.object({
+const compoundInterestStrategy = z.object({
   type: z.literal("compound"),
   config: z.object({
     growthRate: z.number(),

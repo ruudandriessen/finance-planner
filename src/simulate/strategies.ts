@@ -1,7 +1,7 @@
 import type { Rule, SimulationContext, Transaction } from "./types";
 
 // Define the signature for any strategy function
-export type StrategyFn = (rule: Rule, ctx: SimulationContext) => Transaction[];
+type StrategyFn = (rule: Rule, ctx: SimulationContext) => Transaction[];
 
 /**
  * STRATEGY 1: FIXED_TRANSFER

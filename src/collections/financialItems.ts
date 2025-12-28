@@ -4,7 +4,6 @@ import {
 } from "@tanstack/react-db";
 import z from "zod";
 
-// Savings account data schema
 const savingsDataSchema = z.object({
   type: z.literal("savings"),
   initialBalance: z.number(),
@@ -12,7 +11,6 @@ const savingsDataSchema = z.object({
 
 export type SavingsData = z.infer<typeof savingsDataSchema>;
 
-// Checking account data schema
 const checkingDataSchema = z.object({
   type: z.literal("checking"),
   initialBalance: z.number(),
@@ -20,7 +18,6 @@ const checkingDataSchema = z.object({
 
 export type CheckingData = z.infer<typeof checkingDataSchema>;
 
-// Income data schema
 const incomeDataSchema = z.object({
   type: z.literal("income"),
   amount: z.number(),
@@ -29,7 +26,6 @@ const incomeDataSchema = z.object({
 
 export type IncomeData = z.infer<typeof incomeDataSchema>;
 
-// Mortgage data schema
 const mortgageDataSchema = z.object({
   type: z.literal("mortgage"),
   paymentAmount: z.number(),
@@ -40,7 +36,6 @@ const mortgageDataSchema = z.object({
 
 export type MortgageData = z.infer<typeof mortgageDataSchema>;
 
-// Expense data schema
 const expenseDataSchema = z.object({
   type: z.literal("expense"),
   amount: z.number(),
@@ -49,8 +44,7 @@ const expenseDataSchema = z.object({
 
 export type ExpenseData = z.infer<typeof expenseDataSchema>;
 
-// Financial item schema
-export const financialItemSchema = z.object({
+const financialItemSchema = z.object({
   id: z.string(),
   name: z.string(),
   priorityOrder: z.number(),
