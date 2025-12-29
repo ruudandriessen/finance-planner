@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   PiggyBank,
   Receipt,
+  TrendingUp,
 } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
@@ -51,6 +52,11 @@ const items = [
     title: "Mortgages",
     url: "/financial-items/mortgage",
     icon: () => <Home />,
+  },
+  {
+    title: "Investments",
+    url: "/financial-items/investment",
+    icon: () => <TrendingUp />,
   },
 ];
 
