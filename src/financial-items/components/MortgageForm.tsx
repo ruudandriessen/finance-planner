@@ -15,6 +15,7 @@ import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
+import { formatDecimal } from "@/lib/formatters";
 import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
 
 type MortgageFormData = {
@@ -247,13 +248,7 @@ export function MortgageForm({
       <div className="rounded-md bg-muted p-3">
         <p className="text-sm font-medium">
           {formData.paymentType === "annuity" ? "Monthly Payment" : "Initial Monthly Payment"}:{" "}
-          <span className="text-primary">
-            $
-            {calculatedPayment.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </span>
+          <span className="text-primary">${formatDecimal(calculatedPayment)}</span>
         </p>
         <p className="text-xs text-muted-foreground mt-1">
           {formData.paymentType === "annuity"

@@ -8,6 +8,7 @@ import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
+import { formatCurrency } from "@/lib/formatters";
 
 export const Route = createFileRoute("/financial-items/mortgage/")({
   component: RouteComponent,
@@ -18,13 +19,6 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const mortgageItems = items.filter((item) => item.data.type === "mortgage");
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">

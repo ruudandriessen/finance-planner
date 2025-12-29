@@ -3,6 +3,7 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
+import { formatCurrencyCompact } from "@/lib/formatters";
 import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/")({
@@ -47,15 +48,6 @@ function Home() {
       {} as Record<string, { label: string; color: string }>,
     ) ?? {};
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      notation: "compact",
-      maximumFractionDigits: 1,
-    }).format(value);
-  };
-
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       <h1 className="text-3xl font-bold text-foreground">Finance Planner</h1>
@@ -78,7 +70,7 @@ function Home() {
                     tickLine={false}
                     axisLine={false}
                     tickMargin={8}
-                    tickFormatter={formatCurrency}
+                    tickFormatter={formatCurrencyCompact}
                   />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   {chartAccounts.accounts.map((account, index) => {

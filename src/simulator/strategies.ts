@@ -2,6 +2,11 @@ import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
+import {
+  formatCurrency,
+  formatPercent,
+  roundCurrency,
+} from "@/lib/formatters";
 import type { Flow, SimulationContext, Transaction } from "./types";
 
 // Define the signature for any strategy function
@@ -97,10 +102,10 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
     if (principalPayment < 0) {
       console.warn(
         `[${rule.name}] ⚠️  NEGATIVE AMORTIZATION!\n` +
-          `  Mortgage Balance: $${principalRemaining.toLocaleString()}\n` +
-          `  Monthly Interest: $${interestPayment.toFixed(2)}\n` +
-          `  Your Payment: $${totalPayment.toFixed(2)}\n` +
-          `  Shortfall: $${(interestPayment - totalPayment).toFixed(2)}\n` +
+          `  Mortgage Balance: ${formatCurrency(principalRemaining)}\n` +
+          `  Monthly Interest: ${formatCurrency(interestPayment)}\n` +
+          `  Your Payment: ${formatCurrency(totalPayment)}\n` +
+          `  Shortfall: ${formatCurrency(interestPayment - totalPayment)}\n` +
           `  → Your payment is too low!`,
       );
       principalPayment = 0;
@@ -114,7 +119,7 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
     transactions.push({
       fromId: rule.sourceAccountId,
       toId: config.interestExpenseAccountId,
-      amount: Number(interestPayment.toFixed(2)),
+      amount: roundCurrency(interestPayment),
       date: ctx.date,
       description: `Mortgage Interest (${rule.name})`,
       type: "INTEREST",
@@ -126,7 +131,7 @@ const dynamicMortgageStrategy: StrategyFn = (rule, ctx) => {
     transactions.push({
       fromId: rule.sourceAccountId,
       toId: config.liabilityAccountId,
-      amount: Number(principalPayment.toFixed(2)),
+      amount: roundCurrency(principalPayment),
       date: ctx.date,
       description: `Mortgage Principal (${rule.name})`,
       type: "TRANSFER",
@@ -159,7 +164,7 @@ const compoundInterestStrategy: StrategyFn = (rule, ctx) => {
   const gainAmount = currentBalance * annualRate;
 
   // Round to 2 decimals
-  const safeAmount = Number(gainAmount.toFixed(2));
+  const safeAmount = roundCurrency(gainAmount);
 
   if (safeAmount <= 0) return [];
 
@@ -169,7 +174,7 @@ const compoundInterestStrategy: StrategyFn = (rule, ctx) => {
       toId: rule.targetAccountId, // The Asset
       amount: safeAmount,
       date: ctx.date,
-      description: `Growth (${(annualRate * 100).toFixed(1)}%): ${rule.name}`,
+      description: `Growth (${formatPercent(annualRate)}): ${rule.name}`,
       type: "INTEREST", // or 'APPRECIATION'
     },
   ];
@@ -230,7 +235,7 @@ const savingsInterestStrategy: StrategyFn = (rule, ctx) => {
 
   // Calculate annual interest
   const interestAmount = weightedAverageBalance * config.interestRate;
-  const safeAmount = Number(interestAmount.toFixed(2));
+  const safeAmount = roundCurrency(interestAmount);
 
   if (safeAmount <= 0) {
     return [];
@@ -242,7 +247,7 @@ const savingsInterestStrategy: StrategyFn = (rule, ctx) => {
       toId: rule.targetAccountId, // The savings account
       amount: safeAmount,
       date: ctx.date,
-      description: `Annual Interest (${(config.interestRate * 100).toFixed(1)}%): ${rule.name}`,
+      description: `Annual Interest (${formatPercent(config.interestRate)}): ${rule.name}`,
       type: "INTEREST",
     },
   ];

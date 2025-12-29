@@ -4,6 +4,7 @@ import { Edit3, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { formatCurrency } from "@/lib/formatters";
 
 export const Route = createFileRoute("/financial-items/savings/")({
   component: RouteComponent,
@@ -14,13 +15,6 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const savingsItems = items.filter((item) => item.data.type === "savings");
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">

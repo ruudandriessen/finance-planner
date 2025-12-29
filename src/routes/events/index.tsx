@@ -4,6 +4,7 @@ import { Edit3, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { formatCurrency, formatDate } from "@/lib/formatters";
 import { plansCollection } from "@/plans/plans";
 import { Route as RootRoute } from "@/routes/__root";
 
@@ -18,21 +19,6 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const plan = plans.find((p) => p.id === planId);
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   const getMortgageName = (mortgageId: string) => {
     const mortgage = financialItems.find((item) => item.id === mortgageId);
