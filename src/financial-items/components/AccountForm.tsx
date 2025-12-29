@@ -2,50 +2,90 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { FinancialItemBase } from "@/financial-items/types";
 
-type SavingsFormData = {
+type AccountType = "savings" | "checking";
+
+type AccountFormData = {
   name: string;
+  accountType: AccountType;
   initialBalance: number;
   interestRate: number;
 };
 
-export function SavingsForm({
+interface AccountFormProps {
+  initialData?: FinancialItemBase;
+  onSubmit: (data: FinancialItemBase) => void | Promise<void>;
+  onCancel: () => void;
+  onDelete?: () => void | Promise<void>;
+  submitLabel?: string;
+}
+
+export function AccountForm({
   initialData,
   onSubmit,
   onCancel,
   onDelete,
   submitLabel = "Save",
-}: FinancialItemFormProps<"savings">) {
-  const [formData, setFormData] = useState<SavingsFormData>({
+}: AccountFormProps) {
+  const initialType =
+    initialData?.data?.type === "checking" ? "checking" : "savings";
+  const initialBalance =
+    initialData?.data?.type === "savings" ||
+    initialData?.data?.type === "checking"
+      ? initialData.data.initialBalance
+      : 0;
+  const initialInterestRate =
+    initialData?.data?.type === "savings"
+      ? (initialData.data.interestRate ?? 0) * 100
+      : 0;
+
+  const [formData, setFormData] = useState<AccountFormData>({
     name: initialData?.name ?? "",
-    initialBalance: initialData?.data?.initialBalance ?? 0,
-    interestRate: (initialData?.data?.interestRate ?? 0) * 100, // Convert to percentage for display
+    accountType: initialType,
+    initialBalance,
+    interestRate: initialInterestRate,
   });
 
-  const handleInputChange = (field: keyof SavingsFormData, value: string) => {
+  const handleInputChange = (
+    field: keyof AccountFormData,
+    value: string | AccountType
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { initialBalance, interestRate } = formData;
+    const { initialBalance, accountType, interestRate } = formData;
     if (initialBalance < 0) return;
     if (interestRate < 0) return;
 
-    const financialItem: FinancialItem<"savings"> = {
+    const financialItem: FinancialItemBase = {
       id: initialData?.id ?? crypto.randomUUID(),
       name: formData.name,
       priorityOrder: initialData?.priorityOrder ?? 0,
       schedule: "monthly",
       start: initialData?.start,
       end: initialData?.end,
-      data: {
-        type: "savings",
-        initialBalance,
-        interestRate: interestRate / 100, // Convert from percentage to decimal
-      },
+      data:
+        accountType === "savings"
+          ? {
+              type: "savings",
+              initialBalance,
+              interestRate: interestRate / 100,
+            }
+          : {
+              type: "checking",
+              initialBalance,
+            },
     };
 
     await onSubmit(financialItem);
@@ -66,6 +106,29 @@ export function SavingsForm({
       </div>
 
       <div>
+        <Label htmlFor="accountType">Account Type</Label>
+        <Select
+          value={formData.accountType}
+          onValueChange={(value: AccountType) =>
+            handleInputChange("accountType", value)
+          }
+        >
+          <SelectTrigger className="mt-2">
+            <SelectValue placeholder="Select account type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="savings">Savings Account</SelectItem>
+            <SelectItem value="checking">Checking Account</SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground mt-1">
+          {formData.accountType === "savings"
+            ? "A savings account for building your emergency fund or other goals"
+            : "A checking account for daily transactions"}
+        </p>
+      </div>
+
+      <div>
         <Label htmlFor="initialBalance">Initial Balance ($)</Label>
         <Input
           id="initialBalance"
@@ -79,7 +142,7 @@ export function SavingsForm({
           required
         />
         <p className="text-xs text-muted-foreground mt-1">
-          Current balance in this savings account
+          Current balance in this account
         </p>
       </div>
 

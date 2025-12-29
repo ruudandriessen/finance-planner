@@ -1,14 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import {
-  CalendarClock,
-  CreditCard,
-  DollarSign,
-  Home,
-  LayoutDashboard,
-  PiggyBank,
-  Receipt,
-  TrendingUp,
-} from "lucide-react";
+import { CalendarClock, LayoutDashboard, TrendingUp, Wallet } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -29,29 +20,9 @@ const items = [
     icon: () => <LayoutDashboard />,
   },
   {
-    title: "Savings",
-    url: "/financial-items/savings",
-    icon: () => <PiggyBank />,
-  },
-  {
-    title: "Checking",
-    url: "/financial-items/checking",
-    icon: () => <CreditCard />,
-  },
-  {
-    title: "Income",
-    url: "/financial-items/income",
-    icon: () => <DollarSign />,
-  },
-  {
-    title: "Expenses",
-    url: "/financial-items/expenses",
-    icon: () => <Receipt />,
-  },
-  {
-    title: "Mortgages",
-    url: "/financial-items/mortgage",
-    icon: () => <Home />,
+    title: "Financial Items",
+    url: "/financial-items",
+    icon: () => <Wallet />,
   },
   {
     title: "Investments",
