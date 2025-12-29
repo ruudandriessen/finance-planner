@@ -10,6 +10,7 @@ import type {
 type SavingsFormData = {
   name: string;
   initialBalance: number;
+  interestRate: number;
 };
 
 export function SavingsForm({
@@ -22,6 +23,7 @@ export function SavingsForm({
   const [formData, setFormData] = useState<SavingsFormData>({
     name: initialData?.name ?? "",
     initialBalance: initialData?.data?.initialBalance ?? 0,
+    interestRate: (initialData?.data?.interestRate ?? 0) * 100, // Convert to percentage for display
   });
 
   const handleInputChange = (field: keyof SavingsFormData, value: string) => {
@@ -31,8 +33,9 @@ export function SavingsForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { initialBalance } = formData;
+    const { initialBalance, interestRate } = formData;
     if (initialBalance < 0) return;
+    if (interestRate < 0) return;
 
     const financialItem: FinancialItem<"savings"> = {
       id: initialData?.id ?? crypto.randomUUID(),
@@ -44,6 +47,7 @@ export function SavingsForm({
       data: {
         type: "savings",
         initialBalance,
+        interestRate: interestRate / 100, // Convert from percentage to decimal
       },
     };
 
@@ -79,6 +83,25 @@ export function SavingsForm({
         />
         <p className="text-xs text-muted-foreground mt-1">
           Current balance in this savings account
+        </p>
+      </div>
+
+      <div>
+        <Label htmlFor="interestRate">Annual Interest Rate (%)</Label>
+        <Input
+          id="interestRate"
+          type="number"
+          step="0.01"
+          min="0"
+          max="100"
+          value={formData.interestRate}
+          onChange={(e) => handleInputChange("interestRate", e.target.value)}
+          placeholder="e.g., 4.5"
+          className="mt-2"
+        />
+        <p className="text-xs text-muted-foreground mt-1">
+          Interest is paid out annually in January based on weighted average
+          balance
         </p>
       </div>
 

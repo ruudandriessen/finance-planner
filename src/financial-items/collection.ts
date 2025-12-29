@@ -7,6 +7,7 @@ import z from "zod";
 const savingsDataSchema = z.object({
   type: z.literal("savings"),
   initialBalance: z.number(),
+  interestRate: z.number().default(0), // Annual interest rate as decimal (e.g., 0.04 for 4%)
 });
 
 export type SavingsData = z.infer<typeof savingsDataSchema>;
