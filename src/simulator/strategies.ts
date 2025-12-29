@@ -175,6 +175,79 @@ const compoundInterestStrategy: StrategyFn = (rule, ctx) => {
   ];
 };
 
+/**
+ * STRATEGY 4: SAVINGS_INTEREST
+ * Calculates weighted annual interest on a savings account.
+ * Interest is paid out once a year in January based on the weighted average
+ * balance throughout the previous year.
+ *
+ * How it works:
+ * - Each month, we record the balance at the end of the month
+ * - In January, we calculate the weighted average of the past 12 months
+ * - Interest = weighted average balance × annual interest rate
+ */
+const savingsInterestStrategy: StrategyFn = (rule, ctx) => {
+  if (rule.strategy.type !== "savingsInterest") return [];
+  const { config } = rule.strategy;
+
+  const stateKey = `savingsInterest:${rule.id}:balances`;
+  const currentMonth = ctx.date.getMonth(); // 0 = January
+  const currentBalance = ctx.balances[config.savingsAccountId] ?? 0;
+
+  // Get or initialize the balance history (array of monthly balances)
+  const balanceHistory = (ctx.strategyState[stateKey] as number[]) ?? [];
+
+  // Record current balance for this month
+  balanceHistory.push(currentBalance);
+
+  // Keep only the last 12 months
+  if (balanceHistory.length > 12) {
+    balanceHistory.shift();
+  }
+
+  // Store updated history
+  ctx.strategyState[stateKey] = balanceHistory;
+
+  // Only pay out in January (month 0)
+  if (currentMonth !== 0) {
+    return [];
+  }
+
+  // Need at least some history to calculate interest
+  if (balanceHistory.length === 0) {
+    return [];
+  }
+
+  // Calculate weighted average balance
+  // Each month's balance is weighted equally (simple average)
+  const totalBalance = balanceHistory.reduce((sum, bal) => sum + bal, 0);
+  const weightedAverageBalance = totalBalance / balanceHistory.length;
+
+  // No interest on zero or negative balance
+  if (weightedAverageBalance <= 0) {
+    return [];
+  }
+
+  // Calculate annual interest
+  const interestAmount = weightedAverageBalance * config.interestRate;
+  const safeAmount = Number(interestAmount.toFixed(2));
+
+  if (safeAmount <= 0) {
+    return [];
+  }
+
+  return [
+    {
+      fromId: rule.sourceAccountId, // The "Bank" income node
+      toId: rule.targetAccountId, // The savings account
+      amount: safeAmount,
+      date: ctx.date,
+      description: `Annual Interest (${(config.interestRate * 100).toFixed(1)}%): ${rule.name}`,
+      type: "INTEREST",
+    },
+  ];
+};
+
 // Add to Registry
 // StrategyRegistry['COMPOUND_INTEREST'] = compoundInterestStrategy;
 
@@ -186,4 +259,5 @@ export const StrategyRegistry: Record<string, StrategyFn> = {
   fixed: fixedTransferStrategy,
   mortgage: dynamicMortgageStrategy,
   compound: compoundInterestStrategy,
+  savingsInterest: savingsInterestStrategy,
 };

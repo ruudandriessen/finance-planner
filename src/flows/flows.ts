@@ -30,6 +30,14 @@ const compoundInterestStrategy = z.object({
   }),
 });
 
+const savingsInterestStrategy = z.object({
+  type: z.literal("savingsInterest"),
+  config: z.object({
+    interestRate: z.number(), // Annual interest rate as decimal (e.g., 0.04 for 4%)
+    savingsAccountId: z.string(), // The account to track and pay interest on
+  }),
+});
+
 export const flowSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -50,6 +58,7 @@ export const flowSchema = z.object({
     fixedStrategy,
     morgageStrategy,
     compoundInterestStrategy,
+    savingsInterestStrategy,
   ]),
   modifiers: z.array(z.enum(["inflation_adjusted"])),
 });

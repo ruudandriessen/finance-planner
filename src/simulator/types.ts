@@ -20,6 +20,9 @@ export interface SimulationContext {
   globals: {
     inflationRate: number;
   };
+  // Persistent state for strategies that need to track data across months
+  // Key format: "strategyType:flowId:key" -> value
+  strategyState: Record<string, unknown>;
 }
 
 export interface Transaction {

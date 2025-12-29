@@ -107,6 +107,9 @@ export const runSimulation = ({
   const history: SimulationResult[] = [];
   const currentDate = new Date(startDate);
 
+  // Persistent state for strategies that need to track data across months
+  const strategyState: Record<string, unknown> = {};
+
   // 2. Time Loop
   for (let i = 0; i < monthsToSimulate; i++) {
     const monthlyTransactions: Transaction[] = [];
@@ -116,6 +119,7 @@ export const runSimulation = ({
       date: new Date(currentDate), // Copy date
       balances: currentBalances, // Pass reference to current state
       globals: { inflationRate: 0.03 }, // Hardcoded for now
+      strategyState, // Persistent state across months
     };
 
     // 3. Process one-time events first (before regular rules)

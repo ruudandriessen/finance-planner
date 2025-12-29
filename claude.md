@@ -22,7 +22,7 @@ Finance Planner is a client-side financial planning application that simulates f
 
 Users interact with **Financial Items** - a simplified abstraction over accounts and flows. Each financial item represents a real-world financial concept:
 
-- **Savings**: A savings account with initial balance
+- **Savings**: A savings account with initial balance and optional annual interest rate (paid out in January based on weighted average balance)
 - **Checking**: A checking account with initial balance
 - **Income**: Regular income deposited to a target account
 - **Expense**: Regular expense paid from a source account
@@ -34,14 +34,14 @@ Financial items are stored in `financialItemsCollection` and edited via dedicate
 
 **Accounts** and **Flows** exist purely as internal simulation concepts. They are **not** stored or edited directly by users. Instead, they are **derived** from financial items at simulation time.
 
-The derivation happens in `src/lib/derive-accounts-flows.ts`:
+The derivation happens in `src/simulator/derivers/derive-accounts-flows.ts`:
 1. Each financial item type has a corresponding derive function (e.g., `deriveSavings`, `deriveIncome`)
 2. These functions convert user-friendly financial items into simulation-ready accounts and flows
 3. The `deriveAccountsAndFlows` function aggregates all derived accounts and flows
 
 ### Simulation Engine
 
-The simulation engine (`src/simulate/run.ts`) operates on derived accounts and flows:
+The simulation engine (`src/simulator/run.ts`) operates on derived accounts and flows:
 
 1. **Input**: Takes derived accounts and flows from `deriveAccountsAndFlows()`
 2. **Initialization**: Creates balance map from derived accounts
@@ -72,6 +72,7 @@ Flows use a discriminated union strategy pattern:
 1. **Fixed** (`type: "fixed"`): Simple fixed-amount transfer
 2. **Mortgage** (`type: "mortgage"`): Calculates interest and principal payments
 3. **Compound** (`type: "compound"`): Applies percentage growth to target account balance
+4. **SavingsInterest** (`type: "savingsInterest"`): Tracks monthly balance and pays out annual interest in January based on weighted average balance
 
 ## Data Flow Summary
 
@@ -91,13 +92,13 @@ Results displayed to user
 
 ## Key Files
 
-- `src/collections/financialItems.ts`: User-facing financial items schema and collection
-- `src/collections/flows.ts`: Internal flow schema (used by derivation)
-- `src/lib/derive-accounts-flows.ts`: Converts financial items to accounts/flows
+- `src/financial-items/collection.ts`: User-facing financial items schema and collection
+- `src/flows/flows.ts`: Internal flow schema (used by derivation)
+- `src/simulator/derivers/derive-accounts-flows.ts`: Converts financial items to accounts/flows
 - `src/hooks/use-simulation.ts`: Hook that orchestrates derivation and simulation
-- `src/simulate/run.ts`: Core simulation logic
-- `src/simulate/strategies.ts`: Strategy implementations
-- `src/components/financial-items/*.tsx`: Form components and derive functions per item type
+- `src/simulator/run.ts`: Core simulation logic
+- `src/simulator/strategies.ts`: Strategy implementations
+- `src/financial-items/components/*.tsx`: Form components for editing financial items
 
 ## Routing
 
