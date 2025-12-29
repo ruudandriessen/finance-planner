@@ -101,7 +101,7 @@ export function FinancialItemSheet({
           <SheetDescription>{getTypeDescription(type, mode)}</SheetDescription>
         </SheetHeader>
 
-        <div className="py-4">{renderForm()}</div>
+        <div className="px-6 py-4">{renderForm()}</div>
       </SheetContent>
     </Sheet>
   );

@@ -89,15 +89,10 @@ export function FinancialItemCard({ item, onEdit }: FinancialItemCardProps) {
   const { displayValue, subtitle } = getItemDisplayInfo(item);
 
   return (
-    <Card className="group bg-gradient-to-br from-background to-muted/20 hover:shadow-md transition-shadow">
+    <Card className="bg-gradient-to-br from-background to-muted/20 hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base font-medium">{item.name}</CardTitle>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={onEdit}
-        >
+        <Button variant="ghost" size="sm" onClick={onEdit}>
           <Edit3 className="h-4 w-4" />
         </Button>
       </CardHeader>
