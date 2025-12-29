@@ -191,3 +191,15 @@ return process(value);
 ## Paradigm
 
 Functional approach only. No classes.
+
+## Git Workflow
+
+Use **conventional commits** for all commit messages (e.g., `feat:`, `fix:`, `refactor:`, `docs:`, `chore:`).
+
+When fixing issues in a PR, use the **fixup workflow** instead of creating new commits:
+
+1. Create a fixup commit: `git commit --fixup <commit-hash>`
+2. Rebase with autosquash: `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base-commit>~1`
+3. Force push: `git push --force`
+
+This keeps the commit history clean by squashing fixes into their original commits.
