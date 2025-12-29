@@ -46,18 +46,23 @@ function RouteComponent() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {mortgageItems.map((item) => {
             if (item.data.type !== "mortgage") return null;
-            const { loanAmount, interestRate, loanTermYears, paymentType } =
-              item.data;
+            const {
+              originalLoanAmount,
+              interestRate,
+              loanTermYears,
+              paymentType,
+            } = item.data;
             // interestRate is stored as decimal (e.g., 0.045 for 4.5%)
+            // Payment is calculated based on original loan terms
             const paymentAmount =
               paymentType === "annuity"
                 ? calculateAnnuityPayment(
-                    loanAmount,
+                    originalLoanAmount,
                     interestRate,
                     loanTermYears,
                   )
-                : calculateLinearPrincipal(loanAmount, loanTermYears) +
-                  (loanAmount * interestRate) / 12;
+                : calculateLinearPrincipal(originalLoanAmount, loanTermYears) +
+                  (originalLoanAmount * interestRate) / 12;
             return (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between">

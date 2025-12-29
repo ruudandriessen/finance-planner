@@ -13,7 +13,8 @@ describe("deriveMortgage", () => {
     data: {
       type: "mortgage",
       interestRate: 0.05, // 5% as decimal
-      loanAmount: 300000,
+      currentBalance: 300000,
+      originalLoanAmount: 300000,
       loanTermYears: 30,
       paymentType: "annuity",
       paymentSourceAccountId: "checking-account",
@@ -51,12 +52,13 @@ describe("deriveMortgage", () => {
     expect(result.accounts[2]?.id).toBe("asset-mortgage-1");
   });
 
-  it("should set liability amount as negative of loan amount", () => {
+  it("should set liability amount as negative of current balance", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
         interestRate: 0.05,
-        loanAmount: 250000,
+        currentBalance: 250000,
+        originalLoanAmount: 300000,
         loanTermYears: 30,
         paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
@@ -70,12 +72,13 @@ describe("deriveMortgage", () => {
     expect(liabilityAccount?.amount).toBe(-250000);
   });
 
-  it("should handle negative loan amount input by making it negative", () => {
+  it("should handle negative current balance input by making it negative", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
         interestRate: 0.05,
-        loanAmount: -200000,
+        currentBalance: -200000,
+        originalLoanAmount: 300000,
         loanTermYears: 30,
         paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
@@ -97,12 +100,13 @@ describe("deriveMortgage", () => {
     expect(expenseAccount?.amount).toBe(0);
   });
 
-  it("should set asset account amount to loan amount", () => {
+  it("should set asset account amount to original loan amount when no house value", () => {
     const item = createMortgageItem({
       data: {
         type: "mortgage",
         interestRate: 0.05,
-        loanAmount: 400000,
+        currentBalance: 350000,
+        originalLoanAmount: 400000,
         loanTermYears: 30,
         paymentType: "annuity",
         paymentSourceAccountId: "checking-account",
@@ -112,6 +116,25 @@ describe("deriveMortgage", () => {
 
     const assetAccount = result.accounts.find((a) => a.type === "asset");
     expect(assetAccount?.amount).toBe(400000);
+  });
+
+  it("should set asset account amount to house value when provided", () => {
+    const item = createMortgageItem({
+      data: {
+        type: "mortgage",
+        interestRate: 0.05,
+        currentBalance: 250000,
+        originalLoanAmount: 300000,
+        loanTermYears: 30,
+        paymentType: "annuity",
+        paymentSourceAccountId: "checking-account",
+        houseValue: 500000,
+      },
+    });
+    const result = deriveMortgage(item);
+
+    const assetAccount = result.accounts.find((a) => a.type === "asset");
+    expect(assetAccount?.amount).toBe(500000);
   });
 
   it("should create one flow with mortgage strategy", () => {
@@ -129,7 +152,8 @@ describe("deriveMortgage", () => {
       data: {
         type: "mortgage",
         interestRate: 0.05,
-        loanAmount: 300000,
+        currentBalance: 300000,
+        originalLoanAmount: 300000,
         loanTermYears: 30,
         paymentType: "annuity",
         paymentSourceAccountId: "savings-account",
@@ -156,7 +180,8 @@ describe("deriveMortgage", () => {
       data: {
         type: "mortgage",
         interestRate: 0.045, // 4.5% as decimal
-        loanAmount: 350000,
+        currentBalance: 300000,
+        originalLoanAmount: 350000,
         loanTermYears: 30,
         paymentType: "annuity",
         paymentSourceAccountId: "checking-account",

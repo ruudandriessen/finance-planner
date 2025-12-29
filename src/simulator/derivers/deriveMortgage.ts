@@ -11,10 +11,12 @@ import type {
 export function deriveMortgage(item: FinancialItem<"mortgage">): DeriveResult {
   const {
     interestRate,
-    loanAmount,
+    currentBalance,
+    originalLoanAmount,
     loanTermYears,
     paymentType,
     paymentSourceAccountId,
+    houseValue,
   } = item.data;
 
   // Generate account IDs deterministically
@@ -22,11 +24,14 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): DeriveResult {
   const expenseAccountId = `expense-${item.id}`;
   const assetAccountId = `asset-${item.id}`;
 
+  // Property value defaults to original loan amount if not specified
+  const propertyValue = houseValue ?? originalLoanAmount;
+
   const accounts: DerivedAccount[] = [
     {
       id: liabilityAccountId,
       type: "liability",
-      amount: -Math.abs(loanAmount), // Negative for liability
+      amount: -Math.abs(currentBalance), // Negative for liability (current remaining balance)
     },
     {
       id: expenseAccountId,
@@ -36,7 +41,7 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): DeriveResult {
     {
       id: assetAccountId,
       type: "asset",
-      amount: loanAmount, // Property value starts at loan amount
+      amount: propertyValue, // Property value
     },
   ];
 
@@ -55,7 +60,7 @@ export function deriveMortgage(item: FinancialItem<"mortgage">): DeriveResult {
         assetAccountId,
         paymentType,
         loanTermMonths: loanTermYears * 12,
-        originalLoanAmount: loanAmount,
+        originalLoanAmount,
         interestCalculation: {
           type: "FIXED_RATE",
           baseAnnualRate: interestRate,
