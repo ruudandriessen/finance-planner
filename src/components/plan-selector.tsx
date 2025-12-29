@@ -50,7 +50,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
 
   const saveEdit = async () => {
     if (!selectedPlan || !editName.trim()) return;
-    await plansCollection.update(selectedPlan.id, (plan) => {
+    plansCollection.update(selectedPlan.id, (plan) => {
       plan.name = editName.trim();
     });
     setIsEditing(false);
@@ -58,7 +58,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
   };
 
   const setPlanId = (planId?: string) => {
-    navigate({ search: (prev) => ({ ...prev, planId }) });
+    void navigate({ search: (prev) => ({ ...prev, planId }) });
   };
   const handleCreatePlan = async () => {
     if (!newPlanName.trim()) return;
@@ -71,7 +71,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
       events: [],
     };
 
-    await plansCollection.insert(newPlan);
+    plansCollection.insert(newPlan);
     setPlanId(newPlan.id);
     setNewPlanName("");
     setIsCreateDialogOpen(false);
@@ -88,7 +88,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
               onChange={(e) => setEditName(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  saveEdit();
+                  void saveEdit();
                 }
                 if (e.key === "Escape") {
                   cancelEditing();
@@ -175,7 +175,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
                 onChange={(e) => setNewPlanName(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    handleCreatePlan();
+                    void handleCreatePlan();
                   }
                 }}
               />

@@ -34,7 +34,7 @@ function RouteComponent() {
   }
 
   const handleSubmit = async (data: FinancialItem<"savings">) => {
-    await financialItemsCollection.update(item.id, (oldItem) => {
+    financialItemsCollection.update(item.id, (oldItem) => {
       oldItem.name = data.name;
       oldItem.priorityOrder = data.priorityOrder;
       oldItem.schedule = data.schedule;
@@ -42,13 +42,13 @@ function RouteComponent() {
       oldItem.end = data.end;
       oldItem.data = data.data;
     });
-    navigate({ to: "/financial-items/savings" });
+    await navigate({ to: "/financial-items/savings" });
   };
 
   const handleDelete = async () => {
     if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
-      await financialItemsCollection.delete(item.id);
-      navigate({ to: "/financial-items/savings" });
+      financialItemsCollection.delete(item.id);
+      await navigate({ to: "/financial-items/savings" });
     }
   };
 
