@@ -9,10 +9,9 @@ type UseSimulationOptions = {
   planId?: string;
 };
 
-export function useSimulation({
-  monthsToSimulate = 12,
-  planId,
-}: UseSimulationOptions = {}): SimulationResult[] | null {
+export function useSimulation({ monthsToSimulate = 12, planId }: UseSimulationOptions = {}):
+  | SimulationResult[]
+  | null {
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const { data: plans = [] } = useLiveQuery(plansCollection);
 

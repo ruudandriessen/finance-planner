@@ -3,9 +3,7 @@ import { StrategyRegistry } from "./strategies";
 import type { Flow, SimulationContext } from "./types";
 
 describe("savingsInterestStrategy", () => {
-  const createContext = (
-    overrides: Partial<SimulationContext> = {},
-  ): SimulationContext => ({
+  const createContext = (overrides: Partial<SimulationContext> = {}): SimulationContext => ({
     date: new Date("2024-01-15"),
     balances: {},
     globals: { inflationRate: 0.03 },
@@ -46,9 +44,7 @@ describe("savingsInterestStrategy", () => {
 
     strategy(flow, ctx);
 
-    expect(
-      ctx.strategyState["savingsInterest:interest-flow-1:balances"],
-    ).toEqual([10000]);
+    expect(ctx.strategyState["savingsInterest:interest-flow-1:balances"]).toEqual([10000]);
   });
 
   it("should not pay out in non-January months", () => {
@@ -154,9 +150,7 @@ describe("savingsInterestStrategy", () => {
 
     strategy(flow, ctx);
 
-    const history = ctx.strategyState[
-      "savingsInterest:interest-flow-1:balances"
-    ] as number[];
+    const history = ctx.strategyState["savingsInterest:interest-flow-1:balances"] as number[];
     expect(history).toHaveLength(12);
     expect(history[0]).toBe(2000); // First entry (1000) was shifted out
     expect(history[11]).toBe(15000); // New entry added
@@ -167,9 +161,7 @@ describe("savingsInterestStrategy", () => {
       date: new Date("2024-01-15"),
       balances: { "savings-account": 0 },
       strategyState: {
-        "savingsInterest:interest-flow-1:balances": [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        ],
+        "savingsInterest:interest-flow-1:balances": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     });
     const flow = createFlow();

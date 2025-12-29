@@ -24,13 +24,8 @@ function RouteComponent() {
     return (
       <div className="container mx-auto p-6 max-w-2xl">
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">
-            Checking account not found
-          </p>
-          <Button
-            onClick={() => navigate({ to: "/financial-items/checking" })}
-            className="mt-4"
-          >
+          <p className="text-lg text-muted-foreground">Checking account not found</p>
+          <Button onClick={() => navigate({ to: "/financial-items/checking" })} className="mt-4">
             Back to Checking
           </Button>
         </div>
@@ -68,19 +63,13 @@ function RouteComponent() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Checking
         </Button>
-        <h1 className="text-3xl font-bold text-foreground">
-          Edit Checking Account
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Update your checking account details
-        </p>
+        <h1 className="text-3xl font-bold text-foreground">Edit Checking Account</h1>
+        <p className="text-muted-foreground mt-1">Update your checking account details</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Account Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Account Details</CardTitle>
         </CardHeader>
         <CardContent>
           <CheckingForm

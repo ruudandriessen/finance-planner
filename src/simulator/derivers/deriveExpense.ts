@@ -1,9 +1,5 @@
 import type { FinancialItem } from "@/financial-items/types";
-import type {
-  DerivedAccount,
-  DerivedFlow,
-  DeriveResult,
-} from "./derive-accounts-flows";
+import type { DerivedAccount, DerivedFlow, DeriveResult } from "./derive-accounts-flows";
 
 /**
  * Derives accounts and flows from an expense financial item

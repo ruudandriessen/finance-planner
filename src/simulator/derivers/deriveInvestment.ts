@@ -5,9 +5,7 @@ import type { DerivedAccount, DeriveResult } from "./derive-accounts-flows";
  * Derives accounts and flows from an investment financial item.
  * Investment portfolios are asset accounts with compound growth.
  */
-export function deriveInvestment(
-  item: FinancialItem<"investment">,
-): DeriveResult {
+export function deriveInvestment(item: FinancialItem<"investment">): DeriveResult {
   // The investment account itself (asset)
   const investmentAccount: DerivedAccount = {
     id: item.id,

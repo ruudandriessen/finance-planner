@@ -47,9 +47,7 @@ function deriveItem(item: FinancialItemBase): DeriveResult | null {
 /**
  * Derives accounts and flows from financial items for simulation
  */
-export function deriveAccountsAndFlows(
-  items: FinancialItemBase[],
-): DeriveResult {
+export function deriveAccountsAndFlows(items: FinancialItemBase[]): DeriveResult {
   const allAccounts: DerivedAccount[] = [];
   const allFlows: Flow[] = [];
 

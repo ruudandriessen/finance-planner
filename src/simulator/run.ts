@@ -2,12 +2,7 @@ import type { PlanEvent } from "@/events/schema";
 import { deriveAccountsAndFlows } from "./derivers/derive-accounts-flows";
 import { shouldRunRule } from "./shouldRunRule";
 import { StrategyRegistry } from "./strategies";
-import type {
-  SimulationContext,
-  SimulationOptions,
-  SimulationResult,
-  Transaction,
-} from "./types";
+import type { SimulationContext, SimulationOptions, SimulationResult, Transaction } from "./types";
 
 /**
  * Checks if an event should be applied in the current month.
@@ -24,10 +19,7 @@ function shouldApplyEvent(event: PlanEvent, currentDate: Date): boolean {
 /**
  * Applies a transaction to the current balances (mutates in place).
  */
-function applyTransaction(
-  currentBalances: Record<string, number>,
-  tx: Transaction,
-): void {
+function applyTransaction(currentBalances: Record<string, number>, tx: Transaction): void {
   // Decrease Source
   const sourceBalance = currentBalances[tx.fromId];
   if (sourceBalance !== undefined) {
@@ -53,9 +45,7 @@ function processEvents(
   currentDate: Date,
   currentBalances: Record<string, number>,
 ): Transaction[] {
-  const eventsToApply = events.filter((event) =>
-    shouldApplyEvent(event, currentDate),
-  );
+  const eventsToApply = events.filter((event) => shouldApplyEvent(event, currentDate));
   const transactionsToApply = eventsToApply
     .filter((event) => event.type === "mortgageDownPayment")
     .map((event) => {
@@ -84,8 +74,7 @@ export const runSimulation = ({
   financialItems,
   events = [],
 }: SimulationOptions): SimulationResult[] => {
-  const { flows, accounts: initialAccounts } =
-    deriveAccountsAndFlows(financialItems);
+  const { flows, accounts: initialAccounts } = deriveAccountsAndFlows(financialItems);
 
   if (initialAccounts.length === 0 || flows.length === 0) {
     return [];
@@ -100,9 +89,7 @@ export const runSimulation = ({
   });
 
   // Sort rules once by priority
-  const sortedRules = [...flows].sort(
-    (a, b) => a.priorityOrder - b.priorityOrder,
-  );
+  const sortedRules = [...flows].sort((a, b) => a.priorityOrder - b.priorityOrder);
 
   const history: SimulationResult[] = [];
   const currentDate = new Date(startDate);
@@ -123,11 +110,7 @@ export const runSimulation = ({
     };
 
     // 3. Process one-time events first (before regular rules)
-    const eventTransactions = processEvents(
-      events,
-      currentDate,
-      currentBalances,
-    );
+    const eventTransactions = processEvents(events, currentDate, currentBalances);
     monthlyTransactions.push(...eventTransactions);
 
     // 4. Rule Execution Loop (Waterfall)

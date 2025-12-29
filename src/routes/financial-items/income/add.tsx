@@ -35,9 +35,7 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Income Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Income Details</CardTitle>
         </CardHeader>
         <CardContent>
           <IncomeForm

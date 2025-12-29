@@ -15,10 +15,7 @@ import {
   calculateAnnuityPayment,
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
-import type {
-  FinancialItem,
-  FinancialItemFormProps,
-} from "@/financial-items/types";
+import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
 
 type MortgageFormData = {
   name: string;
@@ -60,29 +57,17 @@ export function MortgageForm({
   });
 
   const calculatedPayment = (() => {
-    const {
-      originalLoanAmount,
-      interestRateDisplay,
-      loanTermYears,
-      paymentType,
-    } = formData;
+    const { originalLoanAmount, interestRateDisplay, loanTermYears, paymentType } = formData;
     if (originalLoanAmount <= 0 || loanTermYears <= 0) {
       return 0;
     }
     // Convert display percentage to decimal for calculations
     const interestRate = interestRateDisplay / 100;
     if (paymentType === "annuity") {
-      return calculateAnnuityPayment(
-        originalLoanAmount,
-        interestRate,
-        loanTermYears,
-      );
+      return calculateAnnuityPayment(originalLoanAmount, interestRate, loanTermYears);
     }
     // For linear, show initial payment (highest payment)
-    const principal = calculateLinearPrincipal(
-      originalLoanAmount,
-      loanTermYears,
-    );
+    const principal = calculateLinearPrincipal(originalLoanAmount, loanTermYears);
     const monthlyInterest = (originalLoanAmount * interestRate) / 12;
     return principal + monthlyInterest;
   })();
@@ -131,9 +116,7 @@ export function MortgageForm({
         mortgageStartDate: formData.mortgageStartDate
           ? new Date(formData.mortgageStartDate)
           : undefined,
-        houseValue: formData.houseValue
-          ? Number(formData.houseValue)
-          : undefined,
+        houseValue: formData.houseValue ? Number(formData.houseValue) : undefined,
       },
     };
 
@@ -168,16 +151,12 @@ export function MortgageForm({
             step="0.01"
             min="0"
             value={formData.originalLoanAmount}
-            onChange={(e) =>
-              handleInputChange("originalLoanAmount", e.target.value)
-            }
+            onChange={(e) => handleInputChange("originalLoanAmount", e.target.value)}
             placeholder="e.g., 300000"
             className="mt-2"
             required
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Total loan amount at inception
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Total loan amount at inception</p>
         </div>
 
         <div>
@@ -188,16 +167,12 @@ export function MortgageForm({
             step="0.01"
             min="0"
             value={formData.currentBalance}
-            onChange={(e) =>
-              handleInputChange("currentBalance", e.target.value)
-            }
+            onChange={(e) => handleInputChange("currentBalance", e.target.value)}
             placeholder="e.g., 280000"
             className="mt-2"
             required
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Remaining loan balance today
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Remaining loan balance today</p>
         </div>
       </div>
 
@@ -211,9 +186,7 @@ export function MortgageForm({
             min="0"
             max="100"
             value={formData.interestRateDisplay}
-            onChange={(e) =>
-              handleInputChange("interestRateDisplay", e.target.value)
-            }
+            onChange={(e) => handleInputChange("interestRateDisplay", e.target.value)}
             placeholder="e.g., 4.5"
             className="mt-2"
             required
@@ -226,9 +199,7 @@ export function MortgageForm({
             id="mortgageStartDate"
             type="date"
             value={formData.mortgageStartDate}
-            onChange={(e) =>
-              handleInputChange("mortgageStartDate", e.target.value)
-            }
+            onChange={(e) => handleInputChange("mortgageStartDate", e.target.value)}
             className="mt-2"
           />
           <p className="text-xs text-muted-foreground mt-1">
@@ -275,10 +246,7 @@ export function MortgageForm({
 
       <div className="rounded-md bg-muted p-3">
         <p className="text-sm font-medium">
-          {formData.paymentType === "annuity"
-            ? "Monthly Payment"
-            : "Initial Monthly Payment"}
-          :{" "}
+          {formData.paymentType === "annuity" ? "Monthly Payment" : "Initial Monthly Payment"}:{" "}
           <span className="text-primary">
             $
             {calculatedPayment.toLocaleString(undefined, {
@@ -299,9 +267,7 @@ export function MortgageForm({
           <Label htmlFor="paymentSourceAccount">Pay From</Label>
           <Select
             value={formData.paymentSourceAccountId}
-            onValueChange={(value) =>
-              handleInputChange("paymentSourceAccountId", value)
-            }
+            onValueChange={(value) => handleInputChange("paymentSourceAccountId", value)}
           >
             <SelectTrigger className="mt-2">
               <SelectValue placeholder="Select account" />
@@ -314,9 +280,7 @@ export function MortgageForm({
               ))}
             </SelectContent>
           </Select>
-          <p className="text-xs text-muted-foreground mt-1">
-            Account to pay from
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Account to pay from</p>
         </div>
 
         <div>
@@ -349,9 +313,7 @@ export function MortgageForm({
             className="mt-2"
             required
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Lower numbers run first
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Lower numbers run first</p>
         </div>
 
         <div>
@@ -374,21 +336,11 @@ export function MortgageForm({
       </div>
 
       <div className="flex gap-4 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Cancel
         </Button>
         {onDelete && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onDelete}
-            className="flex-1"
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} className="flex-1">
             Delete
           </Button>
         )}

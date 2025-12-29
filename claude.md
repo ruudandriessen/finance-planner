@@ -35,6 +35,7 @@ Financial items are stored in `financialItemsCollection` and edited via dedicate
 **Accounts** and **Flows** exist purely as internal simulation concepts. They are **not** stored or edited directly by users. Instead, they are **derived** from financial items at simulation time.
 
 The derivation happens in `src/simulator/derivers/derive-accounts-flows.ts`:
+
 1. Each financial item type has a corresponding derive function (e.g., `deriveSavings`, `deriveIncome`)
 2. These functions convert user-friendly financial items into simulation-ready accounts and flows
 3. The `deriveAccountsAndFlows` function aggregates all derived accounts and flows
@@ -52,6 +53,7 @@ The simulation engine (`src/simulator/run.ts`) operates on derived accounts and 
 7. **History Recording**: Snapshot of balances and transactions per month
 
 **Key Characteristics**:
+
 - Waterfall execution: earlier flows affect later flows in the same month
 - Priority-based ordering: lower `priorityOrder` runs first
 - Date-based filtering: flows respect `start`/`end` dates
@@ -103,6 +105,7 @@ Results displayed to user
 ## Routing
 
 Uses TanStack Router with file-based routing:
+
 - Routes defined in `src/routes/`
 - File names map to URL paths
 - Dynamic routes use `$` prefix

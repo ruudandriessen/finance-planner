@@ -1,7 +1,4 @@
-import {
-  createCollection,
-  localStorageCollectionOptions,
-} from "@tanstack/react-db";
+import { createCollection, localStorageCollectionOptions } from "@tanstack/react-db";
 import z from "zod";
 
 const savingsDataSchema = z.object({

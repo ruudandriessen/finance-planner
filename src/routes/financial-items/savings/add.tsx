@@ -29,17 +29,13 @@ function RouteComponent() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Savings
         </Button>
-        <h1 className="text-3xl font-bold text-foreground">
-          Add Savings Account
-        </h1>
+        <h1 className="text-3xl font-bold text-foreground">Add Savings Account</h1>
         <p className="text-muted-foreground mt-1">Add a new savings account</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Account Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Account Details</CardTitle>
         </CardHeader>
         <CardContent>
           <SavingsForm

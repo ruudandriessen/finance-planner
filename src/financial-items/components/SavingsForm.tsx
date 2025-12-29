@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type {
-  FinancialItem,
-  FinancialItemFormProps,
-} from "@/financial-items/types";
+import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
 
 type SavingsFormData = {
   name: string;
@@ -100,27 +97,16 @@ export function SavingsForm({
           className="mt-2"
         />
         <p className="text-xs text-muted-foreground mt-1">
-          Interest is paid out annually in January based on weighted average
-          balance
+          Interest is paid out annually in January based on weighted average balance
         </p>
       </div>
 
       <div className="flex gap-4 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Cancel
         </Button>
         {onDelete && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onDelete}
-            className="flex-1"
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} className="flex-1">
             Delete
           </Button>
         )}

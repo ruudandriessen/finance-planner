@@ -10,9 +10,7 @@ const mortgageDownPaymentEvent = z.object({
   amount: z.number(),
 });
 
-export const eventsSchema = z.discriminatedUnion("type", [
-  mortgageDownPaymentEvent,
-]);
+export const eventsSchema = z.discriminatedUnion("type", [mortgageDownPaymentEvent]);
 
 export type PlanEvent = z.infer<typeof eventsSchema>;
 export type MortgageDownPaymentEvent = z.infer<typeof mortgageDownPaymentEvent>;

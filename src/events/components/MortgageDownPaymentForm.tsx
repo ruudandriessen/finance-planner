@@ -75,9 +75,7 @@ export function MortgageDownPaymentForm({
     await onSubmit(event);
   };
 
-  const mortgageItems = financialItems.filter(
-    (item) => item.data.type === "mortgage",
-  );
+  const mortgageItems = financialItems.filter((item) => item.data.type === "mortgage");
 
   const accountItems = financialItems.filter(
     (item) => item.data.type === "savings" || item.data.type === "checking",
@@ -161,9 +159,7 @@ export function MortgageDownPaymentForm({
           step="0.01"
           min="0"
           value={formData.amount}
-          onChange={(e) =>
-            handleInputChange("amount", Number.parseFloat(e.target.value) || 0)
-          }
+          onChange={(e) => handleInputChange("amount", Number.parseFloat(e.target.value) || 0)}
           placeholder="e.g., 10000"
           className="mt-2"
           required
@@ -174,21 +170,11 @@ export function MortgageDownPaymentForm({
       </div>
 
       <div className="flex gap-4 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Cancel
         </Button>
         {onDelete && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onDelete}
-            className="flex-1"
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} className="flex-1">
             Delete
           </Button>
         )}

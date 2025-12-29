@@ -30,16 +30,12 @@ function RouteComponent() {
           Back to Expenses
         </Button>
         <h1 className="text-3xl font-bold text-foreground">Add Expense</h1>
-        <p className="text-muted-foreground mt-1">
-          Add a new recurring expense
-        </p>
+        <p className="text-muted-foreground mt-1">Add a new recurring expense</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Expense Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Expense Details</CardTitle>
         </CardHeader>
         <CardContent>
           <ExpenseForm

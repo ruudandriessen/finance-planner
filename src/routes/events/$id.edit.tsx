@@ -70,27 +70,17 @@ function RouteComponent() {
     return (
       <div className="container mx-auto p-6 max-w-2xl">
         <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate({ to: "/events" })}
-            className="mb-4"
-          >
+          <Button variant="outline" onClick={() => navigate({ to: "/events" })} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Events
           </Button>
-          <h1 className="text-3xl font-bold text-foreground">
-            Edit Mortgage Down Payment
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Update your mortgage down payment event
-          </p>
+          <h1 className="text-3xl font-bold text-foreground">Edit Mortgage Down Payment</h1>
+          <p className="text-muted-foreground mt-1">Update your mortgage down payment event</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl text-foreground">
-              Event Details
-            </CardTitle>
+            <CardTitle className="text-xl text-foreground">Event Details</CardTitle>
           </CardHeader>
           <CardContent>
             <MortgageDownPaymentForm
