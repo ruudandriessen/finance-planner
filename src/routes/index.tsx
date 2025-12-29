@@ -1,18 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  Line,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
 import { Route as RootRoute } from "@/routes/__root";
 
@@ -84,12 +73,7 @@ function Home() {
               <ChartContainer config={chartConfig}>
                 <ComposedChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="date"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                  />
+                  <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
                   <YAxis
                     tickLine={false}
                     axisLine={false}
@@ -101,13 +85,7 @@ function Home() {
                     const isLast = chartAccounts.accounts.length === index + 1;
                     const isTotal = account.id === "total-assets";
                     if (isTotal) {
-                      return (
-                        <Line
-                          dataKey={account.id}
-                          stroke="transparent"
-                          dot={false}
-                        />
-                      );
+                      return <Line dataKey={account.id} stroke="transparent" dot={false} />;
                     }
 
                     return (
@@ -129,9 +107,7 @@ function Home() {
         <Card className="mt-6">
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
-              <p className="text-lg font-medium mb-2 text-foreground">
-                No accounts yet
-              </p>
+              <p className="text-lg font-medium mb-2 text-foreground">No accounts yet</p>
               <p className="text-sm text-muted-foreground">
                 Add accounts to see your financial simulation
               </p>

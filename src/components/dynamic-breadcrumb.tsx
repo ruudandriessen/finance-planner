@@ -42,9 +42,7 @@ export function DynamicBreadcrumb({ planId }: { planId?: string }) {
       else if (match.params && Object.keys(match.params).length > 0) {
         // If it's a dynamic parameter, use a generic label
         const paramKey = Object.keys(match.params)[0];
-        if (
-          lastSegment === match.params[paramKey as keyof typeof match.params]
-        ) {
+        if (lastSegment === match.params[paramKey as keyof typeof match.params]) {
           // Get the parent segment for context
           const parentSegment = pathSegments[pathSegments.length - 2];
           title = parentSegment
@@ -68,9 +66,7 @@ export function DynamicBreadcrumb({ planId }: { planId?: string }) {
   // Remove duplicate consecutive segments
   const uniqueBreadcrumbs = breadcrumbs.filter(
     (crumb, index, arr) =>
-      index === 0 ||
-      crumb.path !== arr[index - 1]?.path ||
-      crumb.title !== arr[index - 1]?.title,
+      index === 0 || crumb.path !== arr[index - 1]?.path || crumb.title !== arr[index - 1]?.title,
   );
 
   return (

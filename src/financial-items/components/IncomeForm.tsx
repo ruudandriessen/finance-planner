@@ -11,10 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { financialItemsCollection } from "@/financial-items/collection";
-import type {
-  FinancialItem,
-  FinancialItemFormProps,
-} from "@/financial-items/types";
+import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
 
 type IncomeFormData = {
   name: string;
@@ -101,9 +98,7 @@ export function IncomeForm({
           className="mt-2"
           required
         />
-        <p className="text-xs text-muted-foreground mt-1">
-          Amount per {formData.schedule} period
-        </p>
+        <p className="text-xs text-muted-foreground mt-1">Amount per {formData.schedule} period</p>
       </div>
 
       <div>
@@ -140,9 +135,7 @@ export function IncomeForm({
             className="mt-2"
             required
           />
-          <p className="text-xs text-muted-foreground mt-1">
-            Lower numbers run first
-          </p>
+          <p className="text-xs text-muted-foreground mt-1">Lower numbers run first</p>
         </div>
 
         <div>
@@ -165,21 +158,11 @@ export function IncomeForm({
       </div>
 
       <div className="flex gap-4 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Cancel
         </Button>
         {onDelete && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onDelete}
-            className="flex-1"
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} className="flex-1">
             Delete
           </Button>
         )}

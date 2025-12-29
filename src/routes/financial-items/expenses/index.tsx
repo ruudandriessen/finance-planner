@@ -27,14 +27,10 @@ function RouteComponent() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Expenses</h1>
-          <p className="text-muted-foreground">
-            Manage your recurring expenses
-          </p>
+          <p className="text-muted-foreground">Manage your recurring expenses</p>
         </div>
 
-        <Button
-          onClick={() => navigate({ to: "/financial-items/expenses/add" })}
-        >
+        <Button onClick={() => navigate({ to: "/financial-items/expenses/add" })}>
           <Plus className="h-4 w-4 mr-2" />
           Add Expense
         </Button>
@@ -62,12 +58,8 @@ function RouteComponent() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
-                    {formatCurrency(amount)}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1 capitalize">
-                    {item.schedule}
-                  </p>
+                  <div className="text-2xl font-bold">{formatCurrency(amount)}</div>
+                  <p className="text-sm text-muted-foreground mt-1 capitalize">{item.schedule}</p>
                 </CardContent>
               </Card>
             );
@@ -77,12 +69,8 @@ function RouteComponent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
-              <p className="text-lg font-medium mb-2 text-foreground">
-                No expenses yet
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Add your first expense to get started
-              </p>
+              <p className="text-lg font-medium mb-2 text-foreground">No expenses yet</p>
+              <p className="text-sm text-muted-foreground">Add your first expense to get started</p>
             </div>
           </CardContent>
         </Card>

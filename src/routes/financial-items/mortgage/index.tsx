@@ -34,9 +34,7 @@ function RouteComponent() {
           <p className="text-muted-foreground">Manage your mortgage payments</p>
         </div>
 
-        <Button
-          onClick={() => navigate({ to: "/financial-items/mortgage/add" })}
-        >
+        <Button onClick={() => navigate({ to: "/financial-items/mortgage/add" })}>
           <Plus className="h-4 w-4 mr-2" />
           Add Mortgage
         </Button>
@@ -46,21 +44,12 @@ function RouteComponent() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {mortgageItems.map((item) => {
             if (item.data.type !== "mortgage") return null;
-            const {
-              originalLoanAmount,
-              interestRate,
-              loanTermYears,
-              paymentType,
-            } = item.data;
+            const { originalLoanAmount, interestRate, loanTermYears, paymentType } = item.data;
             // interestRate is stored as decimal (e.g., 0.045 for 4.5%)
             // Payment is calculated based on original loan terms
             const paymentAmount =
               paymentType === "annuity"
-                ? calculateAnnuityPayment(
-                    originalLoanAmount,
-                    interestRate,
-                    loanTermYears,
-                  )
+                ? calculateAnnuityPayment(originalLoanAmount, interestRate, loanTermYears)
                 : calculateLinearPrincipal(originalLoanAmount, loanTermYears) +
                   (originalLoanAmount * interestRate) / 12;
             return (
@@ -81,9 +70,7 @@ function RouteComponent() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
-                    {formatCurrency(paymentAmount)}
-                  </div>
+                  <div className="text-2xl font-bold">{formatCurrency(paymentAmount)}</div>
                   <p className="text-sm text-muted-foreground mt-1 capitalize">
                     {item.schedule} {paymentType} payment
                   </p>
@@ -96,9 +83,7 @@ function RouteComponent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
-              <p className="text-lg font-medium mb-2 text-foreground">
-                No mortgages yet
-              </p>
+              <p className="text-lg font-medium mb-2 text-foreground">No mortgages yet</p>
               <p className="text-sm text-muted-foreground">
                 Add your first mortgage to get started
               </p>

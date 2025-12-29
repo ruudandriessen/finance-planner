@@ -45,9 +45,7 @@ function RouteComponent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
-              <p className="text-lg font-medium mb-2 text-foreground">
-                No plan selected
-              </p>
+              <p className="text-lg font-medium mb-2 text-foreground">No plan selected</p>
               <p className="text-sm text-muted-foreground">
                 Select a plan to view and manage events
               </p>
@@ -65,9 +63,7 @@ function RouteComponent() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Events</h1>
-          <p className="text-muted-foreground">
-            One-off events for plan: {plan.name}
-          </p>
+          <p className="text-muted-foreground">One-off events for plan: {plan.name}</p>
         </div>
 
         <Button onClick={() => navigate({ to: "/events/add" })}>
@@ -98,18 +94,12 @@ function RouteComponent() {
                     </Button>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">
-                      {formatCurrency(event.amount)}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Mortgage Down Payment
-                    </p>
+                    <div className="text-2xl font-bold">{formatCurrency(event.amount)}</div>
+                    <p className="text-sm text-muted-foreground mt-1">Mortgage Down Payment</p>
                     <p className="text-sm text-muted-foreground">
                       {getMortgageName(event.mortgageId)}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(event.date)}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{formatDate(event.date)}</p>
                   </CardContent>
                 </Card>
               );
@@ -121,9 +111,7 @@ function RouteComponent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
-              <p className="text-lg font-medium mb-2 text-foreground">
-                No events yet
-              </p>
+              <p className="text-lg font-medium mb-2 text-foreground">No events yet</p>
               <p className="text-sm text-muted-foreground">
                 Add your first event to simulate one-off financial scenarios
               </p>

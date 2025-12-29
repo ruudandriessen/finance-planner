@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type {
-  FinancialItem,
-  FinancialItemFormProps,
-} from "@/financial-items/types";
+import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
 
 type InvestmentFormData = {
   name: string;
@@ -26,10 +23,7 @@ export function InvestmentForm({
     yearlyReturnRate: initialData?.data?.yearlyReturnRate ?? 7,
   });
 
-  const handleInputChange = (
-    field: keyof InvestmentFormData,
-    value: string,
-  ) => {
+  const handleInputChange = (field: keyof InvestmentFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -96,9 +90,7 @@ export function InvestmentForm({
           type="number"
           step="0.1"
           value={formData.yearlyReturnRate}
-          onChange={(e) =>
-            handleInputChange("yearlyReturnRate", e.target.value)
-          }
+          onChange={(e) => handleInputChange("yearlyReturnRate", e.target.value)}
           placeholder="e.g., 7"
           className="mt-2"
           required
@@ -109,21 +101,11 @@ export function InvestmentForm({
       </div>
 
       <div className="flex gap-4 pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
           Cancel
         </Button>
         {onDelete && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={onDelete}
-            className="flex-1"
-          >
+          <Button type="button" variant="destructive" onClick={onDelete} className="flex-1">
             Delete
           </Button>
         )}

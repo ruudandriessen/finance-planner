@@ -105,12 +105,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
             >
               <Check className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={cancelEditing}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={cancelEditing}>
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -128,9 +123,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
                 {plans.length > 0 ? (
                   <>
                     <DropdownMenuItem onSelect={() => setPlanId()}>
-                      <span className={planId == null ? "font-medium" : ""}>
-                        Current Reality
-                      </span>
+                      <span className={planId == null ? "font-medium" : ""}>Current Reality</span>
                     </DropdownMenuItem>
                     {plans.map((plan) => (
                       <DropdownMenuItem
@@ -155,12 +148,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
               </DropdownMenuContent>
             </DropdownMenu>
             {selectedPlan && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={startEditing}
-              >
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={startEditing}>
                 <Pencil className="h-4 w-4" />
               </Button>
             )}
@@ -173,8 +161,8 @@ export function PlanSelector({ planId }: { planId?: string }) {
           <DialogHeader>
             <DialogTitle>Create New Plan</DialogTitle>
             <DialogDescription>
-              Give your plan a name. You can edit accounts and flows within this
-              plan without affecting your current data.
+              Give your plan a name. You can edit accounts and flows within this plan without
+              affecting your current data.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -194,10 +182,7 @@ export function PlanSelector({ planId }: { planId?: string }) {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsCreateDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleCreatePlan} disabled={!newPlanName.trim()}>

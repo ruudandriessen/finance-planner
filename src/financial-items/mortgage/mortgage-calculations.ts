@@ -30,9 +30,6 @@ export function calculateAnnuityPayment(
  * With a linear mortgage, you pay the same principal every month,
  * plus interest on the remaining balance.
  */
-export function calculateLinearPrincipal(
-  loanAmount: number,
-  termYears: number,
-): number {
+export function calculateLinearPrincipal(loanAmount: number, termYears: number): number {
   return loanAmount / (termYears * 12);
 }

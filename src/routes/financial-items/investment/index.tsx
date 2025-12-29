@@ -13,9 +13,7 @@ function RouteComponent() {
   const { data: items = [] } = useLiveQuery(financialItemsCollection);
   const navigate = useNavigate();
 
-  const investmentItems = items.filter(
-    (item) => item.data.type === "investment",
-  );
+  const investmentItems = items.filter((item) => item.data.type === "investment");
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -36,17 +34,11 @@ function RouteComponent() {
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            Investment Portfolios
-          </h1>
-          <p className="text-muted-foreground">
-            Manage your investment portfolios
-          </p>
+          <h1 className="text-3xl font-bold text-foreground">Investment Portfolios</h1>
+          <p className="text-muted-foreground">Manage your investment portfolios</p>
         </div>
 
-        <Button
-          onClick={() => navigate({ to: "/financial-items/investment/add" })}
-        >
+        <Button onClick={() => navigate({ to: "/financial-items/investment/add" })}>
           <Plus className="h-4 w-4 mr-2" />
           Add Investment Portfolio
         </Button>
@@ -55,10 +47,8 @@ function RouteComponent() {
       {investmentItems.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {investmentItems.map((item) => {
-            const value =
-              item.data.type === "investment" ? item.data.initialValue : 0;
-            const rate =
-              item.data.type === "investment" ? item.data.yearlyReturnRate : 0;
+            const value = item.data.type === "investment" ? item.data.initialValue : 0;
+            const rate = item.data.type === "investment" ? item.data.yearlyReturnRate : 0;
             return (
               <Card key={item.id}>
                 <CardHeader className="flex flex-row items-center justify-between">
@@ -77,18 +67,12 @@ function RouteComponent() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
-                    {formatCurrency(value)}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Initial Value
-                  </p>
+                  <div className="text-2xl font-bold">{formatCurrency(value)}</div>
+                  <p className="text-sm text-muted-foreground mt-1">Initial Value</p>
                   <div className="text-lg font-medium mt-2 text-green-600 dark:text-green-400">
                     {formatPercent(rate)} yearly
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Expected Return
-                  </p>
+                  <p className="text-sm text-muted-foreground">Expected Return</p>
                 </CardContent>
               </Card>
             );

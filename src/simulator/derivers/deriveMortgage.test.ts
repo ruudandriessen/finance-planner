@@ -28,9 +28,7 @@ describe("deriveMortgage", () => {
 
     expect(result.accounts).toHaveLength(3);
 
-    const liabilityAccount = result.accounts.find(
-      (a) => a.type === "liability",
-    );
+    const liabilityAccount = result.accounts.find((a) => a.type === "liability");
     const expenseAccount = result.accounts.find((a) => a.type === "expense");
     const assetAccount = result.accounts.find((a) => a.type === "asset");
 
@@ -66,9 +64,7 @@ describe("deriveMortgage", () => {
     });
     const result = deriveMortgage(item);
 
-    const liabilityAccount = result.accounts.find(
-      (a) => a.type === "liability",
-    );
+    const liabilityAccount = result.accounts.find((a) => a.type === "liability");
     expect(liabilityAccount?.amount).toBe(-250000);
   });
 
@@ -86,9 +82,7 @@ describe("deriveMortgage", () => {
     });
     const result = deriveMortgage(item);
 
-    const liabilityAccount = result.accounts.find(
-      (a) => a.type === "liability",
-    );
+    const liabilityAccount = result.accounts.find((a) => a.type === "liability");
     expect(liabilityAccount?.amount).toBe(-200000);
   });
 

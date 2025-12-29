@@ -27,8 +27,7 @@ type FinancialItemDataMap = {
 };
 
 // Helper type to extract data type from type literal
-type DataTypeForType<T extends keyof FinancialItemDataMap> =
-  FinancialItemDataMap[T];
+type DataTypeForType<T extends keyof FinancialItemDataMap> = FinancialItemDataMap[T];
 
 // Base financial item structure (matches schema shape)
 export type FinancialItemBase = {

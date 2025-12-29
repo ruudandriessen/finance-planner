@@ -17,22 +17,15 @@ function RouteComponent() {
   const { data: items } = useLiveQuery(financialItemsCollection);
 
   const item = items
-    ?.filter(
-      (i): i is FinancialItem<"investment"> => i.data.type === "investment",
-    )
+    ?.filter((i): i is FinancialItem<"investment"> => i.data.type === "investment")
     .find((i) => i.id === id);
 
   if (!item || item.data.type !== "investment") {
     return (
       <div className="container mx-auto p-6 max-w-2xl">
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">
-            Investment portfolio not found
-          </p>
-          <Button
-            onClick={() => navigate({ to: "/financial-items/investment" })}
-            className="mt-4"
-          >
+          <p className="text-lg text-muted-foreground">Investment portfolio not found</p>
+          <Button onClick={() => navigate({ to: "/financial-items/investment" })} className="mt-4">
             Back to Investments
           </Button>
         </div>
@@ -79,19 +72,13 @@ function RouteComponent() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Investments
         </Button>
-        <h1 className="text-3xl font-bold text-foreground">
-          Edit Investment Portfolio
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Update your investment portfolio details
-        </p>
+        <h1 className="text-3xl font-bold text-foreground">Edit Investment Portfolio</h1>
+        <p className="text-muted-foreground mt-1">Update your investment portfolio details</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Portfolio Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Portfolio Details</CardTitle>
         </CardHeader>
         <CardContent>
           <InvestmentForm

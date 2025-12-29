@@ -59,9 +59,7 @@ function computeMortgageChartAccounts(
 /**
  * Computes chart accounts for savings, checking, and investment financial items.
  */
-function computeAccountItemChartAccounts(
-  items: FinancialItemBase[],
-): ChartAccountConfig[] {
+function computeAccountItemChartAccounts(items: FinancialItemBase[]): ChartAccountConfig[] {
   return items
     .filter(
       (item) =>
@@ -129,10 +127,7 @@ export function useChartAccounts({
     },
   };
 
-  const chartAccountConfigs: ChartAccountConfig[] = [
-    ...individualConfigs,
-    totalAssetsConfig,
-  ];
+  const chartAccountConfigs: ChartAccountConfig[] = [...individualConfigs, totalAssetsConfig];
 
   if (chartAccountConfigs.length === 0) {
     return null;

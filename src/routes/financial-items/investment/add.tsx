@@ -29,19 +29,13 @@ function RouteComponent() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Investments
         </Button>
-        <h1 className="text-3xl font-bold text-foreground">
-          Add Investment Portfolio
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Add a new investment portfolio
-        </p>
+        <h1 className="text-3xl font-bold text-foreground">Add Investment Portfolio</h1>
+        <p className="text-muted-foreground mt-1">Add a new investment portfolio</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Portfolio Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Portfolio Details</CardTitle>
         </CardHeader>
         <CardContent>
           <InvestmentForm

@@ -25,10 +25,7 @@ function RouteComponent() {
       <div className="container mx-auto p-6 max-w-2xl">
         <div className="text-center py-12">
           <p className="text-lg text-muted-foreground">Income item not found</p>
-          <Button
-            onClick={() => navigate({ to: "/financial-items/income" })}
-            className="mt-4"
-          >
+          <Button onClick={() => navigate({ to: "/financial-items/income" })} className="mt-4">
             Back to Income
           </Button>
         </div>
@@ -72,9 +69,7 @@ function RouteComponent() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-foreground">
-            Income Details
-          </CardTitle>
+          <CardTitle className="text-xl text-foreground">Income Details</CardTitle>
         </CardHeader>
         <CardContent>
           <IncomeForm
