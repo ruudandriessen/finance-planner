@@ -30,10 +30,13 @@ export type IncomeData = z.infer<typeof incomeDataSchema>;
 const mortgageDataSchema = z.object({
   type: z.literal("mortgage"),
   interestRate: z.number(),
-  loanAmount: z.number(),
+  currentBalance: z.number(), // Remaining loan balance
+  originalLoanAmount: z.number(), // Total loan at inception
   loanTermYears: z.number(),
   paymentType: z.enum(["annuity", "linear"]),
   paymentSourceAccountId: z.string(),
+  mortgageStartDate: z.date().optional(), // When the mortgage was taken out
+  houseValue: z.number().optional(), // Property value (defaults to originalLoanAmount)
 });
 
 export type MortgageData = z.infer<typeof mortgageDataSchema>;

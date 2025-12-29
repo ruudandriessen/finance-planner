@@ -23,12 +23,15 @@ import type {
 type MortgageFormData = {
   name: string;
   interestRateDisplay: number; // Display value (e.g., 4.5 for 4.5%)
-  loanAmount: number;
+  currentBalance: number; // Remaining loan balance
+  originalLoanAmount: number; // Total loan at inception
   loanTermYears: number;
   paymentType: "annuity" | "linear";
   paymentSourceAccountId: string;
   priorityOrder: number;
   schedule: "monthly" | "annually";
+  mortgageStartDate: string; // ISO date string for input field
+  houseValue: string; // String to allow empty input (defaults to originalLoanAmount)
 };
 
 export function MortgageForm({
@@ -43,28 +46,44 @@ export function MortgageForm({
     name: initialData?.name ?? "",
     // Convert stored decimal (0.045) to display value (4.5)
     interestRateDisplay: (initialData?.data?.interestRate ?? 0) * 100,
-    loanAmount: initialData?.data?.loanAmount ?? 0,
+    currentBalance: initialData?.data?.currentBalance ?? 0,
+    originalLoanAmount: initialData?.data?.originalLoanAmount ?? 0,
     loanTermYears: initialData?.data?.loanTermYears ?? 30,
     paymentType: initialData?.data?.paymentType ?? "annuity",
     paymentSourceAccountId: initialData?.data?.paymentSourceAccountId ?? "",
     priorityOrder: initialData?.priorityOrder ?? 10,
     schedule: initialData?.schedule ?? "monthly",
+    mortgageStartDate: initialData?.data?.mortgageStartDate
+      ? (initialData.data.mortgageStartDate.toISOString().split("T")[0] ?? "")
+      : "",
+    houseValue: initialData?.data?.houseValue?.toString() ?? "",
   });
 
   const calculatedPayment = (() => {
-    const { loanAmount, interestRateDisplay, loanTermYears, paymentType } =
-      formData;
-    if (loanAmount <= 0 || loanTermYears <= 0) {
+    const {
+      originalLoanAmount,
+      interestRateDisplay,
+      loanTermYears,
+      paymentType,
+    } = formData;
+    if (originalLoanAmount <= 0 || loanTermYears <= 0) {
       return 0;
     }
     // Convert display percentage to decimal for calculations
     const interestRate = interestRateDisplay / 100;
     if (paymentType === "annuity") {
-      return calculateAnnuityPayment(loanAmount, interestRate, loanTermYears);
+      return calculateAnnuityPayment(
+        originalLoanAmount,
+        interestRate,
+        loanTermYears,
+      );
     }
     // For linear, show initial payment (highest payment)
-    const principal = calculateLinearPrincipal(loanAmount, loanTermYears);
-    const monthlyInterest = (loanAmount * interestRate) / 12;
+    const principal = calculateLinearPrincipal(
+      originalLoanAmount,
+      loanTermYears,
+    );
+    const monthlyInterest = (originalLoanAmount * interestRate) / 12;
     return principal + monthlyInterest;
   })();
 
@@ -77,31 +96,44 @@ export function MortgageForm({
 
     const {
       interestRateDisplay,
-      loanAmount,
+      currentBalance,
+      originalLoanAmount,
       loanTermYears,
       paymentType,
       priorityOrder,
     } = formData;
 
-    if (interestRateDisplay < 0 || loanAmount <= 0 || loanTermYears <= 0) {
+    if (
+      interestRateDisplay < 0 ||
+      currentBalance <= 0 ||
+      originalLoanAmount <= 0 ||
+      loanTermYears <= 0
+    ) {
       return;
     }
 
     const financialItem: FinancialItem<"mortgage"> = {
       id: initialData?.id ?? crypto.randomUUID(),
       name: formData.name,
-      priorityOrder,
+      priorityOrder: Number(priorityOrder),
       schedule: formData.schedule,
       start: initialData?.start,
       end: initialData?.end,
       data: {
         type: "mortgage",
         // Convert display percentage (4.5) to decimal (0.045) for storage
-        interestRate: interestRateDisplay / 100,
-        loanAmount,
-        loanTermYears,
+        interestRate: Number(interestRateDisplay) / 100,
+        currentBalance: Number(currentBalance),
+        originalLoanAmount: Number(originalLoanAmount),
+        loanTermYears: Number(loanTermYears),
         paymentType,
         paymentSourceAccountId: formData.paymentSourceAccountId,
+        mortgageStartDate: formData.mortgageStartDate
+          ? new Date(formData.mortgageStartDate)
+          : undefined,
+        houseValue: formData.houseValue
+          ? Number(formData.houseValue)
+          : undefined,
       },
     };
 
@@ -129,20 +161,47 @@ export function MortgageForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="loanAmount">Initial Loan Amount ($)</Label>
+          <Label htmlFor="originalLoanAmount">Original Loan Amount ($)</Label>
           <Input
-            id="loanAmount"
+            id="originalLoanAmount"
             type="number"
             step="0.01"
             min="0"
-            value={formData.loanAmount}
-            onChange={(e) => handleInputChange("loanAmount", e.target.value)}
+            value={formData.originalLoanAmount}
+            onChange={(e) =>
+              handleInputChange("originalLoanAmount", e.target.value)
+            }
             placeholder="e.g., 300000"
             className="mt-2"
             required
           />
+          <p className="text-xs text-muted-foreground mt-1">
+            Total loan amount at inception
+          </p>
         </div>
 
+        <div>
+          <Label htmlFor="currentBalance">Current Balance ($)</Label>
+          <Input
+            id="currentBalance"
+            type="number"
+            step="0.01"
+            min="0"
+            value={formData.currentBalance}
+            onChange={(e) =>
+              handleInputChange("currentBalance", e.target.value)
+            }
+            placeholder="e.g., 280000"
+            className="mt-2"
+            required
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            Remaining loan balance today
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="interestRateDisplay">Annual Interest Rate (%)</Label>
           <Input
@@ -159,6 +218,22 @@ export function MortgageForm({
             className="mt-2"
             required
           />
+        </div>
+
+        <div>
+          <Label htmlFor="mortgageStartDate">Mortgage Start Date</Label>
+          <Input
+            id="mortgageStartDate"
+            type="date"
+            value={formData.mortgageStartDate}
+            onChange={(e) =>
+              handleInputChange("mortgageStartDate", e.target.value)
+            }
+            className="mt-2"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            When the mortgage was taken out (optional)
+          </p>
         </div>
       </div>
 
@@ -219,28 +294,47 @@ export function MortgageForm({
         </p>
       </div>
 
-      <div>
-        <Label htmlFor="paymentSourceAccount">Pay From</Label>
-        <Select
-          value={formData.paymentSourceAccountId}
-          onValueChange={(value) =>
-            handleInputChange("paymentSourceAccountId", value)
-          }
-        >
-          <SelectTrigger className="mt-2">
-            <SelectValue placeholder="Select account" />
-          </SelectTrigger>
-          <SelectContent>
-            {accountItems.map((item) => (
-              <SelectItem key={item.id} value={item.id}>
-                {item.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-xs text-muted-foreground mt-1">
-          Select the account you'll pay from (e.g., Checking Account)
-        </p>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="paymentSourceAccount">Pay From</Label>
+          <Select
+            value={formData.paymentSourceAccountId}
+            onValueChange={(value) =>
+              handleInputChange("paymentSourceAccountId", value)
+            }
+          >
+            <SelectTrigger className="mt-2">
+              <SelectValue placeholder="Select account" />
+            </SelectTrigger>
+            <SelectContent>
+              {accountItems.map((item) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground mt-1">
+            Account to pay from
+          </p>
+        </div>
+
+        <div>
+          <Label htmlFor="houseValue">Property Value ($)</Label>
+          <Input
+            id="houseValue"
+            type="number"
+            step="0.01"
+            min="0"
+            value={formData.houseValue}
+            onChange={(e) => handleInputChange("houseValue", e.target.value)}
+            placeholder="e.g., 400000"
+            className="mt-2"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            Leave empty to use original loan amount
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
