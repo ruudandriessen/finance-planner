@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db";
 import { createFileRoute } from "@tanstack/react-router";
-import { DollarSign, Home, Receipt, Wallet } from "lucide-react";
+import { DollarSign, Home, Receipt, TrendingUp, Wallet } from "lucide-react";
 import { useState } from "react";
 import { CategorySection } from "@/components/financial-items/CategorySection";
 import { FinancialItemCard } from "@/components/financial-items/FinancialItemCard";
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/financial-items/")({
   component: FinancialItemsPage,
 });
 
-type ItemType = "account" | "income" | "expense" | "mortgage";
+type ItemType = "account" | "income" | "expense" | "mortgage" | "investment";
 
 type SheetState = {
   open: boolean;
@@ -21,14 +21,11 @@ type SheetState = {
 };
 
 const categoryGradients = {
-  accounts:
-    "from-blue-500/10 to-cyan-500/10 dark:from-blue-400/15 dark:to-cyan-400/15",
-  income:
-    "from-green-500/10 to-emerald-500/10 dark:from-green-400/15 dark:to-emerald-400/15",
-  expenses:
-    "from-orange-500/10 to-red-500/10 dark:from-orange-400/15 dark:to-red-400/15",
-  mortgages:
-    "from-purple-500/10 to-violet-500/10 dark:from-purple-400/15 dark:to-violet-400/15",
+  accounts: "from-blue-500/10 to-cyan-500/10 dark:from-blue-400/15 dark:to-cyan-400/15",
+  income: "from-green-500/10 to-emerald-500/10 dark:from-green-400/15 dark:to-emerald-400/15",
+  expenses: "from-orange-500/10 to-red-500/10 dark:from-orange-400/15 dark:to-red-400/15",
+  mortgages: "from-purple-500/10 to-violet-500/10 dark:from-purple-400/15 dark:to-violet-400/15",
+  investments: "from-teal-500/10 to-emerald-500/10 dark:from-teal-400/15 dark:to-emerald-400/15",
 };
 
 function FinancialItemsPage() {
@@ -41,11 +38,12 @@ function FinancialItemsPage() {
   });
 
   const accountItems = items.filter(
-    (item) => item.data.type === "savings" || item.data.type === "checking"
+    (item) => item.data.type === "savings" || item.data.type === "checking",
   );
   const incomeItems = items.filter((item) => item.data.type === "income");
   const expenseItems = items.filter((item) => item.data.type === "expense");
   const mortgageItems = items.filter((item) => item.data.type === "mortgage");
+  const investmentItems = items.filter((item) => item.data.type === "investment");
 
   const openAddSheet = (type: ItemType) => {
     setSheetState({ open: true, mode: "add", type, itemId: undefined });
@@ -64,7 +62,7 @@ function FinancialItemsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground">Financial Items</h1>
         <p className="text-muted-foreground">
-          Manage your accounts, income, expenses, and mortgages
+          Manage your accounts, income, expenses, mortgages, and investments
         </p>
       </div>
 
@@ -132,6 +130,23 @@ function FinancialItemsPage() {
             key={item.id}
             item={item}
             onEdit={() => openEditSheet("mortgage", item.id)}
+          />
+        ))}
+      </CategorySection>
+
+      <CategorySection
+        title="Investments"
+        icon={<TrendingUp className="h-5 w-5" />}
+        gradientClass={categoryGradients.investments}
+        onAdd={() => openAddSheet("investment")}
+        isEmpty={investmentItems.length === 0}
+        emptyMessage="Add your investment portfolios to track growth"
+      >
+        {investmentItems.map((item) => (
+          <FinancialItemCard
+            key={item.id}
+            item={item}
+            onEdit={() => openEditSheet("investment", item.id)}
           />
         ))}
       </CategorySection>

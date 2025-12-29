@@ -19,7 +19,7 @@ function calculateMortgagePayment(
   loanAmount: number,
   annualRate: number,
   loanTermYears: number,
-  paymentType: "annuity" | "linear"
+  paymentType: "annuity" | "linear",
 ): number {
   const monthlyRate = annualRate / 12;
   const totalPayments = loanTermYears * 12;
@@ -70,7 +70,7 @@ function getItemDisplayInfo(item: FinancialItemBase): {
         item.data.originalLoanAmount,
         item.data.interestRate,
         item.data.loanTermYears,
-        item.data.paymentType
+        item.data.paymentType,
       );
       return {
         displayValue: formatCurrency(payment),

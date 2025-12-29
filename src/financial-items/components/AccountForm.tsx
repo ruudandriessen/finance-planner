@@ -35,17 +35,13 @@ export function AccountForm({
   onDelete,
   submitLabel = "Save",
 }: AccountFormProps) {
-  const initialType =
-    initialData?.data?.type === "checking" ? "checking" : "savings";
+  const initialType = initialData?.data?.type === "checking" ? "checking" : "savings";
   const initialBalance =
-    initialData?.data?.type === "savings" ||
-    initialData?.data?.type === "checking"
+    initialData?.data?.type === "savings" || initialData?.data?.type === "checking"
       ? initialData.data.initialBalance
       : 0;
   const initialInterestRate =
-    initialData?.data?.type === "savings"
-      ? (initialData.data.interestRate ?? 0) * 100
-      : 0;
+    initialData?.data?.type === "savings" ? (initialData.data.interestRate ?? 0) * 100 : 0;
 
   const [formData, setFormData] = useState<AccountFormData>({
     name: initialData?.name ?? "",
@@ -54,9 +50,9 @@ export function AccountForm({
     interestRate: initialInterestRate,
   });
 
-  const handleInputChange = (
-    field: keyof AccountFormData,
-    value: string | AccountType
+  const handleInputChange = <TKey extends keyof AccountFormData>(
+    field: TKey,
+    value: AccountFormData[TKey],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -109,9 +105,7 @@ export function AccountForm({
         <Label htmlFor="accountType">Account Type</Label>
         <Select
           value={formData.accountType}
-          onValueChange={(value: AccountType) =>
-            handleInputChange("accountType", value)
-          }
+          onValueChange={(value: AccountType) => handleInputChange("accountType", value)}
         >
           <SelectTrigger className="mt-2">
             <SelectValue placeholder="Select account type" />
@@ -136,14 +130,12 @@ export function AccountForm({
           step="0.01"
           min="0"
           value={formData.initialBalance}
-          onChange={(e) => handleInputChange("initialBalance", e.target.value)}
+          onChange={(e) => handleInputChange("initialBalance", Number(e.target.value))}
           placeholder="Enter initial balance"
           className="mt-2"
           required
         />
-        <p className="text-xs text-muted-foreground mt-1">
-          Current balance in this account
-        </p>
+        <p className="text-xs text-muted-foreground mt-1">Current balance in this account</p>
       </div>
 
       <div>
@@ -155,7 +147,7 @@ export function AccountForm({
           min="0"
           max="100"
           value={formData.interestRate}
-          onChange={(e) => handleInputChange("interestRate", e.target.value)}
+          onChange={(e) => handleInputChange("interestRate", Number(e.target.value))}
           placeholder="e.g., 4.5"
           className="mt-2"
         />
