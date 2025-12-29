@@ -2,6 +2,7 @@ import type {
   CheckingData,
   ExpenseData,
   IncomeData,
+  InvestmentData,
   MortgageData,
   SavingsData,
 } from "@/financial-items/collection";
@@ -12,7 +13,8 @@ export type FinancialItemData =
   | CheckingData
   | IncomeData
   | MortgageData
-  | ExpenseData;
+  | ExpenseData
+  | InvestmentData;
 
 // Type map: maps type literal to its data type
 type FinancialItemDataMap = {
@@ -21,6 +23,7 @@ type FinancialItemDataMap = {
   income: IncomeData;
   mortgage: MortgageData;
   expense: ExpenseData;
+  investment: InvestmentData;
 };
 
 // Helper type to extract data type from type literal

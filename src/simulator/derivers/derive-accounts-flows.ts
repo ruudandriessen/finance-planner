@@ -3,6 +3,7 @@ import type { Flow } from "@/flows/flows";
 import { deriveChecking } from "./deriveChecking";
 import { deriveExpense } from "./deriveExpense";
 import { deriveIncome } from "./deriveIncome";
+import { deriveInvestment } from "./deriveInvestment";
 import { deriveMortgage } from "./deriveMortgage";
 import { deriveSavings } from "./deriveSavings";
 
@@ -36,6 +37,8 @@ function deriveItem(item: FinancialItemBase): DeriveResult | null {
       return deriveMortgage({ ...item, data: item.data });
     case "expense":
       return deriveExpense({ ...item, data: item.data });
+    case "investment":
+      return deriveInvestment({ ...item, data: item.data });
     default:
       return null;
   }

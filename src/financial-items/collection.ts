@@ -46,6 +46,14 @@ const expenseDataSchema = z.object({
 
 export type ExpenseData = z.infer<typeof expenseDataSchema>;
 
+const investmentDataSchema = z.object({
+  type: z.literal("investment"),
+  initialValue: z.number(),
+  yearlyReturnRate: z.number(),
+});
+
+export type InvestmentData = z.infer<typeof investmentDataSchema>;
+
 const financialItemSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -59,6 +67,7 @@ const financialItemSchema = z.object({
     incomeDataSchema,
     mortgageDataSchema,
     expenseDataSchema,
+    investmentDataSchema,
   ]),
 });
 
