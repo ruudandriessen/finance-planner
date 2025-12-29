@@ -10,10 +10,11 @@ import { financialItemsCollection } from "@/financial-items/collection";
 import { AccountForm } from "@/financial-items/components/AccountForm";
 import { ExpenseForm } from "@/financial-items/components/ExpenseForm";
 import { IncomeForm } from "@/financial-items/components/IncomeForm";
+import { InvestmentForm } from "@/financial-items/components/InvestmentForm";
 import { MortgageForm } from "@/financial-items/components/MortgageForm";
 import type { FinancialItemBase } from "@/financial-items/types";
 
-type ItemType = "account" | "income" | "expense" | "mortgage";
+type ItemType = "account" | "income" | "expense" | "mortgage" | "investment";
 
 interface FinancialItemSheetProps {
   open: boolean;
@@ -33,6 +34,8 @@ function getTypeLabel(type: ItemType): string {
       return "Expense";
     case "mortgage":
       return "Mortgage";
+    case "investment":
+      return "Investment";
   }
 }
 
@@ -47,6 +50,8 @@ function getTypeDescription(type: ItemType, mode: "add" | "edit"): string {
       return `${action} recurring expense`;
     case "mortgage":
       return `${action} mortgage or loan`;
+    case "investment":
+      return `${action} investment portfolio`;
   }
 }
 
@@ -59,15 +64,13 @@ export function FinancialItemSheet({
 }: FinancialItemSheetProps) {
   const { data: items = [] } = useLiveQuery(financialItemsCollection);
 
-  const existingItem = itemId
-    ? items.find((item) => item.id === itemId)
-    : undefined;
+  const existingItem = itemId ? items.find((item) => item.id === itemId) : undefined;
 
   const handleSubmit = async (data: FinancialItemBase) => {
     if (mode === "add") {
-      await financialItemsCollection.insert(data);
+      financialItemsCollection.insert(data);
     } else if (existingItem) {
-      await financialItemsCollection.update(existingItem.id, (old) => {
+      financialItemsCollection.update(existingItem.id, (old) => {
         old.name = data.name;
         old.priorityOrder = data.priorityOrder;
         old.schedule = data.schedule;
@@ -81,7 +84,7 @@ export function FinancialItemSheet({
 
   const handleDelete = async () => {
     if (existingItem && confirm(`Delete "${existingItem.name}"?`)) {
-      await financialItemsCollection.delete(existingItem.id);
+      financialItemsCollection.delete(existingItem.id);
       onOpenChange(false);
     }
   };
@@ -90,8 +93,7 @@ export function FinancialItemSheet({
     onOpenChange(false);
   };
 
-  const title =
-    mode === "add" ? `Add ${getTypeLabel(type)}` : `Edit ${getTypeLabel(type)}`;
+  const title = mode === "add" ? `Add ${getTypeLabel(type)}` : `Edit ${getTypeLabel(type)}`;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -145,6 +147,16 @@ export function FinancialItemSheet({
         return (
           <MortgageForm
             initialData={existingItem as Parameters<typeof MortgageForm>[0]["initialData"]}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            onDelete={deleteHandler}
+            submitLabel={submitLabel}
+          />
+        );
+      case "investment":
+        return (
+          <InvestmentForm
+            initialData={existingItem as Parameters<typeof InvestmentForm>[0]["initialData"]}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             onDelete={deleteHandler}

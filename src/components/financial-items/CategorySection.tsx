@@ -29,7 +29,7 @@ export function CategorySection({
         className={cn(
           "flex items-center justify-between px-4 py-3 rounded-lg mb-4",
           "bg-gradient-to-r",
-          gradientClass
+          gradientClass,
         )}
       >
         <div className="flex items-center gap-2">
