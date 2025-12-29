@@ -9,7 +9,11 @@ import checker from "vite-plugin-checker";
 export default defineConfig({
   plugins: [
     tanstackRouter(),
-    react(),
+    react({
+      babel: {
+        plugins: [["babel-plugin-react-compiler", {}]],
+      },
+    }),
     tailwindcss(),
     checker({
       typescript: true,
