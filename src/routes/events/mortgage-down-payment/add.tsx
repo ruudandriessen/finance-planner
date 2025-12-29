@@ -33,10 +33,10 @@ function RouteComponent() {
   }
 
   const handleSubmit = async (event: MortgageDownPaymentEvent) => {
-    await plansCollection.update(planId, (oldPlan) => {
+    plansCollection.update(planId, (oldPlan) => {
       oldPlan.events.push(event);
     });
-    navigate({ to: "/events" });
+    await navigate({ to: "/events" });
   };
 
   return (

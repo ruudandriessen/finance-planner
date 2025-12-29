@@ -48,21 +48,21 @@ function RouteComponent() {
   }
 
   const handleSubmit = async (updatedEvent: MortgageDownPaymentEvent) => {
-    await plansCollection.update(planId, (oldPlan) => {
+    plansCollection.update(planId, (oldPlan) => {
       const index = oldPlan.events.findIndex((e) => e.id === id);
       if (index !== -1) {
         oldPlan.events[index] = updatedEvent;
       }
     });
-    navigate({ to: "/events" });
+    await navigate({ to: "/events" });
   };
 
   const handleDelete = async () => {
     if (confirm(`Are you sure you want to delete "${event.name}"?`)) {
-      await plansCollection.update(planId, (oldPlan) => {
+      plansCollection.update(planId, (oldPlan) => {
         oldPlan.events = oldPlan.events.filter((e) => e.id !== id);
       });
-      navigate({ to: "/events" });
+      await navigate({ to: "/events" });
     }
   };
 

@@ -14,8 +14,8 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const handleSubmit = async (data: FinancialItem<"income">) => {
-    await financialItemsCollection.insert(data);
-    navigate({ to: "/financial-items/income" });
+    financialItemsCollection.insert(data);
+    await navigate({ to: "/financial-items/income" });
   };
 
   return (
