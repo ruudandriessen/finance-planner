@@ -36,7 +36,8 @@ export function InvestmentForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { initialValue, yearlyReturnRate } = formData;
+    const initialValue = Number(formData.initialValue);
+    const yearlyReturnRate = Number(formData.yearlyReturnRate);
     if (initialValue < 0) return;
 
     const financialItem: FinancialItem<"investment"> = {
