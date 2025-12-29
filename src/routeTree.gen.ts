@@ -10,32 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FinancialItemsIndexRouteImport } from './routes/financial-items/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as EventsAddRouteImport } from './routes/events/add'
-import { Route as FinancialItemsSavingsIndexRouteImport } from './routes/financial-items/savings/index'
-import { Route as FinancialItemsMortgageIndexRouteImport } from './routes/financial-items/mortgage/index'
 import { Route as FinancialItemsInvestmentIndexRouteImport } from './routes/financial-items/investment/index'
-import { Route as FinancialItemsIncomeIndexRouteImport } from './routes/financial-items/income/index'
-import { Route as FinancialItemsExpensesIndexRouteImport } from './routes/financial-items/expenses/index'
-import { Route as FinancialItemsCheckingIndexRouteImport } from './routes/financial-items/checking/index'
-import { Route as FinancialItemsSavingsAddRouteImport } from './routes/financial-items/savings/add'
-import { Route as FinancialItemsMortgageAddRouteImport } from './routes/financial-items/mortgage/add'
 import { Route as FinancialItemsInvestmentAddRouteImport } from './routes/financial-items/investment/add'
-import { Route as FinancialItemsIncomeAddRouteImport } from './routes/financial-items/income/add'
-import { Route as FinancialItemsExpensesAddRouteImport } from './routes/financial-items/expenses/add'
-import { Route as FinancialItemsCheckingAddRouteImport } from './routes/financial-items/checking/add'
 import { Route as EventsMortgageDownPaymentAddRouteImport } from './routes/events/mortgage-down-payment/add'
 import { Route as EventsIdEditRouteImport } from './routes/events/$id.edit'
-import { Route as FinancialItemsSavingsIdEditRouteImport } from './routes/financial-items/savings/$id.edit'
-import { Route as FinancialItemsMortgageIdEditRouteImport } from './routes/financial-items/mortgage/$id.edit'
 import { Route as FinancialItemsInvestmentIdEditRouteImport } from './routes/financial-items/investment/$id.edit'
-import { Route as FinancialItemsIncomeIdEditRouteImport } from './routes/financial-items/income/$id.edit'
-import { Route as FinancialItemsExpensesIdEditRouteImport } from './routes/financial-items/expenses/$id.edit'
-import { Route as FinancialItemsCheckingIdEditRouteImport } from './routes/financial-items/checking/$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinancialItemsIndexRoute = FinancialItemsIndexRouteImport.update({
+  id: '/financial-items/',
+  path: '/financial-items/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
@@ -48,75 +39,16 @@ const EventsAddRoute = EventsAddRouteImport.update({
   path: '/events/add',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FinancialItemsSavingsIndexRoute =
-  FinancialItemsSavingsIndexRouteImport.update({
-    id: '/financial-items/savings/',
-    path: '/financial-items/savings/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsMortgageIndexRoute =
-  FinancialItemsMortgageIndexRouteImport.update({
-    id: '/financial-items/mortgage/',
-    path: '/financial-items/mortgage/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const FinancialItemsInvestmentIndexRoute =
   FinancialItemsInvestmentIndexRouteImport.update({
     id: '/financial-items/investment/',
     path: '/financial-items/investment/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const FinancialItemsIncomeIndexRoute =
-  FinancialItemsIncomeIndexRouteImport.update({
-    id: '/financial-items/income/',
-    path: '/financial-items/income/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsExpensesIndexRoute =
-  FinancialItemsExpensesIndexRouteImport.update({
-    id: '/financial-items/expenses/',
-    path: '/financial-items/expenses/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsCheckingIndexRoute =
-  FinancialItemsCheckingIndexRouteImport.update({
-    id: '/financial-items/checking/',
-    path: '/financial-items/checking/',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsSavingsAddRoute =
-  FinancialItemsSavingsAddRouteImport.update({
-    id: '/financial-items/savings/add',
-    path: '/financial-items/savings/add',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsMortgageAddRoute =
-  FinancialItemsMortgageAddRouteImport.update({
-    id: '/financial-items/mortgage/add',
-    path: '/financial-items/mortgage/add',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const FinancialItemsInvestmentAddRoute =
   FinancialItemsInvestmentAddRouteImport.update({
     id: '/financial-items/investment/add',
     path: '/financial-items/investment/add',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsIncomeAddRoute = FinancialItemsIncomeAddRouteImport.update({
-  id: '/financial-items/income/add',
-  path: '/financial-items/income/add',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FinancialItemsExpensesAddRoute =
-  FinancialItemsExpensesAddRouteImport.update({
-    id: '/financial-items/expenses/add',
-    path: '/financial-items/expenses/add',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsCheckingAddRoute =
-  FinancialItemsCheckingAddRouteImport.update({
-    id: '/financial-items/checking/add',
-    path: '/financial-items/checking/add',
     getParentRoute: () => rootRouteImport,
   } as any)
 const EventsMortgageDownPaymentAddRoute =
@@ -130,40 +62,10 @@ const EventsIdEditRoute = EventsIdEditRouteImport.update({
   path: '/events/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FinancialItemsSavingsIdEditRoute =
-  FinancialItemsSavingsIdEditRouteImport.update({
-    id: '/financial-items/savings/$id/edit',
-    path: '/financial-items/savings/$id/edit',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsMortgageIdEditRoute =
-  FinancialItemsMortgageIdEditRouteImport.update({
-    id: '/financial-items/mortgage/$id/edit',
-    path: '/financial-items/mortgage/$id/edit',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const FinancialItemsInvestmentIdEditRoute =
   FinancialItemsInvestmentIdEditRouteImport.update({
     id: '/financial-items/investment/$id/edit',
     path: '/financial-items/investment/$id/edit',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsIncomeIdEditRoute =
-  FinancialItemsIncomeIdEditRouteImport.update({
-    id: '/financial-items/income/$id/edit',
-    path: '/financial-items/income/$id/edit',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsExpensesIdEditRoute =
-  FinancialItemsExpensesIdEditRouteImport.update({
-    id: '/financial-items/expenses/$id/edit',
-    path: '/financial-items/expenses/$id/edit',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const FinancialItemsCheckingIdEditRoute =
-  FinancialItemsCheckingIdEditRouteImport.update({
-    id: '/financial-items/checking/$id/edit',
-    path: '/financial-items/checking/$id/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -171,77 +73,35 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/events/add': typeof EventsAddRoute
   '/events': typeof EventsIndexRoute
+  '/financial-items': typeof FinancialItemsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
-  '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
-  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
-  '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
-  '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
-  '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/financial-items/checking': typeof FinancialItemsCheckingIndexRoute
-  '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
-  '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/investment': typeof FinancialItemsInvestmentIndexRoute
-  '/financial-items/mortgage': typeof FinancialItemsMortgageIndexRoute
-  '/financial-items/savings': typeof FinancialItemsSavingsIndexRoute
-  '/financial-items/checking/$id/edit': typeof FinancialItemsCheckingIdEditRoute
-  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
-  '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/investment/$id/edit': typeof FinancialItemsInvestmentIdEditRoute
-  '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
-  '/financial-items/savings/$id/edit': typeof FinancialItemsSavingsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/events/add': typeof EventsAddRoute
   '/events': typeof EventsIndexRoute
+  '/financial-items': typeof FinancialItemsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
-  '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
-  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
-  '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
-  '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
-  '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/financial-items/checking': typeof FinancialItemsCheckingIndexRoute
-  '/financial-items/expenses': typeof FinancialItemsExpensesIndexRoute
-  '/financial-items/income': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/investment': typeof FinancialItemsInvestmentIndexRoute
-  '/financial-items/mortgage': typeof FinancialItemsMortgageIndexRoute
-  '/financial-items/savings': typeof FinancialItemsSavingsIndexRoute
-  '/financial-items/checking/$id/edit': typeof FinancialItemsCheckingIdEditRoute
-  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
-  '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/investment/$id/edit': typeof FinancialItemsInvestmentIdEditRoute
-  '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
-  '/financial-items/savings/$id/edit': typeof FinancialItemsSavingsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/events/add': typeof EventsAddRoute
   '/events/': typeof EventsIndexRoute
+  '/financial-items/': typeof FinancialItemsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
-  '/financial-items/checking/add': typeof FinancialItemsCheckingAddRoute
-  '/financial-items/expenses/add': typeof FinancialItemsExpensesAddRoute
-  '/financial-items/income/add': typeof FinancialItemsIncomeAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
-  '/financial-items/mortgage/add': typeof FinancialItemsMortgageAddRoute
-  '/financial-items/savings/add': typeof FinancialItemsSavingsAddRoute
-  '/financial-items/checking/': typeof FinancialItemsCheckingIndexRoute
-  '/financial-items/expenses/': typeof FinancialItemsExpensesIndexRoute
-  '/financial-items/income/': typeof FinancialItemsIncomeIndexRoute
   '/financial-items/investment/': typeof FinancialItemsInvestmentIndexRoute
-  '/financial-items/mortgage/': typeof FinancialItemsMortgageIndexRoute
-  '/financial-items/savings/': typeof FinancialItemsSavingsIndexRoute
-  '/financial-items/checking/$id/edit': typeof FinancialItemsCheckingIdEditRoute
-  '/financial-items/expenses/$id/edit': typeof FinancialItemsExpensesIdEditRoute
-  '/financial-items/income/$id/edit': typeof FinancialItemsIncomeIdEditRoute
   '/financial-items/investment/$id/edit': typeof FinancialItemsInvestmentIdEditRoute
-  '/financial-items/mortgage/$id/edit': typeof FinancialItemsMortgageIdEditRoute
-  '/financial-items/savings/$id/edit': typeof FinancialItemsSavingsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -249,102 +109,46 @@ export interface FileRouteTypes {
     | '/'
     | '/events/add'
     | '/events'
+    | '/financial-items'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
-    | '/financial-items/checking/add'
-    | '/financial-items/expenses/add'
-    | '/financial-items/income/add'
     | '/financial-items/investment/add'
-    | '/financial-items/mortgage/add'
-    | '/financial-items/savings/add'
-    | '/financial-items/checking'
-    | '/financial-items/expenses'
-    | '/financial-items/income'
     | '/financial-items/investment'
-    | '/financial-items/mortgage'
-    | '/financial-items/savings'
-    | '/financial-items/checking/$id/edit'
-    | '/financial-items/expenses/$id/edit'
-    | '/financial-items/income/$id/edit'
     | '/financial-items/investment/$id/edit'
-    | '/financial-items/mortgage/$id/edit'
-    | '/financial-items/savings/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/events/add'
     | '/events'
+    | '/financial-items'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
-    | '/financial-items/checking/add'
-    | '/financial-items/expenses/add'
-    | '/financial-items/income/add'
     | '/financial-items/investment/add'
-    | '/financial-items/mortgage/add'
-    | '/financial-items/savings/add'
-    | '/financial-items/checking'
-    | '/financial-items/expenses'
-    | '/financial-items/income'
     | '/financial-items/investment'
-    | '/financial-items/mortgage'
-    | '/financial-items/savings'
-    | '/financial-items/checking/$id/edit'
-    | '/financial-items/expenses/$id/edit'
-    | '/financial-items/income/$id/edit'
     | '/financial-items/investment/$id/edit'
-    | '/financial-items/mortgage/$id/edit'
-    | '/financial-items/savings/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/events/add'
     | '/events/'
+    | '/financial-items/'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
-    | '/financial-items/checking/add'
-    | '/financial-items/expenses/add'
-    | '/financial-items/income/add'
     | '/financial-items/investment/add'
-    | '/financial-items/mortgage/add'
-    | '/financial-items/savings/add'
-    | '/financial-items/checking/'
-    | '/financial-items/expenses/'
-    | '/financial-items/income/'
     | '/financial-items/investment/'
-    | '/financial-items/mortgage/'
-    | '/financial-items/savings/'
-    | '/financial-items/checking/$id/edit'
-    | '/financial-items/expenses/$id/edit'
-    | '/financial-items/income/$id/edit'
     | '/financial-items/investment/$id/edit'
-    | '/financial-items/mortgage/$id/edit'
-    | '/financial-items/savings/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EventsAddRoute: typeof EventsAddRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  FinancialItemsIndexRoute: typeof FinancialItemsIndexRoute
   EventsIdEditRoute: typeof EventsIdEditRoute
   EventsMortgageDownPaymentAddRoute: typeof EventsMortgageDownPaymentAddRoute
-  FinancialItemsCheckingAddRoute: typeof FinancialItemsCheckingAddRoute
-  FinancialItemsExpensesAddRoute: typeof FinancialItemsExpensesAddRoute
-  FinancialItemsIncomeAddRoute: typeof FinancialItemsIncomeAddRoute
   FinancialItemsInvestmentAddRoute: typeof FinancialItemsInvestmentAddRoute
-  FinancialItemsMortgageAddRoute: typeof FinancialItemsMortgageAddRoute
-  FinancialItemsSavingsAddRoute: typeof FinancialItemsSavingsAddRoute
-  FinancialItemsCheckingIndexRoute: typeof FinancialItemsCheckingIndexRoute
-  FinancialItemsExpensesIndexRoute: typeof FinancialItemsExpensesIndexRoute
-  FinancialItemsIncomeIndexRoute: typeof FinancialItemsIncomeIndexRoute
   FinancialItemsInvestmentIndexRoute: typeof FinancialItemsInvestmentIndexRoute
-  FinancialItemsMortgageIndexRoute: typeof FinancialItemsMortgageIndexRoute
-  FinancialItemsSavingsIndexRoute: typeof FinancialItemsSavingsIndexRoute
-  FinancialItemsCheckingIdEditRoute: typeof FinancialItemsCheckingIdEditRoute
-  FinancialItemsExpensesIdEditRoute: typeof FinancialItemsExpensesIdEditRoute
-  FinancialItemsIncomeIdEditRoute: typeof FinancialItemsIncomeIdEditRoute
   FinancialItemsInvestmentIdEditRoute: typeof FinancialItemsInvestmentIdEditRoute
-  FinancialItemsMortgageIdEditRoute: typeof FinancialItemsMortgageIdEditRoute
-  FinancialItemsSavingsIdEditRoute: typeof FinancialItemsSavingsIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -354,6 +158,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financial-items/': {
+      id: '/financial-items/'
+      path: '/financial-items'
+      fullPath: '/financial-items'
+      preLoaderRoute: typeof FinancialItemsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/': {
@@ -370,20 +181,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsAddRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/financial-items/savings/': {
-      id: '/financial-items/savings/'
-      path: '/financial-items/savings'
-      fullPath: '/financial-items/savings'
-      preLoaderRoute: typeof FinancialItemsSavingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/mortgage/': {
-      id: '/financial-items/mortgage/'
-      path: '/financial-items/mortgage'
-      fullPath: '/financial-items/mortgage'
-      preLoaderRoute: typeof FinancialItemsMortgageIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/financial-items/investment/': {
       id: '/financial-items/investment/'
       path: '/financial-items/investment'
@@ -391,67 +188,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinancialItemsInvestmentIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/financial-items/income/': {
-      id: '/financial-items/income/'
-      path: '/financial-items/income'
-      fullPath: '/financial-items/income'
-      preLoaderRoute: typeof FinancialItemsIncomeIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/expenses/': {
-      id: '/financial-items/expenses/'
-      path: '/financial-items/expenses'
-      fullPath: '/financial-items/expenses'
-      preLoaderRoute: typeof FinancialItemsExpensesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/checking/': {
-      id: '/financial-items/checking/'
-      path: '/financial-items/checking'
-      fullPath: '/financial-items/checking'
-      preLoaderRoute: typeof FinancialItemsCheckingIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/savings/add': {
-      id: '/financial-items/savings/add'
-      path: '/financial-items/savings/add'
-      fullPath: '/financial-items/savings/add'
-      preLoaderRoute: typeof FinancialItemsSavingsAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/mortgage/add': {
-      id: '/financial-items/mortgage/add'
-      path: '/financial-items/mortgage/add'
-      fullPath: '/financial-items/mortgage/add'
-      preLoaderRoute: typeof FinancialItemsMortgageAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/financial-items/investment/add': {
       id: '/financial-items/investment/add'
       path: '/financial-items/investment/add'
       fullPath: '/financial-items/investment/add'
       preLoaderRoute: typeof FinancialItemsInvestmentAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/income/add': {
-      id: '/financial-items/income/add'
-      path: '/financial-items/income/add'
-      fullPath: '/financial-items/income/add'
-      preLoaderRoute: typeof FinancialItemsIncomeAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/expenses/add': {
-      id: '/financial-items/expenses/add'
-      path: '/financial-items/expenses/add'
-      fullPath: '/financial-items/expenses/add'
-      preLoaderRoute: typeof FinancialItemsExpensesAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/checking/add': {
-      id: '/financial-items/checking/add'
-      path: '/financial-items/checking/add'
-      fullPath: '/financial-items/checking/add'
-      preLoaderRoute: typeof FinancialItemsCheckingAddRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/mortgage-down-payment/add': {
@@ -468,46 +209,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/financial-items/savings/$id/edit': {
-      id: '/financial-items/savings/$id/edit'
-      path: '/financial-items/savings/$id/edit'
-      fullPath: '/financial-items/savings/$id/edit'
-      preLoaderRoute: typeof FinancialItemsSavingsIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/mortgage/$id/edit': {
-      id: '/financial-items/mortgage/$id/edit'
-      path: '/financial-items/mortgage/$id/edit'
-      fullPath: '/financial-items/mortgage/$id/edit'
-      preLoaderRoute: typeof FinancialItemsMortgageIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/financial-items/investment/$id/edit': {
       id: '/financial-items/investment/$id/edit'
       path: '/financial-items/investment/$id/edit'
       fullPath: '/financial-items/investment/$id/edit'
       preLoaderRoute: typeof FinancialItemsInvestmentIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/income/$id/edit': {
-      id: '/financial-items/income/$id/edit'
-      path: '/financial-items/income/$id/edit'
-      fullPath: '/financial-items/income/$id/edit'
-      preLoaderRoute: typeof FinancialItemsIncomeIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/expenses/$id/edit': {
-      id: '/financial-items/expenses/$id/edit'
-      path: '/financial-items/expenses/$id/edit'
-      fullPath: '/financial-items/expenses/$id/edit'
-      preLoaderRoute: typeof FinancialItemsExpensesIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/financial-items/checking/$id/edit': {
-      id: '/financial-items/checking/$id/edit'
-      path: '/financial-items/checking/$id/edit'
-      fullPath: '/financial-items/checking/$id/edit'
-      preLoaderRoute: typeof FinancialItemsCheckingIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -517,26 +223,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EventsAddRoute: EventsAddRoute,
   EventsIndexRoute: EventsIndexRoute,
+  FinancialItemsIndexRoute: FinancialItemsIndexRoute,
   EventsIdEditRoute: EventsIdEditRoute,
   EventsMortgageDownPaymentAddRoute: EventsMortgageDownPaymentAddRoute,
-  FinancialItemsCheckingAddRoute: FinancialItemsCheckingAddRoute,
-  FinancialItemsExpensesAddRoute: FinancialItemsExpensesAddRoute,
-  FinancialItemsIncomeAddRoute: FinancialItemsIncomeAddRoute,
   FinancialItemsInvestmentAddRoute: FinancialItemsInvestmentAddRoute,
-  FinancialItemsMortgageAddRoute: FinancialItemsMortgageAddRoute,
-  FinancialItemsSavingsAddRoute: FinancialItemsSavingsAddRoute,
-  FinancialItemsCheckingIndexRoute: FinancialItemsCheckingIndexRoute,
-  FinancialItemsExpensesIndexRoute: FinancialItemsExpensesIndexRoute,
-  FinancialItemsIncomeIndexRoute: FinancialItemsIncomeIndexRoute,
   FinancialItemsInvestmentIndexRoute: FinancialItemsInvestmentIndexRoute,
-  FinancialItemsMortgageIndexRoute: FinancialItemsMortgageIndexRoute,
-  FinancialItemsSavingsIndexRoute: FinancialItemsSavingsIndexRoute,
-  FinancialItemsCheckingIdEditRoute: FinancialItemsCheckingIdEditRoute,
-  FinancialItemsExpensesIdEditRoute: FinancialItemsExpensesIdEditRoute,
-  FinancialItemsIncomeIdEditRoute: FinancialItemsIncomeIdEditRoute,
   FinancialItemsInvestmentIdEditRoute: FinancialItemsInvestmentIdEditRoute,
-  FinancialItemsMortgageIdEditRoute: FinancialItemsMortgageIdEditRoute,
-  FinancialItemsSavingsIdEditRoute: FinancialItemsSavingsIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -65,7 +65,7 @@ function Home() {
 
       {chartAccounts ? (
         <div className="mt-6 space-y-6">
-          <Card>
+          <Card className="bg-gradient-to-br from-background to-muted/20">
             <CardHeader>
               <CardTitle>Account Balances Over Time (30 Years)</CardTitle>
             </CardHeader>
@@ -104,7 +104,7 @@ function Home() {
           </Card>
         </div>
       ) : (
-        <Card className="mt-6">
+        <Card className="mt-6 bg-gradient-to-br from-background to-muted/20">
           <CardContent className="flex flex-col items-center justify-center py-12 px-6">
             <div className="text-muted-foreground text-center">
               <p className="text-lg font-medium mb-2 text-foreground">No accounts yet</p>

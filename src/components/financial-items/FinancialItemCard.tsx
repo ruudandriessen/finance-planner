@@ -1,0 +1,110 @@
+import { Edit3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { FinancialItemBase } from "@/financial-items/types";
+
+interface FinancialItemCardProps {
+  item: FinancialItemBase;
+  onEdit: () => void;
+}
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
+}
+
+function calculateMortgagePayment(
+  loanAmount: number,
+  annualRate: number,
+  loanTermYears: number,
+  paymentType: "annuity" | "linear"
+): number {
+  const monthlyRate = annualRate / 12;
+  const totalPayments = loanTermYears * 12;
+
+  if (paymentType === "linear") {
+    const principalPayment = loanAmount / totalPayments;
+    const interestPayment = loanAmount * monthlyRate;
+    return principalPayment + interestPayment;
+  }
+
+  // Annuity calculation
+  if (monthlyRate === 0) {
+    return loanAmount / totalPayments;
+  }
+  return (
+    (loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments))) /
+    (Math.pow(1 + monthlyRate, totalPayments) - 1)
+  );
+}
+
+function getItemDisplayInfo(item: FinancialItemBase): {
+  displayValue: string;
+  subtitle: string;
+} {
+  switch (item.data.type) {
+    case "savings":
+      return {
+        displayValue: formatCurrency(item.data.initialBalance),
+        subtitle: "Savings Account",
+      };
+    case "checking":
+      return {
+        displayValue: formatCurrency(item.data.initialBalance),
+        subtitle: "Checking Account",
+      };
+    case "income":
+      return {
+        displayValue: formatCurrency(item.data.amount),
+        subtitle: `${item.schedule} income`,
+      };
+    case "expense":
+      return {
+        displayValue: formatCurrency(item.data.amount),
+        subtitle: `${item.schedule} expense`,
+      };
+    case "mortgage": {
+      const payment = calculateMortgagePayment(
+        item.data.originalLoanAmount,
+        item.data.interestRate,
+        item.data.loanTermYears,
+        item.data.paymentType
+      );
+      return {
+        displayValue: formatCurrency(payment),
+        subtitle: `${item.data.paymentType} • ${item.data.loanTermYears}yr @ ${(item.data.interestRate * 100).toFixed(1)}%`,
+      };
+    }
+    case "investment":
+      return {
+        displayValue: formatCurrency(item.data.initialValue),
+        subtitle: `${(item.data.yearlyReturnRate * 100).toFixed(1)}% yearly return`,
+      };
+  }
+}
+
+export function FinancialItemCard({ item, onEdit }: FinancialItemCardProps) {
+  const { displayValue, subtitle } = getItemDisplayInfo(item);
+
+  return (
+    <Card className="group bg-gradient-to-br from-background to-muted/20 hover:shadow-md transition-shadow">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-base font-medium">{item.name}</CardTitle>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={onEdit}
+        >
+          <Edit3 className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{displayValue}</div>
+        <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
+      </CardContent>
+    </Card>
+  );
+}
