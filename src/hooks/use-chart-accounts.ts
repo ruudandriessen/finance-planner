@@ -57,14 +57,17 @@ function computeMortgageChartAccounts(
 }
 
 /**
- * Computes chart accounts for savings and checking financial items.
+ * Computes chart accounts for savings, checking, and investment financial items.
  */
 function computeAccountItemChartAccounts(
   items: FinancialItemBase[],
 ): ChartAccountConfig[] {
   return items
     .filter(
-      (item) => item.data.type === "savings" || item.data.type === "checking",
+      (item) =>
+        item.data.type === "savings" ||
+        item.data.type === "checking" ||
+        item.data.type === "investment",
     )
     .map((item) => ({
       account: {
