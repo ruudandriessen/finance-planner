@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as FinancialItemsIndexRouteImport } from './routes/financial-items/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
@@ -19,6 +20,11 @@ import { Route as EventsMortgageDownPaymentAddRouteImport } from './routes/event
 import { Route as EventsIdEditRouteImport } from './routes/events/$id.edit'
 import { Route as FinancialItemsInvestmentIdEditRouteImport } from './routes/financial-items/investment/$id.edit'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -71,6 +77,7 @@ const FinancialItemsInvestmentIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
   '/events': typeof EventsIndexRoute
   '/financial-items': typeof FinancialItemsIndexRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
   '/events': typeof EventsIndexRoute
   '/financial-items': typeof FinancialItemsIndexRoute
@@ -94,6 +102,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
   '/events/': typeof EventsIndexRoute
   '/financial-items/': typeof FinancialItemsIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/settings'
     | '/events/add'
     | '/events'
     | '/financial-items'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/settings'
     | '/events/add'
     | '/events'
     | '/financial-items'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/settings'
     | '/events/add'
     | '/events/'
     | '/financial-items/'
@@ -141,6 +153,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SettingsRoute: typeof SettingsRoute
   EventsAddRoute: typeof EventsAddRoute
   EventsIndexRoute: typeof EventsIndexRoute
   FinancialItemsIndexRoute: typeof FinancialItemsIndexRoute
@@ -153,6 +166,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -221,6 +241,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SettingsRoute: SettingsRoute,
   EventsAddRoute: EventsAddRoute,
   EventsIndexRoute: EventsIndexRoute,
   FinancialItemsIndexRoute: FinancialItemsIndexRoute,

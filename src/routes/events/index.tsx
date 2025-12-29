@@ -4,6 +4,7 @@ import { Edit3, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { useFormatCurrency } from "@/hooks/use-currency";
 import { plansCollection } from "@/plans/plans";
 import { Route as RootRoute } from "@/routes/__root";
 
@@ -16,15 +17,9 @@ function RouteComponent() {
   const { data: plans = [] } = useLiveQuery(plansCollection);
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
   const navigate = useNavigate();
+  const formatCurrency = useFormatCurrency();
 
   const plan = plans.find((p) => p.id === planId);
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {

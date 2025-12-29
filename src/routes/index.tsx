@@ -3,6 +3,7 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
+import { useFormatCurrencyCompact } from "@/hooks/use-currency";
 import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/")({
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { planId } = RootRoute.useSearch();
+  const formatCurrency = useFormatCurrencyCompact();
   const numberOfMonthsInSimulation = 30 * 12;
   const chartAccounts = useChartAccounts({
     monthsToSimulate: numberOfMonthsInSimulation,
@@ -46,15 +48,6 @@ function Home() {
       },
       {} as Record<string, { label: string; color: string }>,
     ) ?? {};
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      notation: "compact",
-      maximumFractionDigits: 1,
-    }).format(value);
-  };
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">

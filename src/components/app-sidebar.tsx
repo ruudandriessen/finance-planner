@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarClock, LayoutDashboard, Wallet } from "lucide-react";
+import { CalendarClock, LayoutDashboard, Settings, Wallet } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -65,6 +65,16 @@ export function AppSidebar({ planId }: { planId?: string }) {
         )}
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link to="/settings">
+                <Settings />
+                <span>Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
         <ModeToggle />
       </SidebarFooter>
     </Sidebar>
