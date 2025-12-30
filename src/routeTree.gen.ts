@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TransactionsIndexRouteImport } from './routes/transactions/index'
 import { Route as FinancialItemsIndexRouteImport } from './routes/financial-items/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
+import { Route as TransactionsImportRouteImport } from './routes/transactions/import'
 import { Route as EventsAddRouteImport } from './routes/events/add'
 import { Route as FinancialItemsInvestmentIndexRouteImport } from './routes/financial-items/investment/index'
 import { Route as FinancialItemsInvestmentAddRouteImport } from './routes/financial-items/investment/add'
@@ -30,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransactionsIndexRoute = TransactionsIndexRouteImport.update({
+  id: '/transactions/',
+  path: '/transactions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinancialItemsIndexRoute = FinancialItemsIndexRouteImport.update({
   id: '/financial-items/',
   path: '/financial-items/',
@@ -38,6 +45,11 @@ const FinancialItemsIndexRoute = FinancialItemsIndexRouteImport.update({
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsImportRoute = TransactionsImportRouteImport.update({
+  id: '/transactions/import',
+  path: '/transactions/import',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsAddRoute = EventsAddRouteImport.update({
@@ -79,8 +91,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
+  '/transactions/import': typeof TransactionsImportRoute
   '/events': typeof EventsIndexRoute
   '/financial-items': typeof FinancialItemsIndexRoute
+  '/transactions': typeof TransactionsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
@@ -91,8 +105,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
+  '/transactions/import': typeof TransactionsImportRoute
   '/events': typeof EventsIndexRoute
   '/financial-items': typeof FinancialItemsIndexRoute
+  '/transactions': typeof TransactionsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
@@ -104,8 +120,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/events/add': typeof EventsAddRoute
+  '/transactions/import': typeof TransactionsImportRoute
   '/events/': typeof EventsIndexRoute
   '/financial-items/': typeof FinancialItemsIndexRoute
+  '/transactions/': typeof TransactionsIndexRoute
   '/events/$id/edit': typeof EventsIdEditRoute
   '/events/mortgage-down-payment/add': typeof EventsMortgageDownPaymentAddRoute
   '/financial-items/investment/add': typeof FinancialItemsInvestmentAddRoute
@@ -118,8 +136,10 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/events/add'
+    | '/transactions/import'
     | '/events'
     | '/financial-items'
+    | '/transactions'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
     | '/financial-items/investment/add'
@@ -130,8 +150,10 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/events/add'
+    | '/transactions/import'
     | '/events'
     | '/financial-items'
+    | '/transactions'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
     | '/financial-items/investment/add'
@@ -142,8 +164,10 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/events/add'
+    | '/transactions/import'
     | '/events/'
     | '/financial-items/'
+    | '/transactions/'
     | '/events/$id/edit'
     | '/events/mortgage-down-payment/add'
     | '/financial-items/investment/add'
@@ -155,8 +179,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SettingsRoute: typeof SettingsRoute
   EventsAddRoute: typeof EventsAddRoute
+  TransactionsImportRoute: typeof TransactionsImportRoute
   EventsIndexRoute: typeof EventsIndexRoute
   FinancialItemsIndexRoute: typeof FinancialItemsIndexRoute
+  TransactionsIndexRoute: typeof TransactionsIndexRoute
   EventsIdEditRoute: typeof EventsIdEditRoute
   EventsMortgageDownPaymentAddRoute: typeof EventsMortgageDownPaymentAddRoute
   FinancialItemsInvestmentAddRoute: typeof FinancialItemsInvestmentAddRoute
@@ -180,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transactions/': {
+      id: '/transactions/'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/financial-items/': {
       id: '/financial-items/'
       path: '/financial-items'
@@ -192,6 +225,13 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions/import': {
+      id: '/transactions/import'
+      path: '/transactions/import'
+      fullPath: '/transactions/import'
+      preLoaderRoute: typeof TransactionsImportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events/add': {
@@ -243,8 +283,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SettingsRoute: SettingsRoute,
   EventsAddRoute: EventsAddRoute,
+  TransactionsImportRoute: TransactionsImportRoute,
   EventsIndexRoute: EventsIndexRoute,
   FinancialItemsIndexRoute: FinancialItemsIndexRoute,
+  TransactionsIndexRoute: TransactionsIndexRoute,
   EventsIdEditRoute: EventsIdEditRoute,
   EventsMortgageDownPaymentAddRoute: EventsMortgageDownPaymentAddRoute,
   FinancialItemsInvestmentAddRoute: FinancialItemsInvestmentAddRoute,

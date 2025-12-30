@@ -18,6 +18,7 @@ type AccountFormData = {
   accountType: AccountType;
   initialBalance: number;
   interestRate: number;
+  iban: string;
 };
 
 interface AccountFormProps {
@@ -42,12 +43,17 @@ export function AccountForm({
       : 0;
   const initialInterestRate =
     initialData?.data?.type === "savings" ? (initialData.data.interestRate ?? 0) * 100 : 0;
+  const initialIban =
+    initialData?.data?.type === "savings" || initialData?.data?.type === "checking"
+      ? (initialData.data.iban ?? "")
+      : "";
 
   const [formData, setFormData] = useState<AccountFormData>({
     name: initialData?.name ?? "",
     accountType: initialType,
     initialBalance,
     interestRate: initialInterestRate,
+    iban: initialIban,
   });
 
   const handleInputChange = <TKey extends keyof AccountFormData>(
@@ -77,10 +83,12 @@ export function AccountForm({
               type: "savings",
               initialBalance,
               interestRate: interestRate / 100,
+              iban: formData.iban || undefined,
             }
           : {
               type: "checking",
               initialBalance,
+              iban: formData.iban || undefined,
             },
     };
 
@@ -153,6 +161,20 @@ export function AccountForm({
         />
         <p className="text-xs text-muted-foreground mt-1">
           Interest is paid out annually in January based on weighted average balance
+        </p>
+      </div>
+
+      <div>
+        <Label htmlFor="iban">IBAN (Optional)</Label>
+        <Input
+          id="iban"
+          value={formData.iban}
+          onChange={(e) => handleInputChange("iban", e.target.value)}
+          placeholder="e.g., NL91ABNA0417164300"
+          className="mt-2"
+        />
+        <p className="text-xs text-muted-foreground mt-1">
+          Link this account to imported bank transactions
         </p>
       </div>
 

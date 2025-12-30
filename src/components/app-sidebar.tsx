@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarClock, LayoutDashboard, Settings, Wallet } from "lucide-react";
+import { ArrowLeftRight, CalendarClock, LayoutDashboard, Settings, Wallet } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import {
   Sidebar,
@@ -23,6 +23,11 @@ const items = [
     title: "Financial Items",
     url: "/financial-items",
     icon: () => <Wallet />,
+  },
+  {
+    title: "Transactions",
+    url: "/transactions",
+    icon: () => <ArrowLeftRight />,
   },
 ];
 

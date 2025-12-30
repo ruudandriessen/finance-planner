@@ -5,6 +5,7 @@ const savingsDataSchema = z.object({
   type: z.literal("savings"),
   initialBalance: z.number(),
   interestRate: z.number().default(0), // Annual interest rate as decimal (e.g., 0.04 for 4%)
+  iban: z.string().optional(), // For transaction matching
 });
 
 export type SavingsData = z.infer<typeof savingsDataSchema>;
@@ -12,6 +13,7 @@ export type SavingsData = z.infer<typeof savingsDataSchema>;
 const checkingDataSchema = z.object({
   type: z.literal("checking"),
   initialBalance: z.number(),
+  iban: z.string().optional(), // For transaction matching
 });
 
 export type CheckingData = z.infer<typeof checkingDataSchema>;
