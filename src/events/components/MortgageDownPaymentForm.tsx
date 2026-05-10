@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import type { MortgageDownPaymentEvent } from "@/events/schema";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { useCurrency } from "@/hooks/use-currency";
 
 type MortgageDownPaymentFormProps = {
   initialData?: MortgageDownPaymentEvent;
@@ -37,6 +38,7 @@ export function MortgageDownPaymentForm({
   submitLabel = "Save",
 }: MortgageDownPaymentFormProps) {
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
+  const currency = useCurrency();
   const [formData, setFormData] = useState<FormData>({
     name: initialData?.name ?? "",
     date: initialData?.date ?? "",
@@ -152,7 +154,7 @@ export function MortgageDownPaymentForm({
       </div>
 
       <div>
-        <Label htmlFor="amount">Amount ($)</Label>
+        <Label htmlFor="amount">Amount ({currency})</Label>
         <Input
           id="amount"
           type="number"

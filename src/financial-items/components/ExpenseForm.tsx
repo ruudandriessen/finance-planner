@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { financialItemsCollection } from "@/financial-items/collection";
 import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+import { useCurrency } from "@/hooks/use-currency";
 
 type ExpenseFormData = {
   name: string;
@@ -29,6 +30,7 @@ export function ExpenseForm({
   submitLabel = "Save",
 }: FinancialItemFormProps<"expense">) {
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
+  const currency = useCurrency();
   const [formData, setFormData] = useState<ExpenseFormData>({
     name: initialData?.name ?? "",
     amount: initialData?.data?.amount ?? 0,
@@ -86,7 +88,7 @@ export function ExpenseForm({
       </div>
 
       <div>
-        <Label htmlFor="amount">Amount ($)</Label>
+        <Label htmlFor="amount">Amount ({currency})</Label>
         <Input
           id="amount"
           type="number"

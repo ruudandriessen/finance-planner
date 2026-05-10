@@ -2,7 +2,7 @@ import { useLiveQuery } from "@tanstack/react-db";
 import { formatCurrency, formatCurrencyCompact } from "@/lib/format-currency";
 import { type Currency, userSettingsCollection } from "@/settings/collection";
 
-function useCurrency(): Currency {
+export function useCurrency(): Currency {
   const { data: settings = [] } = useLiveQuery(userSettingsCollection);
 
   return settings[0]?.currency ?? "EUR";

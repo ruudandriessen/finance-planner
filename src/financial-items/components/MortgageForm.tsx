@@ -16,6 +16,7 @@ import {
   calculateLinearPrincipal,
 } from "@/financial-items/mortgage/mortgage-calculations";
 import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+import { useCurrency, useFormatCurrency } from "@/hooks/use-currency";
 
 type MortgageFormData = {
   name: string;
@@ -39,6 +40,8 @@ export function MortgageForm({
   submitLabel = "Save",
 }: FinancialItemFormProps<"mortgage">) {
   const { data: financialItems = [] } = useLiveQuery(financialItemsCollection);
+  const currency = useCurrency();
+  const formatCurrency = useFormatCurrency();
   const [formData, setFormData] = useState<MortgageFormData>({
     name: initialData?.name ?? "",
     // Convert stored decimal (0.045) to display value (4.5)
@@ -144,7 +147,7 @@ export function MortgageForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="originalLoanAmount">Original Loan Amount ($)</Label>
+          <Label htmlFor="originalLoanAmount">Original Loan Amount ({currency})</Label>
           <Input
             id="originalLoanAmount"
             type="number"
@@ -160,7 +163,7 @@ export function MortgageForm({
         </div>
 
         <div>
-          <Label htmlFor="currentBalance">Current Balance ($)</Label>
+          <Label htmlFor="currentBalance">Current Balance ({currency})</Label>
           <Input
             id="currentBalance"
             type="number"
@@ -247,13 +250,7 @@ export function MortgageForm({
       <div className="rounded-md bg-muted p-3">
         <p className="text-sm font-medium">
           {formData.paymentType === "annuity" ? "Monthly Payment" : "Initial Monthly Payment"}:{" "}
-          <span className="text-primary">
-            $
-            {calculatedPayment.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </span>
+          <span className="text-primary">{formatCurrency(calculatedPayment)}</span>
         </p>
         <p className="text-xs text-muted-foreground mt-1">
           {formData.paymentType === "annuity"
@@ -284,7 +281,7 @@ export function MortgageForm({
         </div>
 
         <div>
-          <Label htmlFor="houseValue">Property Value ($)</Label>
+          <Label htmlFor="houseValue">Property Value ({currency})</Label>
           <Input
             id="houseValue"
             type="number"

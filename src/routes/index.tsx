@@ -3,7 +3,7 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { useChartAccounts } from "@/hooks/use-chart-accounts";
-import { useFormatCurrencyCompact } from "@/hooks/use-currency";
+import { useFormatCurrency, useFormatCurrencyCompact } from "@/hooks/use-currency";
 import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/")({
@@ -12,7 +12,10 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { planId } = RootRoute.useSearch();
-  const formatCurrency = useFormatCurrencyCompact();
+  const formatCurrency = useFormatCurrency();
+  const formatCurrencyCompact = useFormatCurrencyCompact();
+  const formatChartValue = (value: unknown) =>
+    typeof value === "number" ? formatCurrency(value) : String(value);
   const numberOfMonthsInSimulation = 30 * 12;
   const chartAccounts = useChartAccounts({
     monthsToSimulate: numberOfMonthsInSimulation,
@@ -71,9 +74,11 @@ function Home() {
                     tickLine={false}
                     axisLine={false}
                     tickMargin={8}
-                    tickFormatter={formatCurrency}
+                    tickFormatter={formatCurrencyCompact}
                   />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <ChartTooltip
+                    content={<ChartTooltipContent valueFormatter={formatChartValue} />}
+                  />
                   {chartAccounts.accounts.map((account, index) => {
                     const isLast = chartAccounts.accounts.length === index + 1;
                     const isTotal = account.id === "total-assets";
