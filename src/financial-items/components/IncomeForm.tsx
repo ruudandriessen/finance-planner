@@ -11,7 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { financialItemsCollection } from "@/financial-items/collection";
-import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+import {
+  isAccountFinancialItem,
+  type FinancialItem,
+  type FinancialItemFormProps,
+} from "@/financial-items/types";
 import { useCurrency } from "@/hooks/use-currency";
 
 type IncomeFormData = {
@@ -71,10 +75,7 @@ export function IncomeForm({
     await onSubmit(financialItem);
   };
 
-  // Filter to savings and checking accounts only
-  const accountItems = financialItems.filter(
-    (item) => item.data.type === "savings" || item.data.type === "checking",
-  );
+  const accountItems = financialItems.filter(isAccountFinancialItem);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

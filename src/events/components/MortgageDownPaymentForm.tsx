@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import type { MortgageDownPaymentEvent } from "@/events/schema";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { isAccountFinancialItem } from "@/financial-items/types";
 import { useCurrency } from "@/hooks/use-currency";
 
 type MortgageDownPaymentFormProps = {
@@ -47,7 +48,7 @@ export function MortgageDownPaymentForm({
     amount: initialData?.amount ?? 0,
   });
 
-  const handleInputChange = (field: keyof FormData, value: string | number) => {
+  const handleInputChange = <TKey extends keyof FormData>(field: TKey, value: FormData[TKey]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -79,9 +80,7 @@ export function MortgageDownPaymentForm({
 
   const mortgageItems = financialItems.filter((item) => item.data.type === "mortgage");
 
-  const accountItems = financialItems.filter(
-    (item) => item.data.type === "savings" || item.data.type === "checking",
-  );
+  const accountItems = financialItems.filter(isAccountFinancialItem);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

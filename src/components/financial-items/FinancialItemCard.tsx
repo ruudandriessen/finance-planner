@@ -1,37 +1,13 @@
 import { Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { calculateInitialMortgagePayment } from "@/financial-items/mortgage/mortgage-calculations";
 import type { FinancialItemBase } from "@/financial-items/types";
 import { useFormatCurrency } from "@/hooks/use-currency";
 
 interface FinancialItemCardProps {
   item: FinancialItemBase;
   onEdit: () => void;
-}
-
-function calculateMortgagePayment(
-  loanAmount: number,
-  annualRate: number,
-  loanTermYears: number,
-  paymentType: "annuity" | "linear",
-): number {
-  const monthlyRate = annualRate / 12;
-  const totalPayments = loanTermYears * 12;
-
-  if (paymentType === "linear") {
-    const principalPayment = loanAmount / totalPayments;
-    const interestPayment = loanAmount * monthlyRate;
-    return principalPayment + interestPayment;
-  }
-
-  // Annuity calculation
-  if (monthlyRate === 0) {
-    return loanAmount / totalPayments;
-  }
-  return (
-    (loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments))) /
-    (Math.pow(1 + monthlyRate, totalPayments) - 1)
-  );
 }
 
 function getItemDisplayInfo(
@@ -63,7 +39,7 @@ function getItemDisplayInfo(
         subtitle: `${item.schedule} expense`,
       };
     case "mortgage": {
-      const payment = calculateMortgagePayment(
+      const payment = calculateInitialMortgagePayment(
         item.data.originalLoanAmount,
         item.data.interestRate,
         item.data.loanTermYears,

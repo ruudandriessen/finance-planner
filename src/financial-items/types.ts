@@ -59,3 +59,9 @@ export interface FinancialItemFormProps<T extends keyof FinancialItemDataMap> {
   onDelete?: () => void | Promise<void>;
   submitLabel?: string;
 }
+
+export type AccountFinancialItem = FinancialItem<"savings"> | FinancialItem<"checking">;
+
+export function isAccountFinancialItem(item: FinancialItemBase): item is AccountFinancialItem {
+  return item.data.type === "savings" || item.data.type === "checking";
+}

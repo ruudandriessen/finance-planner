@@ -22,10 +22,14 @@ export function InvestmentForm({
   const [formData, setFormData] = useState<InvestmentFormData>({
     name: initialData?.name ?? "",
     initialValue: initialData?.data?.initialValue ?? 0,
-    yearlyReturnRate: initialData?.data?.yearlyReturnRate ?? 7,
+    yearlyReturnRate:
+      initialData?.data?.yearlyReturnRate == null ? 7 : initialData.data.yearlyReturnRate * 100,
   });
 
-  const handleInputChange = (field: keyof InvestmentFormData, value: string) => {
+  const handleInputChange = <TKey extends keyof InvestmentFormData>(
+    field: TKey,
+    value: InvestmentFormData[TKey],
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -75,7 +79,7 @@ export function InvestmentForm({
           step="0.01"
           min="0"
           value={formData.initialValue}
-          onChange={(e) => handleInputChange("initialValue", e.target.value)}
+          onChange={(e) => handleInputChange("initialValue", Number(e.target.value))}
           placeholder="Enter initial value"
           className="mt-2"
           required
@@ -92,7 +96,7 @@ export function InvestmentForm({
           type="number"
           step="0.1"
           value={formData.yearlyReturnRate}
-          onChange={(e) => handleInputChange("yearlyReturnRate", e.target.value)}
+          onChange={(e) => handleInputChange("yearlyReturnRate", Number(e.target.value))}
           placeholder="e.g., 7"
           className="mt-2"
           required
