@@ -37,17 +37,20 @@ export function IncomeForm({
     schedule: initialData?.schedule ?? "monthly",
   });
 
-  const handleInputChange = (field: keyof IncomeFormData, value: string) => {
+  const handleInputChange = <TKey extends keyof IncomeFormData>(
+    field: TKey,
+    value: IncomeFormData[TKey],
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { amount } = formData;
+    const amount = Number(formData.amount);
     if (amount <= 0) return;
 
-    const priorityOrder = formData.priorityOrder;
+    const priorityOrder = Number(formData.priorityOrder);
 
     const financialItem: FinancialItem<"income"> = {
       id: initialData?.id ?? crypto.randomUUID(),
@@ -93,7 +96,7 @@ export function IncomeForm({
           step="0.01"
           min="0"
           value={formData.amount}
-          onChange={(e) => handleInputChange("amount", e.target.value)}
+          onChange={(e) => handleInputChange("amount", Number(e.target.value))}
           placeholder="Enter monthly amount"
           className="mt-2"
           required
@@ -131,7 +134,7 @@ export function IncomeForm({
             type="number"
             min="1"
             value={formData.priorityOrder}
-            onChange={(e) => handleInputChange("priorityOrder", e.target.value)}
+            onChange={(e) => handleInputChange("priorityOrder", Number(e.target.value))}
             className="mt-2"
             required
           />
