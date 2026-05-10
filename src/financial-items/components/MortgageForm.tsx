@@ -11,11 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { calculateInitialMortgagePayment } from "@/financial-items/mortgage/mortgage-calculations";
 import {
-  calculateAnnuityPayment,
-  calculateLinearPrincipal,
-} from "@/financial-items/mortgage/mortgage-calculations";
-import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+  isAccountFinancialItem,
+  type FinancialItem,
+  type FinancialItemFormProps,
+} from "@/financial-items/types";
 import { useCurrency, useFormatCurrency } from "@/hooks/use-currency";
 
 type MortgageFormData = {
@@ -64,18 +65,18 @@ export function MortgageForm({
     if (originalLoanAmount <= 0 || loanTermYears <= 0) {
       return 0;
     }
-    // Convert display percentage to decimal for calculations
-    const interestRate = interestRateDisplay / 100;
-    if (paymentType === "annuity") {
-      return calculateAnnuityPayment(originalLoanAmount, interestRate, loanTermYears);
-    }
-    // For linear, show initial payment (highest payment)
-    const principal = calculateLinearPrincipal(originalLoanAmount, loanTermYears);
-    const monthlyInterest = (originalLoanAmount * interestRate) / 12;
-    return principal + monthlyInterest;
+    return calculateInitialMortgagePayment(
+      originalLoanAmount,
+      interestRateDisplay / 100,
+      loanTermYears,
+      paymentType,
+    );
   })();
 
-  const handleInputChange = (field: keyof MortgageFormData, value: string) => {
+  const handleInputChange = <TKey extends keyof MortgageFormData>(
+    field: TKey,
+    value: MortgageFormData[TKey],
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -126,10 +127,7 @@ export function MortgageForm({
     await onSubmit(financialItem);
   };
 
-  // Filter to savings and checking accounts only
-  const accountItems = financialItems.filter(
-    (item) => item.data.type === "savings" || item.data.type === "checking",
-  );
+  const accountItems = financialItems.filter(isAccountFinancialItem);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -154,7 +152,7 @@ export function MortgageForm({
             step="0.01"
             min="0"
             value={formData.originalLoanAmount}
-            onChange={(e) => handleInputChange("originalLoanAmount", e.target.value)}
+            onChange={(e) => handleInputChange("originalLoanAmount", Number(e.target.value))}
             placeholder="e.g., 300000"
             className="mt-2"
             required
@@ -170,7 +168,7 @@ export function MortgageForm({
             step="0.01"
             min="0"
             value={formData.currentBalance}
-            onChange={(e) => handleInputChange("currentBalance", e.target.value)}
+            onChange={(e) => handleInputChange("currentBalance", Number(e.target.value))}
             placeholder="e.g., 280000"
             className="mt-2"
             required
@@ -189,7 +187,7 @@ export function MortgageForm({
             min="0"
             max="100"
             value={formData.interestRateDisplay}
-            onChange={(e) => handleInputChange("interestRateDisplay", e.target.value)}
+            onChange={(e) => handleInputChange("interestRateDisplay", Number(e.target.value))}
             placeholder="e.g., 4.5"
             className="mt-2"
             required
@@ -221,7 +219,7 @@ export function MortgageForm({
             min="1"
             max="50"
             value={formData.loanTermYears}
-            onChange={(e) => handleInputChange("loanTermYears", e.target.value)}
+            onChange={(e) => handleInputChange("loanTermYears", Number(e.target.value))}
             placeholder="e.g., 30"
             className="mt-2"
             required
@@ -306,7 +304,7 @@ export function MortgageForm({
             type="number"
             min="1"
             value={formData.priorityOrder}
-            onChange={(e) => handleInputChange("priorityOrder", e.target.value)}
+            onChange={(e) => handleInputChange("priorityOrder", Number(e.target.value))}
             className="mt-2"
             required
           />

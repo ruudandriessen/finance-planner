@@ -3,7 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MortgageDownPaymentForm } from "@/events/components//MortgageDownPaymentForm";
+import { MortgageDownPaymentForm } from "@/events/components/MortgageDownPaymentForm";
 import type { MortgageDownPaymentEvent } from "@/events/schema";
 import { plansCollection } from "@/plans/plans";
 import { Route as RootRoute } from "@/routes/__root";

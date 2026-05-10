@@ -33,3 +33,21 @@ export function calculateAnnuityPayment(
 export function calculateLinearPrincipal(loanAmount: number, termYears: number): number {
   return loanAmount / (termYears * 12);
 }
+
+/**
+ * Calculates the first monthly payment shown for a mortgage.
+ * Annuity mortgages have a fixed payment; linear mortgages start highest
+ * because interest is calculated against the full starting balance.
+ */
+export function calculateInitialMortgagePayment(
+  loanAmount: number,
+  annualRate: number,
+  termYears: number,
+  paymentType: "annuity" | "linear",
+): number {
+  if (paymentType === "annuity") {
+    return calculateAnnuityPayment(loanAmount, annualRate, termYears);
+  }
+
+  return calculateLinearPrincipal(loanAmount, termYears) + (loanAmount * annualRate) / 12;
+}

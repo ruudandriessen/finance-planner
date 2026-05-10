@@ -6,6 +6,7 @@ import { CategorySection } from "@/components/financial-items/CategorySection";
 import { FinancialItemCard } from "@/components/financial-items/FinancialItemCard";
 import { FinancialItemSheet } from "@/components/financial-items/FinancialItemSheet";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { isAccountFinancialItem } from "@/financial-items/types";
 
 export const Route = createFileRoute("/financial-items/")({
   component: FinancialItemsPage,
@@ -37,9 +38,7 @@ function FinancialItemsPage() {
     type: "account",
   });
 
-  const accountItems = items.filter(
-    (item) => item.data.type === "savings" || item.data.type === "checking",
-  );
+  const accountItems = items.filter(isAccountFinancialItem);
   const incomeItems = items.filter((item) => item.data.type === "income");
   const expenseItems = items.filter((item) => item.data.type === "expense");
   const mortgageItems = items.filter((item) => item.data.type === "mortgage");

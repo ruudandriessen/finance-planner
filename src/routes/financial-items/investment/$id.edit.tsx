@@ -52,15 +52,6 @@ function RouteComponent() {
     }
   };
 
-  // Convert rate back to percentage for display in form
-  const formInitialData = {
-    ...item,
-    data: {
-      ...item.data,
-      yearlyReturnRate: item.data.yearlyReturnRate * 100,
-    },
-  };
-
   return (
     <div className="container mx-auto p-6 max-w-2xl">
       <div className="mb-6">
@@ -82,7 +73,7 @@ function RouteComponent() {
         </CardHeader>
         <CardContent>
           <InvestmentForm
-            initialData={formInitialData}
+            initialData={item}
             onSubmit={handleSubmit}
             onCancel={() => navigate({ to: "/financial-items/investment" })}
             onDelete={handleDelete}
