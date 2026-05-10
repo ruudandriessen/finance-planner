@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { FinancialItem, FinancialItemFormProps } from "@/financial-items/types";
+import { useCurrency } from "@/hooks/use-currency";
 
 type InvestmentFormData = {
   name: string;
@@ -17,6 +18,7 @@ export function InvestmentForm({
   onDelete,
   submitLabel = "Save",
 }: FinancialItemFormProps<"investment">) {
+  const currency = useCurrency();
   const [formData, setFormData] = useState<InvestmentFormData>({
     name: initialData?.name ?? "",
     initialValue: initialData?.data?.initialValue ?? 0,
@@ -66,7 +68,7 @@ export function InvestmentForm({
       </div>
 
       <div>
-        <Label htmlFor="initialValue">Initial Value ($)</Label>
+        <Label htmlFor="initialValue">Initial Value ({currency})</Label>
         <Input
           id="initialValue"
           type="number"

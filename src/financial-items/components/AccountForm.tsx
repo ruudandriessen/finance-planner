@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { FinancialItemBase } from "@/financial-items/types";
+import { useCurrency } from "@/hooks/use-currency";
 
 type AccountType = "savings" | "checking";
 
@@ -35,6 +36,7 @@ export function AccountForm({
   onDelete,
   submitLabel = "Save",
 }: AccountFormProps) {
+  const currency = useCurrency();
   const initialType = initialData?.data?.type === "checking" ? "checking" : "savings";
   const initialBalance =
     initialData?.data?.type === "savings" || initialData?.data?.type === "checking"
@@ -123,7 +125,7 @@ export function AccountForm({
       </div>
 
       <div>
-        <Label htmlFor="initialBalance">Initial Balance ($)</Label>
+        <Label htmlFor="initialBalance">Initial Balance ({currency})</Label>
         <Input
           id="initialBalance"
           type="number"

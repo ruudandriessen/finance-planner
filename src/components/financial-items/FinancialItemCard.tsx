@@ -2,17 +2,11 @@ import { Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { FinancialItemBase } from "@/financial-items/types";
+import { useFormatCurrency } from "@/hooks/use-currency";
 
 interface FinancialItemCardProps {
   item: FinancialItemBase;
   onEdit: () => void;
-}
-
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
 }
 
 function calculateMortgagePayment(
@@ -40,7 +34,10 @@ function calculateMortgagePayment(
   );
 }
 
-function getItemDisplayInfo(item: FinancialItemBase): {
+function getItemDisplayInfo(
+  item: FinancialItemBase,
+  formatCurrency: (amount: number) => string,
+): {
   displayValue: string;
   subtitle: string;
 } {
@@ -86,7 +83,8 @@ function getItemDisplayInfo(item: FinancialItemBase): {
 }
 
 export function FinancialItemCard({ item, onEdit }: FinancialItemCardProps) {
-  const { displayValue, subtitle } = getItemDisplayInfo(item);
+  const formatCurrency = useFormatCurrency();
+  const { displayValue, subtitle } = getItemDisplayInfo(item, formatCurrency);
 
   return (
     <Card className="bg-gradient-to-br from-background to-muted/20 hover:shadow-md transition-shadow">
