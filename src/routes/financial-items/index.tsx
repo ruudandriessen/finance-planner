@@ -6,7 +6,10 @@ import { CategorySection } from "@/components/financial-items/CategorySection";
 import { FinancialItemCard } from "@/components/financial-items/FinancialItemCard";
 import { FinancialItemSheet } from "@/components/financial-items/FinancialItemSheet";
 import { financialItemsCollection } from "@/financial-items/collection";
+import { getFinancialItemSimulationPreview } from "@/financial-items/simulation-preview";
 import { isAccountFinancialItem } from "@/financial-items/types";
+import { useSimulation } from "@/hooks/use-simulation";
+import { Route as RootRoute } from "@/routes/__root";
 
 export const Route = createFileRoute("/financial-items/")({
   component: FinancialItemsPage,
@@ -31,6 +34,8 @@ const categoryGradients = {
 
 function FinancialItemsPage() {
   const { data: items = [] } = useLiveQuery(financialItemsCollection);
+  const { planId } = RootRoute.useSearch();
+  const simulationResults = useSimulation({ monthsToSimulate: 12 * 30, planId }) ?? [];
 
   const [sheetState, setSheetState] = useState<SheetState>({
     open: false,
@@ -77,6 +82,7 @@ function FinancialItemsPage() {
           <FinancialItemCard
             key={item.id}
             item={item}
+            simulationPreview={getFinancialItemSimulationPreview(item, simulationResults)}
             onEdit={() => openEditSheet("account", item.id)}
           />
         ))}
@@ -94,6 +100,7 @@ function FinancialItemsPage() {
           <FinancialItemCard
             key={item.id}
             item={item}
+            simulationPreview={getFinancialItemSimulationPreview(item, simulationResults)}
             onEdit={() => openEditSheet("income", item.id)}
           />
         ))}
@@ -111,6 +118,7 @@ function FinancialItemsPage() {
           <FinancialItemCard
             key={item.id}
             item={item}
+            simulationPreview={getFinancialItemSimulationPreview(item, simulationResults)}
             onEdit={() => openEditSheet("expense", item.id)}
           />
         ))}
@@ -128,6 +136,7 @@ function FinancialItemsPage() {
           <FinancialItemCard
             key={item.id}
             item={item}
+            simulationPreview={getFinancialItemSimulationPreview(item, simulationResults)}
             onEdit={() => openEditSheet("mortgage", item.id)}
           />
         ))}
@@ -145,6 +154,7 @@ function FinancialItemsPage() {
           <FinancialItemCard
             key={item.id}
             item={item}
+            simulationPreview={getFinancialItemSimulationPreview(item, simulationResults)}
             onEdit={() => openEditSheet("investment", item.id)}
           />
         ))}
