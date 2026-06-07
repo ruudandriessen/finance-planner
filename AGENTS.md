@@ -13,8 +13,8 @@ Finance Planner is a **client-side** React SPA. All data persists in browser `lo
 
 ### Services
 
-| Service | Command | Port | Required |
-|---------|---------|------|----------|
+| Service         | Command       | Port | Required                   |
+| --------------- | ------------- | ---- | -------------------------- |
 | Vite dev server | `bun run dev` | 5173 | Yes (only runtime service) |
 
 Start the dev server in a tmux session so it stays running across commands.
